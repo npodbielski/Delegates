@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Linq.Expressions;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Delegates.Extensions;
 
 namespace Delegates
@@ -17,24 +15,45 @@ namespace Delegates
 
         static void Main(string[] args)
         {
-            TestIndexers();
-            TestEvents();
-            TestProperties();
-            TestStaticProperties();
-            TestFields();
-            TestStaticFields();
-            TestInstanceMethods();
+            //TestIndexers();
+            //TestEvents();
+            //TestProperties();
+            //TestStaticProperties();
+            //TestFields();
+            //TestStaticFields();
+            //TestInstanceMethods();
             TestStaticMethods();
-            TestConstructors();
+            //TestConstructors();
+            //TestGenerics();
         }
 
         private static void TestConstructors()
         {
             var cd = DelegateFactory.DefaultContructor<TestClass>();
-            var c1 = DelegateFactory.Contructor<TestClass, Func<TestClass>>();
-            var c2 = DelegateFactory.Contructor<TestClass, Func<int, TestClass>>();
-            var c3 = DelegateFactory.Contructor<TestClass, Func<bool, TestClass>>();
-            var c4 = DelegateFactory.Contructor<TestClass, Func<string, TestClass>>();
+            var cd1 = Type.DefaultContructor();
+            var cd2 = Type.Contructor<Func<object>>();
+
+            var t_ = cd();
+            var t1 = cd1();
+            var t2 = cd2();
+
+            var c1 = DelegateFactory.Contructor<Func<TestClass>>();
+            var c2 = DelegateFactory.Contructor<Func<int, TestClass>>();
+            var c3 = DelegateFactory.Contructor<Func<bool, TestClass>>();
+            var c4 = DelegateFactory.Contructor<Func<string, TestClass>>();
+            var c5 = DelegateFactory.Contructor<Func<int, TestClass>>();
+            var c6 = Type.Contructor(typeof(int));
+            var c7 = typeof(TestStruct).Contructor<Func<int, object>>();
+            var c8 = typeof(TestStruct).Contructor(typeof(int));
+
+            var t3 = c1();
+            var t4 = c2(0);
+            var t5 = c3(false);
+            var t6 = c4("");
+            var t7 = c5(0);
+            var t8 = c6(new object[] { 0 });
+            var t9 = c7(0);
+            var t10 = c8(new object[] { 0 });
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -73,6 +92,24 @@ namespace Delegates
             }
             _stopWatch.Stop();
             Console.WriteLine("Public default constructor proxy: {0}", _stopWatch.ElapsedMilliseconds);
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = c5(0);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Public constructor with parameter proxy: {0}", _stopWatch.ElapsedMilliseconds);
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = c6(new object[] { 0 });
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Public constructor with parameter via array proxy: {0}", _stopWatch.ElapsedMilliseconds);
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -196,7 +233,7 @@ namespace Delegates
             _stopWatch.Stop();
             Console.WriteLine("Multiple index indexer via delegate with array: {0}", _stopWatch.ElapsedMilliseconds);
 
-            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new Type[] { typeof(int), typeof(int), typeof(int) });
+            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new[] { typeof(int), typeof(int), typeof(int) });
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < _delay; i++)
@@ -212,27 +249,31 @@ namespace Delegates
             var ea1 = DelegateFactory.EventAdd<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             var ea2 = DelegateFactory.EventAdd<TestClass, TestClass.InternalEventArgs>("InternalEvent");
             var ea3 = DelegateFactory.EventAdd<TestClass>("ProtectedEvent");
-            var ea4 = Type.EventAdd("PrivateEvent");
+            var ea4 = Type.EventAdd<TestClass.PublicEventArgs>("PublicEvent");
+            var ea5 = Type.EventAdd("PrivateEvent");
 
             var er1 = DelegateFactory.EventRemove<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             var er2 = DelegateFactory.EventRemove<TestClass, TestClass.InternalEventArgs>("InternalEvent");
             var er3 = DelegateFactory.EventRemove<TestClass>("ProtectedEvent");
-            var er4 = Type.EventRemove("PrivateEvent");
+            var er4 = Type.EventRemove<TestClass.PublicEventArgs>("PublicEvent");
+            var er5 = Type.EventRemove("PrivateEvent");
 
-            ea1(TestInstance, TestHandler);
-            ea2(TestInstance, TestHandler);
-            ea3(TestInstance, TestHandler);
-            ea4(TestInstance, TestHandler);
+            ea1(TestInstance, TypelessHandler);
+            ea2(TestInstance, TypelessHandler);
+            ea3(TestInstance, HandlerWithSourceType);
+            ea4(TestInstance, HandlerWithoutSourceType);
+            ea5(TestInstance, TypelessHandler);
 
             TestInstance.InvokePublicEvent();
             TestInstance.InvokeInternalEvent();
             TestInstance.InvokeProtectedEvent();
             TestInstance.InvokePrivateEvent();
 
-            er1(TestInstance, TestHandler);
-            er2(TestInstance, TestHandler);
-            er3(TestInstance, TestHandler);
-            er4(TestInstance, TestHandler);
+            er1(TestInstance, TypelessHandler);
+            er2(TestInstance, TypelessHandler);
+            er3(TestInstance, HandlerWithSourceType);
+            er4(TestInstance, HandlerWithoutSourceType);
+            er5(TestInstance, TypelessHandler);
 
             TestInstance.InvokePublicEvent();
             TestInstance.InvokeInternalEvent();
@@ -240,12 +281,21 @@ namespace Delegates
             TestInstance.InvokePrivateEvent();
         }
 
-        /// 
-        /// find a way to create handler automatically since we could not have access to EventArgs type becaue it 
-        /// may be private (event if this would not make sense)
-        /// 
+        private static void HandlerWithoutSourceType(object o, TestClass.PublicEventArgs eventArgs)
+        {
+            Console.WriteLine("Public handler without source type works!");
+        }
 
-        private static void TestHandler(TestClass sender, object eventArgs)
+        private static void HandlerWithSourceType(TestClass sender, object eventArgs)
+        {
+            if (eventArgs.GetType() ==
+                Type.GetNestedType("ProtectedEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
+            {
+                Console.WriteLine("Protected handler works!");
+            }
+        }
+
+        private static void TypelessHandler(object sender, object eventArgs)
         {
             if (eventArgs is TestClass.PublicEventArgs)
             {
@@ -256,37 +306,112 @@ namespace Delegates
                 Console.WriteLine("Internal handler works!");
             }
             else if (eventArgs.GetType() ==
-                Type.GetNestedType("ProtectedEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
-            {
-                Console.WriteLine("Protected handler works!");
-            }
-            else if (eventArgs.GetType() ==
                 Type.GetNestedType("PrivateEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
             {
                 Console.WriteLine("Private handler works!");
             }
         }
 
-        private static void TestHandler(object sender, object eventArgs)
+        private static void TestGenerics()
         {
-            if (eventArgs is TestClass.PublicEventArgs)
+            var g1 = DelegateFactory.StaticMethod<TestClass, Func<TestClass, TestClass>, TestClass>("StaticGenericMethod");
+            var g2 = DelegateFactory.StaticMethod<TestClass, Func<TestClass, int, TestClass>, TestClass>("StaticGenericMethod");
+            var g3 = DelegateFactory.StaticMethod<TestClass, Func<TestStruct, int, bool, TestStruct>, TestStruct>("StaticGenericMethod");
+            var g4 = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass>("StaticGenericMethod");
+            var g5 = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass, TestStruct>("StaticGenericMethod");
+            var g6 = DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>, TestClass, TestStruct, int>("StaticGenericMethod");
+            var g7 = DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass), typeof(TestStruct), typeof(int));
+
+            var g8 = Type.StaticMethod<Func<TestClass, TestClass>, TestClass>("StaticGenericMethod");
+            var g9 = Type.StaticMethod<Func<TestClass, int, TestClass>, TestClass>("StaticGenericMethod");
+            var g10 = Type.StaticMethod<Func<TestStruct, int, bool, TestStruct>, TestStruct>("StaticGenericMethod");
+            var g11 = Type.StaticMethod<Func<TestClass>, TestClass>("StaticGenericMethod");
+            var g12 = Type.StaticMethod<Func<TestClass>, TestClass, TestStruct>("StaticGenericMethod");
+            var g13 = Type.StaticMethod<Func<int, TestClass>, TestClass, TestStruct, int>("StaticGenericMethod");
+            var g14 = Type.StaticMethod<Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass), typeof(TestStruct), typeof(int));
+
+            var g15 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type }, new[] { Type });
+            var g16 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type, typeof(int) }, new[] { Type });
+            var g17 = Type.StaticGenericMethod("StaticGenericMethod", new[] { typeof(TestStruct), typeof(int), typeof(bool) }, new[] { typeof(TestStruct) });
+            var g18 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type });
+            var g19 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type, typeof(TestStruct) });
+            var g20 = Type.StaticGenericMethod("StaticGenericMethod", new[] { typeof(int) }, new[] { Type, typeof(TestStruct), typeof(int) });
+            var g21 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { Type }, new[] { Type });
+
+            var t = g1(TestInstance);
+            var t2 = g2(TestInstance, 0);
+            var t3 = g3(new TestStruct(), 0, false);
+            var t4 = g4();
+            var t5 = g5();
+            var t6 = g6(0);
+            var t7 = g7(0);
+
+            var t8 = g8(TestInstance);
+            var t9 = g9(TestInstance, 0);
+            var t10 = g10(new TestStruct(), 0, false);
+            var t11 = g11();
+            var t12 = g12();
+            var t13 = g13(0);
+            var t14 = g14(0);
+
+            var t15 = g15(new object[] { TestInstance });
+            var t16 = g16(new object[] { TestInstance, 0 });
+            var t17 = g17(new object[] { new TestStruct(), 0, false });
+            var t18 = g18(new object[] { });
+            var t19 = g19(new object[] { });
+            var t20 = g20(new object[] { 0 });
+            g21(new object[] { TestInstance });
+            var t21 = TestClass.StaticGenericMethodVoidParameter;
+
+            var g22 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { typeof(object) }, new[] { typeof(object) });
+            g22(new object[] { "" });
+            var t22 = TestClass.StaticGenericMethodVoidParameter;
+            g22(new object[] { TestInstance });
+            var t23 = TestClass.StaticGenericMethodVoidParameter;
+
+            var ig1 = DelegateFactory.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
+            var ig2 = Type.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
+            var ig3 = Type.InstanceMethod<Func<object, TestClass, TestClass>, TestClass>("GenericMethod");
+            var ig4 = Type.InstanceGenericMethod("GenericMethod", new[] { Type }, new[] { Type });
+            var ig5 = Type.InstanceGenericMethodVoid("GenericMethodVoid", new[] { Type }, new[] { Type });
+
+            var it1 = ig1(TestInstance, TestInstance);
+            var it2 = ig2(TestInstance, TestInstance);
+            var it3 = ig3(TestInstance, TestInstance);
+            var it4 = ig4(TestInstance, new object[] { TestInstance });
+            ig5(TestInstance, new object[] { TestInstance });
+            var it5 = TestInstance.InstanceGenericMethodVoidParameter;
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
             {
-                Console.WriteLine("Public handler works!");
+                var test = TestClass.StaticGenericMethod(TestInstance);
             }
-            else if (eventArgs is TestClass.InternalEventArgs)
+            _stopWatch.Stop();
+            Console.WriteLine("Static generic method directly: {0}", _stopWatch.ElapsedMilliseconds);
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
             {
-                Console.WriteLine("Internal handler works!");
+                var test = g1(TestInstance);
             }
-            else if (eventArgs.GetType() ==
-                Type.GetNestedType("ProtectedEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
+            _stopWatch.Stop();
+            Console.WriteLine("Static generic method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+
+            var methodInfos = Type.GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name == "StaticGenericMethod" && m.IsGenericMethod && m.GetParameters().Length == 1 && m.GetGenericArguments().Length == 1);
+            var methodInfo = methodInfos.Single();
+            methodInfo = methodInfo.MakeGenericMethod(Type);
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
             {
-                Console.WriteLine("Protected handler works!");
+                var test = methodInfo.Invoke(null, new object[] { TestInstance });
             }
-            else if (eventArgs.GetType() ==
-                Type.GetNestedType("PrivateEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
-            {
-                Console.WriteLine("Private handler works!");
-            }
+            _stopWatch.Stop();
+            Console.WriteLine("Static generic method via reflection: {0}", _stopWatch.ElapsedMilliseconds);
         }
 
         private static void TestInstanceMethods()
@@ -295,7 +420,22 @@ namespace Delegates
             var m2 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("InternalMethod");
             var m3 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("ProtectedMethod");
             var m4 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
-            var m11 = DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PublicMethod");
+            var m5 = DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PublicMethod");
+            var m6 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
+            var m7 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
+            var m8 = Type.InstanceMethod("PublicMethod", typeof(string));
+            var m9 = Type.InstanceMethodVoid("PublicMethodVoid", typeof(string));
+
+            var t = m1(TestInstance, "test");
+            var t2 = m2(TestInstance, "test");
+            var t3 = m3(TestInstance, "test");
+            var t4 = m4(TestInstance, "test");
+            var t5 = m5(TestInstance, "test");
+            var t6 = m6(TestInstance, "test");
+            var t7 = m7(TestInstance, "test");
+            var t8 = m8(TestInstance, new object[] { "test" });
+            m9(TestInstance, new object[] { "test" });
+            var t9 = TestInstance.PublicMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -315,6 +455,16 @@ namespace Delegates
             _stopWatch.Stop();
             Console.WriteLine("Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
 
+            var methodInfo = Type.GetMethod("PublicMethod");
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = methodInfo.Invoke(TestInstance, new object[] { "test" });
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < 10000; i++)
@@ -322,7 +472,7 @@ namespace Delegates
                 DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static private method proxy creator via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine("Private method proxy creator via reflection: {0}", _stopWatch.ElapsedMilliseconds);
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -331,15 +481,54 @@ namespace Delegates
                 DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PrivateMethod");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static private method proxy creator via expression: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine("Private method proxy creator via expression: {0}", _stopWatch.ElapsedMilliseconds);
         }
 
         private static void TestStaticMethods()
         {
-            var sm1 = Type.StaticMethod<Func<string, string>>("StaticPublicMethod");
-            var sm2 = Type.StaticMethod<Func<string, string>>("StaticInternalMethod");
-            var sm3 = Type.StaticMethod<Func<string, string>>("StaticProtectedMethod");
-            var sm4 = Type.StaticMethod<Func<string, string>>("StaticPrivateMethod");
+            var sm1 = DelegateFactory.StaticMethod<TestClass, Func<string, string>>("StaticPublicMethod");
+            var sm2 = DelegateFactory.StaticMethod<TestClass, Func<string, string>>("StaticInternalMethod");
+            var sm3 = DelegateFactory.StaticMethod<TestClass, Func<string, string>>("StaticProtectedMethod");
+            var sm4 = DelegateFactory.StaticMethod<TestClass, Func<string, string>>("StaticPrivateMethod");
+            var sm5 = Type.StaticMethod<Func<string, string>>("StaticPublicMethod");
+            var sm6 = Type.StaticMethod<Func<string, string>>("StaticInternalMethod");
+            var sm7 = Type.StaticMethod<Func<string, string>>("StaticProtectedMethod");
+            var sm8 = Type.StaticMethod<Func<string, string>>("StaticPrivateMethod");
+            var sm9 = Type.StaticMethod("StaticPublicMethod", typeof(string));
+            var sm10 = Type.StaticMethodVoid("StaticPublicMethodVoid", typeof(string));
+            var sm11 = Type.StaticMethod("StaticInternalMethod", typeof(string));
+            var sm12 = Type.StaticMethod("StaticProtectedMethod", typeof(string));
+            var sm13 = Type.StaticMethod("StaticPrivateMethod", typeof(string));
+            var sm14 = DelegateFactory.StaticMethod<TestClass, Func<int, int>>("StaticPublicMethodValue");
+            var sm15 = Type.StaticMethod<Func<int, int>>("StaticPublicMethodValue");
+            var sm16 = Type.StaticMethod("StaticPublicMethodValue", typeof(int));
+
+            var t = sm1("test");
+            var t2 = sm2("test");
+            var t3 = sm3("test");
+            var t4 = sm4("test");
+            var t5 = sm5("test");
+            var t6 = sm6("test");
+            var t7 = sm7("test");
+            var t8 = sm8("test");
+            var t9 = sm9(new object[] { "test" });
+            sm10(new object[] { "test" });
+            var t10 = TestClass.StaticPublicMethodVoidParameter;
+            var t11 = sm11(new object[] { "test" });
+            var t12 = sm12(new object[] { "test" });
+            var t13 = sm13(new object[] { "test" });
+            var t14 = sm14(0);
+            var t15 = sm15(0);
+            var t16 = sm16(new object[] { 0 });
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = TestClass.StaticPublicMethod("test");
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Static Public method directly: {0}", _stopWatch.ElapsedMilliseconds);
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -349,6 +538,25 @@ namespace Delegates
             }
             _stopWatch.Stop();
             Console.WriteLine("Static Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = sm9(new object[] { "test" });
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Static Public method via proxy with array: {0}", _stopWatch.ElapsedMilliseconds);
+
+            var methodInfo = Type.GetMethod("StaticPublicMethod", new[] { typeof(string) });
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < _delay; i++)
+            {
+                var test = methodInfo.Invoke(null, new object[] { "test" });
+            }
+            _stopWatch.Stop();
+            Console.WriteLine("Static Public method via reflection: {0}", _stopWatch.ElapsedMilliseconds);
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -376,15 +584,6 @@ namespace Delegates
             }
             _stopWatch.Stop();
             Console.WriteLine("Static private method proxy: {0}", _stopWatch.ElapsedMilliseconds);
-
-            _stopWatch = new Stopwatch();
-            _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
-            {
-                var test = TestClass.StaticPublicMethod("test");
-            }
-            _stopWatch.Stop();
-            Console.WriteLine("Static Public method directly: {0}", _stopWatch.ElapsedMilliseconds);
         }
 
         private static void TestStaticFields()

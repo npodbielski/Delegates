@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Extensions\DelegateFactory.cs" />
     <Compile Include="ConsoleApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

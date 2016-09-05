@@ -1,12 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Delegates
 {
-    public class TestClass
+    public interface ITestInterface
+    {
+    }
+
+    public struct TestStruct
+    {
+        public TestStruct(int i)
+        {
+        }
+    }
+
+    public class TestClass : ITestInterface
     {
         public static readonly string StaticPublicReadOnlyField = "StaticPublicReadOnlyField";
 
+        public static object StaticGenericMethodVoidParameter;
+        public object InstanceGenericMethodVoidParameter;
         public static string StaticInternalField = "StaticInternalField";
 
         public static string StaticPrivateField = "StaticPrivateField";
@@ -15,15 +29,14 @@ namespace Delegates
 
         public static string StaticPublicField = "StaticPublicField";
 
+        public static string StaticPublicMethodVoidParameter;
         public static int StaticPublicValueField = 0;
 
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
-
         public string PublicField;
+        public string PublicMethodVoidParameter;
         internal string InternalField;
         protected string ProtectedField;
-        private static string _staticOnlyGetOrSetPropertyValue = "StaticOnlyGetOrSetPropertyValue";
-
         private readonly List<int> _indexerBackend = new List<int>(new int[10]);
         private string _privateField;
 
@@ -56,77 +69,21 @@ namespace Delegates
 
         public event EventHandler<PublicEventArgs> PublicEvent;
 
-        internal event EventHandler<InternalEventArgs> InternalEvent;
+        private event EventHandler<InternalEventArgs> InternalEventBackend;
+
+        internal event EventHandler<InternalEventArgs> InternalEvent
+        {
+            add { InternalEventBackend += value; }
+            remove { InternalEventBackend -= value; }
+        }
 
         protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
 
         private event EventHandler<PrivateEventArgs> PrivateEvent;
 
-        public static string StaticOnlySetProperty
-        {
-            set { _staticOnlyGetOrSetPropertyValue = value; }
-        }
-
-        public static string StaticPublicProperty { get; set; } = "StaticPublicProperty";
-
-        public string PublicProperty { get; set; }
-
-        public int PublicPropertyInt { get; set; }
-
-        public static string StaticOnlyGetProperty => _staticOnlyGetOrSetPropertyValue;
-
-        internal static string StaticInternalProperty { get; set; } = "StaticInternalProperty";
-
-        internal string InternalProperty { get; set; }
-
-        protected static string StaticProtectedProperty { get; set; } = "StaticProtectedProperty";
-
-        protected string ProtectedProperty { get; set; }
-
-        private static string StaticPrivateProperty { get; set; } = "StaticPrivateProperty";
-
-        private string PrivateProperty { get; set; }
-
-        [System.Runtime.CompilerServices.IndexerName("TheItem")]
-        public int this[int i]
-        {
-            get
-            {
-                return _indexerBackend[i];
-            }
-            set { _indexerBackend[i] = value; }
-        }
-
-        [System.Runtime.CompilerServices.IndexerName("TheItem")]
-        public int this[int i1, int i2, int i3]
-        {
-            get { return i1; }
-            set
-            {
-            }
-        }
-
-        [System.Runtime.CompilerServices.IndexerName("TheItem")]
-        internal string this[string s] => s;
-
-        [System.Runtime.CompilerServices.IndexerName("TheItem")]
-        private long this[long s] => s;
-
-        [System.Runtime.CompilerServices.IndexerName("TheItem")]
-        private int this[int i1, int i2]
-        {
-            get { return i1; }
-            set { }
-        }
-
-        public static string StaticPublicMethod(string s)
-        {
-            return s;
-        }
-
         public void InvokeInternalEvent()
         {
-            InternalEvent?.Invoke(this, new InternalEventArgs());
+            InternalEventBackend?.Invoke(this, new InternalEventArgs());
         }
 
         public void InvokePrivateEvent()
@@ -144,9 +101,130 @@ namespace Delegates
             PublicEvent?.Invoke(this, new PublicEventArgs());
         }
 
+        public static string StaticOnlyGetProperty { get; private set; } = "StaticOnlyGetOrSetPropertyValue";
+
+        public static string StaticOnlySetProperty
+        {
+            set { StaticOnlyGetProperty = value; }
+        }
+
+        public static string StaticPublicProperty { get; set; } = "StaticPublicProperty";
+
+        public string PublicProperty { get; set; }
+
+        public int PublicPropertyInt { get; set; }
+        internal static string StaticInternalProperty { get; set; } = "StaticInternalProperty";
+
+        internal string InternalProperty { get; set; }
+
+        protected static string StaticProtectedProperty { get; set; } = "StaticProtectedProperty";
+
+        protected string ProtectedProperty { get; set; }
+
+        private static string StaticPrivateProperty { get; set; } = "StaticPrivateProperty";
+
+        private string PrivateProperty { get; set; }
+
+        [IndexerName("TheItem")]
+        public int this[int i]
+        {
+            get { return _indexerBackend[i]; }
+            set { _indexerBackend[i] = value; }
+        }
+
+        [IndexerName("TheItem")]
+        public int this[int i1, int i2, int i3]
+        {
+            get { return i1; }
+            set { }
+        }
+
+        [IndexerName("TheItem")]
+        internal string this[string s] => s;
+
+        [IndexerName("TheItem")]
+        private long this[long s] => s;
+
+        [IndexerName("TheItem")]
+        private int this[int i1, int i2]
+        {
+            get { return i1; }
+            set { }
+        }
+
+        public static T StaticGenericMethod<T>() where T : new()
+        {
+            return new T();
+        }
+
+        public static T StaticGenericMethod<T>(T param)
+        {
+            return param;
+        }
+
+        public static T StaticGenericMethod<T>(T param, int i) where T : ITestInterface
+        {
+            return param;
+        }
+
+        public static T StaticGenericMethod<T>(T param, int i, bool p) where T : struct
+        {
+            return param;
+        }
+
+        public static T1 StaticGenericMethod<T1, T2>() where T1 : new()
+        {
+            return new T1();
+        }
+
+        public static T1 StaticGenericMethod<T1, T2, T3>(int i) where T1 : new()
+        {
+            return new T1();
+        }
+
+        public static void StaticGenericMethodVoid<T>(T s) where T : class
+        {
+            StaticGenericMethodVoidParameter = s;
+        }
+
+        public static string StaticPublicMethod(string s)
+        {
+            return s;
+        }
+
+        public static string StaticPublicMethod(int i)
+        {
+            return i.ToString();
+        }
+        
+        public static int StaticPublicMethodValue(int i)
+        {
+            return i;
+        }
+
+        public static void StaticPublicMethodVoid(string s)
+        {
+            StaticPublicMethodVoidParameter = s;
+        }
+
+        public T GenericMethod<T>(T s)
+        {
+            return s;
+        }
+
+        public void GenericMethodVoid<T>(T s)
+        {
+            InstanceGenericMethodVoidParameter = s;
+        }
+
         public string PublicMethod(string s)
         {
             return s;
+        }
+
+        public void PublicMethodVoid(string s)
+        {
+            PublicMethodVoidParameter = s;
         }
 
         internal static string StaticInternalMethod(string s)
@@ -187,7 +265,7 @@ namespace Delegates
         {
         }
 
-        protected class ProtectedEventArgs : EventArgs
+        protected class ProtectedEventArgs
         {
         }
 
