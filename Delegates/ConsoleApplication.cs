@@ -15,16 +15,16 @@ namespace Delegates
 
         static void Main(string[] args)
         {
-            //TestIndexers();
-            //TestEvents();
-            //TestProperties();
-            //TestStaticProperties();
-            //TestFields();
-            //TestStaticFields();
-            //TestInstanceMethods();
+            TestIndexers();
+            TestEvents();
+            TestProperties();
+            TestStaticProperties();
+            TestFields();
+            TestStaticFields();
+            TestInstanceMethods();
             TestStaticMethods();
-            //TestConstructors();
-            //TestGenerics();
+            TestConstructors();
+            TestGenerics();
         }
 
         private static void TestConstructors()
@@ -1148,23 +1148,4 @@ namespace Delegates
             Console.WriteLine("Private set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
         }
     }
-
-    //class ConsoleApplication2
-    //{
-    //    private static readonly Type Type = typeof(TestClass);
-
-    //    static void Main(string[] args)
-    //    {
-    //        var sp = DelegateFactory.StaticPropertyGet<TestClass, string>("StaticPublicProperty");
-    //        var sp1 = Type.StaticPropertyGet<string>("StaticPublicProperty");
-    //        var sp2 = Type.StaticPropertyGet<string>("StaticInternalProperty");
-    //        var sp3 = Type.StaticPropertyGet<string>("StaticProtectedProperty");
-    //        var sp4 = Type.StaticPropertyGet<string>("StaticPrivateProperty");
-
-    //        Console.WriteLine("Static public property value: {0}", sp1());
-    //        Console.WriteLine("Static internal property value: {0}", sp2());
-    //        Console.WriteLine("Static protected property value: {0}", sp3());
-    //        Console.WriteLine("Static private property value: {0}", sp4());
-    //    }
-    //}
 }

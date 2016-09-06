@@ -273,35 +273,4 @@ namespace Delegates
         {
         }
     }
-
-    //public class TestClass
-    //{
-    //    public static string StaticPublicProperty { get; set; } = "StaticPublicProperty";
-
-    //    internal static string StaticInternalProperty { get; set; } = "StaticInternalProperty";
-
-    //    protected static string StaticProtectedProperty { get; set; } = "StaticProtectedProperty";
-
-    //    private static string StaticPrivateProperty { get; set; } = "StaticPrivateProperty";
-    //}
-
-    //public class TestClass
-    //{
-    //    public TestClass()
-    //    {
-    //        PublicProperty = "PublicProperty";
-    //        InternalProperty = "InternalProperty";
-    //        ProtectedProperty = "ProtectedProperty";
-    //        PrivateProperty = "PrivateProperty";
-    //    }
-
-    //    public string PublicProperty { get; set; }
-
-    //    internal string InternalProperty { get; set; }
-
-    //    protected string ProtectedProperty { get; set; }
-
-    //    private string PrivateProperty { get; set; }
-
-    //}
 }
