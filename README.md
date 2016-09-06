@@ -4,7 +4,9 @@ Easy way to create delegates for obtaining/using all member types (fields, prope
 Code is written as an example for articles:
 
 http://internetexception.com/post/2016/08/05/Faster-then-Reflection-Delegates.aspx
+
 http://internetexception.com/post/2016/08/16/Faster-than-Reflection-Delegates-Part-2.aspx
+
 http://internetexception.com/post/2016/09/02/Faster-than-Reflection-Delegates-Part-3.aspx
 
 Articles are also available on CodeProject:
