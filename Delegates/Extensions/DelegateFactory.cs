@@ -240,6 +240,7 @@ namespace Delegates.Extensions
             return null;
         }
 
+        [Obsolete]
         public static Func<object, TField> FieldGet2<TField>(this Type source,
             string fieldName)
         {
@@ -305,11 +306,13 @@ namespace Delegates.Extensions
             return null;
         }
 
+        [Obsolete]
         public static Action<object, TProperty> FieldSetWithCast<TProperty>(this Type source, string fieldName)
         {
             return source.FieldSet(fieldName) as Action<object, TProperty>;
         }
 
+        [Obsolete]
         public static Action<TSource, TProperty> FieldSetWithCast<TSource, TProperty>(string fieldName)
         {
             return typeof(TSource).FieldSet(fieldName) as Action<TSource, TProperty>;
@@ -644,6 +647,7 @@ namespace Delegates.Extensions
             return PropertyGet<TSource, TProperty>(propertyName, null);
         }
 
+        [Obsolete]
         public static Func<TSource, TProperty> PropertyGet2<TSource, TProperty>(this Type source,
             string propertyName)
         {
@@ -742,6 +746,7 @@ namespace Delegates.Extensions
             return null;
         }
 
+        [Obsolete]
         public static Func<TField> StaticFieldGetExpr<TSource, TField>(string fieldName)
         {
             var source = typeof(TSource);
@@ -919,6 +924,7 @@ namespace Delegates.Extensions
             return (Func<object>)Expression.Lambda(returnExpression).Compile();
         }
 
+        [Obsolete]
         public static Func<TProperty> StaticPropertyGet2<TProperty>(this Type source, string propertyName)
         {
             var te = Expression.Lambda(Expression.Property(null, source, propertyName));

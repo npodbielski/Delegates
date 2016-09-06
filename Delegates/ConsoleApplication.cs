@@ -680,7 +680,9 @@ namespace Delegates
             var sp3 = Type.StaticPropertyGet<string>("StaticProtectedProperty");
             var sp4 = Type.StaticPropertyGet<string>("StaticPrivateProperty");
             var spg5 = Type.StaticPropertyGet("StaticPublicProperty");
+            var spg6 = DelegateFactory.StaticPropertyGet<TestClass, string>("StaticPublicProperty");
             Console.WriteLine(spg5());
+            spg6();
 
             var sps = DelegateFactory.StaticPropertySet<TestClass, string>("StaticPublicProperty");
             var sps1 = Type.StaticPropertySet<string>("StaticPublicProperty");
@@ -1032,6 +1034,8 @@ namespace Delegates
             var ps2 = DelegateFactory.PropertySet<TestClass, string>("InternalProperty");
             var ps3 = DelegateFactory.PropertySet<TestClass, string>("ProtectedProperty");
             var ps4 = DelegateFactory.PropertySet<TestClass, string>("PrivateProperty");
+            var ps5 = Type.PropertySet<string>("PublicProperty");
+            var ps6 = Type.PropertySet("PublicProperty");
 
             Console.WriteLine("Public property value is {0}", pg1(TestInstance));
             Console.WriteLine("Internal property value is {0}", pg2(TestInstance));
@@ -1042,6 +1046,8 @@ namespace Delegates
             ps2(TestInstance, "test");
             ps3(TestInstance, "test");
             ps4(TestInstance, "test");
+            ps5(TestInstance, "test1");
+            ps6(TestInstance, "test2");
 
             Console.WriteLine("Public property value is {0}", pg1(TestInstance));
             Console.WriteLine("Internal property value is {0}", pg2(TestInstance));
