@@ -11,7 +11,11 @@ http://internetexception.com/post/2016/09/02/Faster-than-Reflection-Delegates-Pa
 
 Articles are also available on CodeProject:
 
-http://www.codeproject.com/Articles/1118828/Faster-than-Reflection-Delegates-Part
+http://www.codeproject.com/Articles/1118828/Faster-than-Reflection-Delegates-Part - part 1
+
+http://www.codeproject.com/Articles/1124966/Faster-than-Reflection-Delegates-Part - part 2
+
+http://www.codeproject.com/Articles/1124863/Faster-than-Reflection-Delegates-Part - part 3
 
 ##Examples
 
