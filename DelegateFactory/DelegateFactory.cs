@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Delegates.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
-namespace Delegates.Extensions
+namespace Delegates
 {
     public static class DelegateFactory
     {
@@ -213,31 +215,63 @@ namespace Delegates.Extensions
 
         public static Func<TSource, TField> FieldGet<TSource, TField>(string fieldName)
         {
-            var source = typeof(TSource);
-            return source.FieldGet(fieldName) as Func<TSource, TField>;
+            return typeof(TSource).FieldGetImpl<Func<TSource, TField>>(fieldName);
+        }
+
+        public static StructPropertyGetFunc<TSource, TField> FieldGetStruct<TSource, TField>(string fieldName)
+            where TSource : struct
+        {
+            return typeof(TSource).FieldGetImpl<StructPropertyGetFunc<TSource, TField>>(fieldName, true);
         }
 
         public static Func<object, TField> FieldGet<TField>(this Type source,
             string fieldName)
         {
-            return source.FieldGet(fieldName) as Func<object, TField>;
+            return source.FieldGetImpl<Func<object, TField>>(fieldName);
         }
 
-        public static Func<object, object> FieldGet(this Type source, string fieldName)
+        private static TDelegate FieldGetImpl<TDelegate>(this Type source, string fieldName, bool byRef = false)
+            where TDelegate : class
         {
             var fieldInfo = GetFieldInfo(source, fieldName);
             if (fieldInfo != null)
             {
-                var sourceParam = Expression.Parameter(typeof(object));
-                Expression returnExpression = Expression.Field(Expression.Convert(sourceParam, source), fieldInfo);
+                var sourceTypeInDelegate = GetFuncDelegateArguments<TDelegate>().First();
+                Expression instanceExpression;
+                ParameterExpression sourceParam;
+                if (sourceTypeInDelegate != source)
+                {
+                    sourceParam = Expression.Parameter(typeof(object));
+                    instanceExpression = Expression.Convert(sourceParam, source);
+                }
+                else
+                {
+                    if (byRef && source.IsValueType)
+                    {
+                        sourceParam = Expression.Parameter(source.MakeByRefType());
+                        instanceExpression = sourceParam;
+                    }
+                    else
+                    {
+                        sourceParam = Expression.Parameter(source);
+                        instanceExpression = sourceParam;
+                    }
+                }
+                Expression returnExpression = Expression.Field(instanceExpression, fieldInfo);
                 if (!fieldInfo.FieldType.IsClass)
                 {
-                    returnExpression = Expression.Convert(returnExpression, typeof(object));
+                    returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
                 }
-                var lambda = Expression.Lambda(returnExpression, sourceParam);
-                return (Func<object, object>)lambda.Compile();
+                var lambda = Expression.Lambda<TDelegate>(returnExpression, sourceParam);
+                var fieldGetImpl = lambda.Compile();
+                return fieldGetImpl;
             }
             return null;
+        }
+
+        public static Func<object, object> FieldGet(this Type source, string fieldName)
+        {
+            return source.FieldGetImpl<Func<object, object>>(fieldName);
         }
 
         [Obsolete]
@@ -255,22 +289,132 @@ namespace Delegates.Extensions
             return null;
         }
 
+        public static StructSetActionRef<object, TProperty> FieldSetStructRef<TProperty>(this Type source, string fieldName)
+        {
+            var fieldInfo = GetFieldInfo(source, fieldName);
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
+            {
+                var sourceParam = Expression.Parameter(typeof(object).MakeByRefType());
+                ParameterExpression valueParam;
+                Expression valueExpr;
+                if (fieldInfo.FieldType == typeof(TProperty))
+                {
+                    valueParam = Expression.Parameter(fieldInfo.FieldType);
+                    valueExpr = valueParam;
+                }
+                else
+                {
+                    valueParam = Expression.Parameter(typeof(TProperty));
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                var structVariable = Expression.Variable(source, "struct");
+                var body = Expression.Block(typeof(void), new[] { structVariable },
+                    Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
+                    Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
+                    Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
+                );
+                var lambda = Expression.Lambda<StructSetActionRef<object, TProperty>>(body, sourceParam, valueParam);
+                return lambda.Compile();
+            }
+            return null;
+        }
+
+        public static StructSetAction<object, TProperty> FieldSetStruct<TProperty>(this Type source, string fieldName)
+        {
+            var fieldInfo = GetFieldInfo(source, fieldName);
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
+            {
+                var sourceParam = Expression.Parameter(typeof(object));
+                ParameterExpression valueParam;
+                Expression valueExpr;
+                if (fieldInfo.FieldType == typeof(TProperty))
+                {
+                    valueParam = Expression.Parameter(fieldInfo.FieldType);
+                    valueExpr = valueParam;
+                }
+                else
+                {
+                    valueParam = Expression.Parameter(typeof(TProperty));
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                var structVariable = Expression.Variable(source, "struct");
+                var body = Expression.Block(typeof(object), new[] { structVariable },
+                    Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
+                    Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
+                    Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
+                );
+                var lambda = Expression.Lambda<StructSetAction<object, TProperty>>(body, sourceParam, valueParam);
+                return lambda.Compile();
+            }
+            return null;
+        }
+
         public static Action<object, TProperty> FieldSet<TProperty>(this Type source, string fieldName)
         {
             var fieldInfo = GetFieldInfo(source, fieldName);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object));
+                Expression valueExpr;
                 var valueParam = Expression.Parameter(typeof(TProperty));
-                var te = Expression.Lambda(typeof(Action<object, TProperty>),
-                    Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo), valueParam),
+                if (fieldInfo.FieldType == typeof(TProperty))
+                {
+                    valueExpr = valueParam;
+                }
+                else
+                {
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                var lambda = Expression.Lambda<Action<object, TProperty>>(
+                    Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo), valueExpr),
                     sourceParam, valueParam);
-                return (Action<object, TProperty>)te.Compile();
+                return lambda.Compile();
+            }
+            return null;
+        }
+
+        //TODO: write test when we create delegates with source as interface with property or method instead of concrete class with implementation
+        public static StructSetActionRef<TSource, TProperty> FieldSetStruct<TSource, TProperty>(string fieldName)
+            where TSource : struct
+        {
+            var source = typeof(TSource);
+            var fieldInfo = GetFieldInfo(source, fieldName);
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
+            {
+                Expression sourcExpr;
+                var sourceParam = Expression.Parameter(typeof(TSource).MakeByRefType());
+                if (source == typeof(TSource))
+                {
+                    sourcExpr = sourceParam;
+                }
+                else
+                {
+                    sourcExpr = Expression.Convert(sourceParam, source);
+                }
+                var valueParam = Expression.Parameter(typeof(TProperty), "value");
+                Expression valueExpr;
+                var structVariable = Expression.Variable(source, "struct");
+                if (fieldInfo.FieldType == typeof(TProperty))
+                {
+                    valueExpr = valueParam;
+                }
+                else
+                {
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                var body = Expression.Block(typeof(void), new[] { structVariable },
+                    Expression.Assign(structVariable, sourcExpr),
+                    Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
+                    Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(TSource)))
+                );
+                var lambda = Expression.Lambda<StructSetActionRef<TSource, TProperty>>(body, sourceParam, valueParam);
+                return lambda.Compile();
             }
             return null;
         }
 
         public static Action<TSource, TProperty> FieldSet<TSource, TProperty>(string fieldName)
+            where TSource : class
         {
             var source = typeof(TSource);
             var fieldInfo = GetFieldInfo(source, fieldName);
@@ -278,10 +422,10 @@ namespace Delegates.Extensions
             {
                 var sourceParam = Expression.Parameter(source);
                 var valueParam = Expression.Parameter(typeof(TProperty));
-                var te = Expression.Lambda(typeof(Action<TSource, TProperty>),
+                var lambda = Expression.Lambda<Action<TSource, TProperty>>(
                     Expression.Assign(Expression.Field(sourceParam, fieldInfo), valueParam),
                     sourceParam, valueParam);
-                return (Action<TSource, TProperty>)te.Compile();
+                return lambda.Compile();
             }
             return null;
         }
@@ -299,9 +443,74 @@ namespace Delegates.Extensions
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
-                var lambda = Expression.Lambda(typeof(Action<object, object>),
-                    returnExpression, sourceParam, valueParam);
-                return (Action<object, object>)lambda.Compile();
+                var lambda = Expression.Lambda<Action<object, object>>(returnExpression, sourceParam, valueParam);
+                return lambda.Compile();
+            }
+            return null;
+        }
+
+        public static StructSetActionRef<object, object> FieldSetStructRef(this Type source, string fieldName)
+        {
+            var fieldInfo = GetFieldInfo(source, fieldName);
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
+            {
+                var sourceParam = Expression.Parameter(typeof(object).MakeByRefType());
+                var valueParam = Expression.Parameter(typeof(object));
+                Expression valueExpr;
+                if (fieldInfo.FieldType != typeof(object))
+                {
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                else
+                {
+                    valueExpr = valueParam;
+                }
+                var structVariable = Expression.Variable(source, "struct");
+                Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
+                if (!fieldInfo.FieldType.IsClass)
+                {
+                    returnExpression = Expression.Convert(returnExpression, typeof(object));
+                }
+                var body = Expression.Block(typeof(void), new[] { structVariable },
+                    Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
+                    returnExpression,
+                    Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
+                );
+                var lambda = Expression.Lambda<StructSetActionRef<object, object>>(body, sourceParam, valueParam);
+                return lambda.Compile();
+            }
+            return null;
+        }
+
+        public static StructSetAction<object, object> FieldSetStruct(this Type source, string fieldName)
+        {
+            var fieldInfo = GetFieldInfo(source, fieldName);
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
+            {
+                var sourceParam = Expression.Parameter(typeof(object));
+                var valueParam = Expression.Parameter(typeof(object));
+                Expression valueExpr;
+                if (fieldInfo.FieldType != typeof(object))
+                {
+                    valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
+                }
+                else
+                {
+                    valueExpr = valueParam;
+                }
+                var structVariable = Expression.Variable(source, "struct");
+                Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
+                if (!fieldInfo.FieldType.IsClass)
+                {
+                    returnExpression = Expression.Convert(returnExpression, typeof(object));
+                }
+                var body = Expression.Block(typeof(object), new[] { structVariable },
+                    Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
+                    returnExpression,
+                    Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
+                );
+                var lambda = Expression.Lambda<StructSetAction<object, object>>(body, sourceParam, valueParam);
+                return lambda.Compile();
             }
             return null;
         }
@@ -594,6 +803,7 @@ namespace Delegates.Extensions
             return deleg as TDelegate;
         }
 
+        [Obsolete]
         public static TDelegate InstanceMethod2<TDelegate>(string methodName) where TDelegate : class
         {
             var source = typeof(TDelegate).GenericTypeArguments[0];
@@ -604,9 +814,9 @@ namespace Delegates.Extensions
             {
                 parameters.Add(Expression.Parameter(type));
             }
-            var te = Expression.Lambda(Expression.Call(param, methodName, null,
+            var lambda = Expression.Lambda(Expression.Call(param, methodName, null,
                 parameters.Skip(1).Cast<Expression>().ToArray()), parameters);
-            return te.Compile() as TDelegate;
+            return lambda.Compile() as TDelegate;
         }
 
         public static Action<object, object[]> InstanceMethodVoid(this Type source,
@@ -617,32 +827,22 @@ namespace Delegates.Extensions
 
         public static Func<object, TProperty> PropertyGet<TProperty>(this Type source, string propertyName)
         {
-            return source.PropertyGet(propertyName) as Func<object, TProperty>;
+            return source.PropertyGetImpl<Func<object, TProperty>>(propertyName);
         }
 
         public static Func<object, object> PropertyGet(this Type source, string propertyName)
         {
-            var propertyInfo = GetPropertyInfo(source, propertyName);
-            if (propertyInfo?.GetMethod == null)
-            {
-                return null;
-            }
-            var sourceObjectParam = Expression.Parameter(typeof(object));
-            Expression returnExpression =
-                Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsClass)
-            {
-                returnExpression = Expression.Convert(returnExpression, typeof(object));
-            }
-            return (Func<object, object>)Expression.Lambda(returnExpression, sourceObjectParam).Compile();
+            return source.PropertyGetImpl<Func<object, object>>(propertyName);
         }
 
         public static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(PropertyInfo propertyInfo)
+            where TSource : class
         {
             return PropertyGet<TSource, TProperty>(null, propertyInfo);
         }
 
         public static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName)
+            where TSource : class
         {
             return PropertyGet<TSource, TProperty>(propertyName, null);
         }
@@ -652,8 +852,8 @@ namespace Delegates.Extensions
             string propertyName)
         {
             var p = Expression.Parameter(source);
-            var te = Expression.Lambda(Expression.Property(p, propertyName), p);
-            return (Func<TSource, TProperty>)te.Compile();
+            var lambda = Expression.Lambda(Expression.Property(p, propertyName), p);
+            return (Func<TSource, TProperty>)lambda.Compile();
         }
 
         public static Action<TSource, TProperty> PropertySet<TSource, TProperty>(this TSource source,
@@ -682,12 +882,85 @@ namespace Delegates.Extensions
                 propertyValueParam = Expression.Parameter(typeof(TProperty));
                 valueExpression = Expression.Convert(propertyValueParam, propertyInfo.PropertyType);
             }
-            return (Action<object, TProperty>)Expression.Lambda(Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.SetMethod, valueExpression), sourceObjectParam, propertyValueParam).Compile();
+            var @delegate = Expression.Lambda(Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.SetMethod, valueExpression), sourceObjectParam, propertyValueParam).Compile();
+            return (Action<object, TProperty>)@delegate;
+        }
+
+        public static StructSetActionRef<object, TProperty> PropertySetStructRef<TProperty>
+            (this Type source, string propertyName)
+        {
+            var propertyInfo = GetPropertyInfo(source, propertyName);
+            if (propertyInfo?.SetMethod == null)
+            {
+                return null;
+            }
+            var sourceObjectParam = Expression.Parameter(typeof(object).MakeByRefType());
+            ParameterExpression propertyValueParam;
+            Expression valueExpression;
+            if (propertyInfo.PropertyType == typeof(TProperty))
+            {
+                propertyValueParam = Expression.Parameter(propertyInfo.PropertyType);
+                valueExpression = propertyValueParam;
+            }
+            else
+            {
+                propertyValueParam = Expression.Parameter(typeof(TProperty));
+                valueExpression = Expression.Convert(propertyValueParam, propertyInfo.PropertyType);
+            }
+            var structVariable = Expression.Variable(source, "struct");
+            var blockExpr = Expression.Block(typeof(void), new[] { structVariable },
+                Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
+                Expression.Call(structVariable, propertyInfo.SetMethod, valueExpression),
+                Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
+            );
+            var @delegate = Expression.Lambda<StructSetActionRef<object, TProperty>>(blockExpr, sourceObjectParam, propertyValueParam).Compile();
+            return @delegate;
+        }
+
+        public static StructSetAction<object, TProperty> PropertySetStruct<TProperty>
+            (this Type source, string propertyName)
+        {
+            var propertyInfo = GetPropertyInfo(source, propertyName);
+            if (propertyInfo?.SetMethod == null)
+            {
+                return null;
+            }
+            var sourceObjectParam = Expression.Parameter(typeof(object));
+            ParameterExpression propertyValueParam;
+            Expression valueExpression;
+            if (propertyInfo.PropertyType == typeof(TProperty))
+            {
+                propertyValueParam = Expression.Parameter(propertyInfo.PropertyType);
+                valueExpression = propertyValueParam;
+            }
+            else
+            {
+                propertyValueParam = Expression.Parameter(typeof(TProperty));
+                valueExpression = Expression.Convert(propertyValueParam, propertyInfo.PropertyType);
+            }
+            var structVariable = Expression.Variable(source, "struct");
+            var blockExpr = Expression.Block(typeof(object), new[] { structVariable },
+                Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
+                Expression.Call(structVariable, propertyInfo.SetMethod, valueExpression),
+                Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
+            );
+            var @delegate = Expression.Lambda<StructSetAction<object, TProperty>>(blockExpr, sourceObjectParam, propertyValueParam).Compile();
+            return @delegate;
         }
 
         public static Action<object, object> PropertySet(this Type source, string propertyName)
         {
             return source.PropertySet<object>(propertyName);
+        }
+
+        public static StructSetActionRef<object, object> PropertySetStructRef(this Type source, string propertyName)
+        {
+            return source.PropertySetStructRef<object>(propertyName);
+        }
+
+        public static StructSetAction<object, object> PropertySetStruct(this Type source, string propertyName)
+        {
+            return source.PropertySetStruct<object>(propertyName);
         }
 
         public static Action<TSource, TProperty> PropertySet<TSource, TProperty>(string propertyName)
@@ -697,19 +970,19 @@ namespace Delegates.Extensions
             return (Action<TSource, TProperty>)propertyInfo?.SetMethod?.CreateDelegate(typeof(Action<TSource, TProperty>));
         }
 
+        public static StructSetActionRef<TSource, TProperty> PropertySetStructRef<TSource, TProperty>(string propertyName)
+        {
+            var source = typeof(TSource);
+            var propertyInfo = GetPropertyInfo(source, propertyName);
+            return (StructSetActionRef<TSource, TProperty>)propertyInfo?.SetMethod?.CreateDelegate(typeof(StructSetActionRef<TSource, TProperty>));
+        }
+
         public static Action<EventHandler<TEvent>> StaticEventAdd<TEvent>(this Type source, string eventName)
         {
-            var eventInfo = source.GetEvent(eventName);
-            if (eventInfo == null)
-            {
-                eventInfo = source.GetEvent(eventName, BindingFlags.NonPublic);
-            }
-            if (eventInfo == null)
-            {
-                eventInfo = source.GetEvent(eventName, BindingFlags.NonPublic | BindingFlags.Public);
-            }
-            return
-                (Action<EventHandler<TEvent>>)eventInfo.AddMethod.CreateDelegate(typeof(Action<EventHandler<TEvent>>));
+            var eventInfo = (source.GetEvent(eventName)
+                ?? source.GetEvent(eventName, BindingFlags.NonPublic))
+                ?? source.GetEvent(eventName, BindingFlags.NonPublic | BindingFlags.Public);
+            return (Action<EventHandler<TEvent>>)eventInfo?.AddMethod.CreateDelegate(typeof(Action<EventHandler<TEvent>>));
         }
 
         public static Func<TField> StaticFieldGet<TSource, TField>(string fieldName)
@@ -763,7 +1036,7 @@ namespace Delegates.Extensions
         public static Action<TField> StaticFieldSet<TField>(this Type source, string fieldName)
         {
             var fieldInfo = GetStaticFieldInfo(source, fieldName);
-            if (fieldInfo != null)
+            if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var valueParam = Expression.Parameter(typeof(TField));
                 var lambda = Expression.Lambda(typeof(Action<TField>),
@@ -927,8 +1200,8 @@ namespace Delegates.Extensions
         [Obsolete]
         public static Func<TProperty> StaticPropertyGet2<TProperty>(this Type source, string propertyName)
         {
-            var te = Expression.Lambda(Expression.Property(null, source, propertyName));
-            return (Func<TProperty>)te.Compile();
+            var lambda = Expression.Lambda(Expression.Property(null, source, propertyName));
+            return (Func<TProperty>)lambda.Compile();
         }
 
         public static Action<TProperty> StaticPropertySet<TSource, TProperty>(string propertyName)
@@ -945,17 +1218,13 @@ namespace Delegates.Extensions
         public static Action<object> StaticPropertySet(this Type source, string propertyName)
         {
             var propertyInfo = GetStaticPropertyInfo(source, propertyName);
-            if (propertyInfo?.GetMethod == null)
+            if (propertyInfo?.SetMethod == null)
             {
                 return null;
             }
             var valueParam = Expression.Parameter(typeof(object));
             var convertedValue = Expression.Convert(valueParam, propertyInfo.PropertyType);
             Expression returnExpression = Expression.Call(propertyInfo.SetMethod, convertedValue);
-            if (!propertyInfo.PropertyType.IsClass)
-            {
-                returnExpression = Expression.Convert(returnExpression, typeof(object));
-            }
             return (Action<object>)Expression.Lambda(returnExpression, valueParam).Compile();
         }
 
@@ -1233,10 +1502,41 @@ namespace Delegates.Extensions
         }
 
         private static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName = null, PropertyInfo propertyInfo = null)
+            where TSource : class
         {
             var source = typeof(TSource);
             propertyInfo = propertyInfo ?? GetPropertyInfo(source, propertyName);
             return (Func<TSource, TProperty>)propertyInfo?.GetMethod?.CreateDelegate(typeof(Func<TSource, TProperty>));
+        }
+
+        public static StructPropertyGetFunc<TSource, TProperty> PropertyGetStruct<TSource, TProperty>(string propertyName = null)
+            where TSource : struct
+        {
+            var source = typeof(TSource);
+            var propertyInfo = GetPropertyInfo(source, propertyName);
+            return (StructPropertyGetFunc<TSource, TProperty>)propertyInfo?.GetMethod?.CreateDelegate(typeof(StructPropertyGetFunc<TSource, TProperty>));
+        }
+
+        public delegate TProp StructPropertyGetFunc<T, out TProp>(ref T i);
+        public delegate void StructSetActionRef<T, in TProp>(ref T i, TProp value);
+        public delegate T StructSetAction<T, in TProp>(T i, TProp value);
+
+        private static TDelegate PropertyGetImpl<TDelegate>(this Type source, string propertyName)
+            where TDelegate : class
+        {
+            var propertyInfo = GetPropertyInfo(source, propertyName);
+            if (propertyInfo?.GetMethod == null)
+            {
+                return null;
+            }
+            var sourceObjectParam = Expression.Parameter(typeof(object));
+            Expression returnExpression =
+                Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
+            if (!propertyInfo.PropertyType.IsClass)
+            {
+                returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
+            }
+            return Expression.Lambda(returnExpression, sourceObjectParam).Compile() as TDelegate;
         }
     }
 }

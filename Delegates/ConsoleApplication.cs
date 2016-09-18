@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Delegates.Extensions;
+using DelegatesTest;
 
 namespace Delegates
 {
@@ -15,16 +16,21 @@ namespace Delegates
 
         static void Main(string[] args)
         {
-            TestIndexers();
-            TestEvents();
-            TestProperties();
-            TestStaticProperties();
-            TestFields();
+            //TestIndexers();
+            //TestEvents();
+            //TestProperties();
+            //TestStaticProperties();
+            //TestFields();
             TestStaticFields();
-            TestInstanceMethods();
-            TestStaticMethods();
-            TestConstructors();
-            TestGenerics();
+            //TestInstanceMethods();
+            //TestStaticMethods();
+            //TestConstructors();
+            //TestGenerics();
+        }
+
+        private string TestStruct(TestStruct t)
+        {
+            return t.PublicProperty;
         }
 
         private static void TestConstructors()
@@ -420,11 +426,11 @@ namespace Delegates
             var m2 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("InternalMethod");
             var m3 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("ProtectedMethod");
             var m4 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
-            var m5 = DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PublicMethod");
-            var m6 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
-            var m7 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
-            var m8 = Type.InstanceMethod("PublicMethod", typeof(string));
-            var m9 = Type.InstanceMethodVoid("PublicMethodVoid", typeof(string));
+            //var m5 = DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PublicMethod");
+            var m5 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
+            var m6 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
+            var m7 = Type.InstanceMethod("PublicMethod", typeof(string));
+            var m8 = Type.InstanceMethodVoid("PublicMethodVoid", typeof(string));
 
             var t = m1(TestInstance, "test");
             var t2 = m2(TestInstance, "test");
@@ -432,10 +438,9 @@ namespace Delegates
             var t4 = m4(TestInstance, "test");
             var t5 = m5(TestInstance, "test");
             var t6 = m6(TestInstance, "test");
-            var t7 = m7(TestInstance, "test");
-            var t8 = m8(TestInstance, new object[] { "test" });
-            m9(TestInstance, new object[] { "test" });
-            var t9 = TestInstance.PublicMethodVoidParameter;
+            var t7 = m7(TestInstance, new object[] { "test" });
+            m8(TestInstance, new object[] { "test" });
+            var t8 = TestInstance.PublicMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();

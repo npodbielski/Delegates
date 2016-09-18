@@ -1,44 +1,39 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TestClass.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace Delegates
+namespace DelegatesTest
 {
-    public interface ITestInterface
-    {
-    }
-
-    public struct TestStruct
-    {
-        public TestStruct(int i)
-        {
-        }
-    }
-
     public class TestClass : ITestInterface
     {
         public static readonly string StaticPublicReadOnlyField = "StaticPublicReadOnlyField";
 
         public static object StaticGenericMethodVoidParameter;
-        public object InstanceGenericMethodVoidParameter;
         public static string StaticInternalField = "StaticInternalField";
-
         public static string StaticPrivateField = "StaticPrivateField";
-
         public static string StaticProtectedField = "StaticProtectedField";
-
         public static string StaticPublicField = "StaticPublicField";
-
         public static string StaticPublicMethodVoidParameter;
         public static int StaticPublicValueField = 0;
 
+        private static string _staticOnlySetPropertyBackend;
+        private readonly List<int> _indexerBackend = new List<int>(new int[10]);
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private string _privateField;
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
-        public string PublicField;
-        public string PublicMethodVoidParameter;
+        private string _onlySetPropertyBackend;
+        public object InstanceGenericMethodVoidParameter;
         internal string InternalField;
         protected string ProtectedField;
-        private readonly List<int> _indexerBackend = new List<int>(new int[10]);
-        private string _privateField;
+        public string PublicField;
+        public int PublicFieldInt;
+        public string PublicMethodVoidParameter;
 
         public TestClass()
         {
@@ -67,52 +62,28 @@ namespace Delegates
         {
         }
 
-        public event EventHandler<PublicEventArgs> PublicEvent;
-
-        private event EventHandler<InternalEventArgs> InternalEventBackend;
-
-        internal event EventHandler<InternalEventArgs> InternalEvent
-        {
-            add { InternalEventBackend += value; }
-            remove { InternalEventBackend -= value; }
-        }
-
-        protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
-
-        private event EventHandler<PrivateEventArgs> PrivateEvent;
-
-        public void InvokeInternalEvent()
-        {
-            InternalEventBackend?.Invoke(this, new InternalEventArgs());
-        }
-
-        public void InvokePrivateEvent()
-        {
-            PrivateEvent?.Invoke(this, new PrivateEventArgs());
-        }
-
-        public void InvokeProtectedEvent()
-        {
-            ProtectedEvent?.Invoke(this, new ProtectedEventArgs());
-        }
-
-        public void InvokePublicEvent()
-        {
-            PublicEvent?.Invoke(this, new PublicEventArgs());
-        }
-
-        public static string StaticOnlyGetProperty { get; private set; } = "StaticOnlyGetOrSetPropertyValue";
+        public static string StaticOnlyGetProperty { get; } = "StaticOnlyGetProperty";
 
         public static string StaticOnlySetProperty
         {
-            set { StaticOnlyGetProperty = value; }
+            set { _staticOnlySetPropertyBackend = value; }
         }
 
         public static string StaticPublicProperty { get; set; } = "StaticPublicProperty";
 
+        public static int StaticPublicPropertyValue { get; set; } = 0;
+
         public string PublicProperty { get; set; }
 
+        public string OnlySetProperty
+        {
+            set { _onlySetPropertyBackend = value; }
+        }
+
+        public string OnlyGetProperty => "OnlyGetProperty";
+
         public int PublicPropertyInt { get; set; }
+
         internal static string StaticInternalProperty { get; set; } = "StaticInternalProperty";
 
         internal string InternalProperty { get; set; }
@@ -121,8 +92,10 @@ namespace Delegates
 
         protected string ProtectedProperty { get; set; }
 
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         private static string StaticPrivateProperty { get; set; } = "StaticPrivateProperty";
 
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         private string PrivateProperty { get; set; }
 
         [IndexerName("TheItem")]
@@ -151,6 +124,20 @@ namespace Delegates
             get { return i1; }
             set { }
         }
+
+        public event EventHandler<PublicEventArgs> PublicEvent;
+
+        internal event EventHandler<InternalEventArgs> InternalEvent
+        {
+            add { InternalEventBackend += value; }
+            remove { InternalEventBackend -= value; }
+        }
+
+        protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
+
+        private event EventHandler<InternalEventArgs> InternalEventBackend;
+
+        private event EventHandler<PrivateEventArgs> PrivateEvent;
 
         public static T StaticGenericMethod<T>() where T : new()
         {
@@ -196,7 +183,7 @@ namespace Delegates
         {
             return i.ToString();
         }
-        
+
         public static int StaticPublicMethodValue(int i)
         {
             return i;
@@ -215,6 +202,46 @@ namespace Delegates
         public void GenericMethodVoid<T>(T s)
         {
             InstanceGenericMethodVoidParameter = s;
+        }
+
+        public string GetPrivateProperty()
+        {
+            return PrivateProperty;
+        }
+
+        public string GetProtectedProperty()
+        {
+            return ProtectedProperty;
+        }
+
+        public static string GetStaticPrivateProperty()
+        {
+            return StaticPrivateProperty;
+        }
+
+        public static string GetStaticProtectedProperty()
+        {
+            return StaticProtectedProperty;
+        }
+
+        public void InvokeInternalEvent()
+        {
+            InternalEventBackend?.Invoke(this, new InternalEventArgs());
+        }
+
+        public void InvokePrivateEvent()
+        {
+            PrivateEvent?.Invoke(this, new PrivateEventArgs());
+        }
+
+        public void InvokeProtectedEvent()
+        {
+            ProtectedEvent?.Invoke(this, new ProtectedEventArgs());
+        }
+
+        public void InvokePublicEvent()
+        {
+            PublicEvent?.Invoke(this, new PublicEventArgs());
         }
 
         public string PublicMethod(string s)
@@ -255,6 +282,26 @@ namespace Delegates
         private string PrivateMethod(string s)
         {
             return s;
+        }
+
+        public string GetPrivateField()
+        {
+            return _privateField;
+        }
+
+        public string GetProtectedField()
+        {
+            return ProtectedField;
+        }
+
+        public static string GetStaticProtectedField()
+        {
+            return StaticProtectedField;
+        }
+
+        public static string GetStaticPrivateField()
+        {
+            return StaticPrivateField;
         }
 
         public class PublicEventArgs : EventArgs
