@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DelegatesTest
+namespace DelegatesTest.TestObjects
 {
     public class TestClassNoDefaultCtor
     {

@@ -6,7 +6,7 @@
 
 using System.Diagnostics.Contracts;
 
-namespace DelegatesTest
+namespace DelegatesTest.TestObjects
 {
     public struct TestStruct
     {
@@ -28,11 +28,41 @@ namespace DelegatesTest
         internal static string StaticInternalField = "StaticInternalField";
 
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
         private static string _staticPrivateField = "_staticPrivateField";
 
         public static string GetStaticPrivateField()
         {
             return _staticPrivateField;
+        }
+
+        private readonly List<int> _indexerBackend = new List<int>(new int[10]);
+
+        public int this[int i]
+        {
+            get { return _indexerBackend[i]; }
+            set { _indexerBackend[i] = value; }
+        }
+
+        public int this[int i1, int i2, int i3]
+        {
+            get { return i1; }
+            set { }
+        }
+
+        internal string this[string s] => s;
+
+        internal string this[string s, string s2]
+        {
+            set { }
+        }
+
+        private long this[long s] => s;
+
+        private int this[int i1, int i2]
+        {
+            get { return i1; }
+            set { }
         }
 
         public TestStruct(int i)

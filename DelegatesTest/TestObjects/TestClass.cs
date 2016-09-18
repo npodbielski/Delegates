@@ -116,6 +116,12 @@ namespace DelegatesTest
         internal string this[string s] => s;
 
         [IndexerName("TheItem")]
+        internal string this[string s, string s2]
+        {
+            set { }
+        }
+
+        [IndexerName("TheItem")]
         private long this[long s] => s;
 
         [IndexerName("TheItem")]

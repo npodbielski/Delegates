@@ -6,6 +6,7 @@
 
 using System;
 using Delegates;
+using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DelegatesTest

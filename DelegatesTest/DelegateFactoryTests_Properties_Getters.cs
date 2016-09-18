@@ -6,6 +6,7 @@
 
 using System;
 using Delegates;
+using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DelegatesTest
@@ -32,7 +33,6 @@ namespace DelegatesTest
             Assert.IsNull(pg);
         }
 
-        //TODO: write alternate version for struct so it wont be copied before retrieving property value
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Internal()
         {

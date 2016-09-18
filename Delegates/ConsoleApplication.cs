@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using Delegates;
 using DelegatesTest;
+using DelegatesTest.TestObjects;
 
 namespace DelegatesApp
 {
@@ -22,16 +23,16 @@ namespace DelegatesApp
 
         private static void Main(string[] args)
         {
-            TestIndexers();
-            TestEvents();
-            TestProperties();
-            TestStaticProperties();
-            TestFields();
-            TestStaticFields();
-            TestInstanceMethods();
-            TestStaticMethods();
             TestConstructors();
+            TestStaticProperties();
+            TestProperties();
+            TestIndexers();
+            TestStaticFields();
+            TestFields();
+            TestStaticMethods();
+            TestInstanceMethods();
             TestGenerics();
+            TestEvents();
         }
         
         private static void TestConstructors()
