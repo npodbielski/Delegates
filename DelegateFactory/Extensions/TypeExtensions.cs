@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TypeExtensions.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Linq;
 
 namespace Delegates.Extensions
@@ -37,7 +43,7 @@ namespace Delegates.Extensions
             {
                 var interfaces = source.GetInterfaces();
                 if (interfaces.Any(i => i == interfaceType
-                    || i.ImplementsInterface(interfaceType)))
+                                        || i.ImplementsInterface(interfaceType)))
                 {
                     return true;
                 }

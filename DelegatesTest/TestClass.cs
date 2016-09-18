@@ -24,10 +24,10 @@ namespace DelegatesTest
 
         private static string _staticOnlySetPropertyBackend;
         private readonly List<int> _indexerBackend = new List<int>(new int[10]);
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private string _privateField;
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
         private string _onlySetPropertyBackend;
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private string _privateField;
         public object InstanceGenericMethodVoidParameter;
         internal string InternalField;
         protected string ProtectedField;

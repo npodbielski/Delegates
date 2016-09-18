@@ -1,38 +1,39 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ConsoleApplication.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Delegates.Extensions;
+using Delegates;
 using DelegatesTest;
 
-namespace Delegates
+namespace DelegatesApp
 {
-    class ConsoleApplication
+    internal class ConsoleApplication
     {
         private static Stopwatch _stopWatch;
-        private static double _delay = 1e8;
+        private const double Delay = 1e8;
         private static readonly TestClass TestInstance = new TestClass();
         private static readonly Type Type = typeof(TestClass);
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            //TestIndexers();
-            //TestEvents();
-            //TestProperties();
-            //TestStaticProperties();
-            //TestFields();
+            TestIndexers();
+            TestEvents();
+            TestProperties();
+            TestStaticProperties();
+            TestFields();
             TestStaticFields();
-            //TestInstanceMethods();
-            //TestStaticMethods();
-            //TestConstructors();
-            //TestGenerics();
+            TestInstanceMethods();
+            TestStaticMethods();
+            TestConstructors();
+            TestGenerics();
         }
-
-        private string TestStruct(TestStruct t)
-        {
-            return t.PublicProperty;
-        }
-
+        
         private static void TestConstructors()
         {
             var cd = DelegateFactory.DefaultContructor<TestClass>();
@@ -57,92 +58,92 @@ namespace Delegates
             var t5 = c3(false);
             var t6 = c4("");
             var t7 = c5(0);
-            var t8 = c6(new object[] { 0 });
+            var t8 = c6(new object[] {0});
             var t9 = c7(0);
-            var t10 = c8(new object[] { 0 });
+            var t10 = c8(new object[] {0});
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = new TestClass();
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public default constructor directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public default constructor directly: {_stopWatch.ElapsedMilliseconds}");
 
             var constructorInfo = Type.GetConstructor(Type.EmptyTypes);
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = (TestClass)constructorInfo.Invoke(null);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public default constructor via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public default constructor via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = Activator.CreateInstance<TestClass>();
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public default constructor via Activator: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public default constructor via Activator: {_stopWatch.ElapsedMilliseconds}");
 
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var t = c1();
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public default constructor proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public default constructor proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = c5(0);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public constructor with parameter proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public constructor with parameter proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = c6(new object[] { 0 });
+                var test = c6(new object[] {0});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public constructor with parameter via array proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public constructor with parameter via array proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var t = c2(0);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal constructor proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal constructor proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var t = c3(false);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected constructor proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected constructor proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var t = c4("");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private constructor proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private constructor proxy: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestIndexers()
@@ -164,7 +165,7 @@ namespace Delegates
             var t4 = ig7(TestInstance, 0);
             var t5 = ig8(TestInstance, 0, 0);
             var t6 = ig9(TestInstance, 0, 0, 0);
-            var t7 = ig10(TestInstance, new object[] { 0, 0, 0 });
+            var t7 = ig10(TestInstance, new object[] {0, 0, 0});
 
             var is1 = DelegateFactory.IndexerSet<TestClass, int, int>();
             var is2 = DelegateFactory.IndexerSet<TestClass, int, int, int>();
@@ -178,7 +179,7 @@ namespace Delegates
             Console.WriteLine(TestInstance[0]);
             is2(TestInstance, 0, 0, 1);
             is3(TestInstance, 0, 0, 0, 1);
-            is4(TestInstance, new object[] { 0, 0, 0 }, 1);
+            is4(TestInstance, new object[] {0, 0, 0}, 1);
             is5(TestInstance, 1, 2);
             Console.WriteLine(TestInstance[1]);
             is6(TestInstance, 0, 0, 2);
@@ -187,67 +188,67 @@ namespace Delegates
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance[0];
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public indexer: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public indexer: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = ig1(TestInstance, 0);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public indexer retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public indexer retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = ig2(TestInstance, "s");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal indexer retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal indexer retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = ig3(TestInstance, i);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private indexer: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private indexer: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance[0, 0, 0];
             }
             _stopWatch.Stop();
-            Console.WriteLine("Multiple index indexer directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Multiple index indexer directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = ig10(TestInstance, new object[] { 0, 0, 0 });
+                var test = ig10(TestInstance, new object[] {0, 0, 0});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Multiple index indexer via delegate with array: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Multiple index indexer via delegate with array: {_stopWatch.ElapsedMilliseconds}");
 
-            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new[] { typeof(int), typeof(int), typeof(int) });
+            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new[] {typeof(int), typeof(int), typeof(int)});
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = indexerInfo.GetValue(TestInstance, new object[] { 0, 0, 0 });
+                var test = indexerInfo.GetValue(TestInstance, new object[] {0, 0, 0});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Multiple index indexer via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Multiple index indexer via reflection: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestEvents()
@@ -312,7 +313,7 @@ namespace Delegates
                 Console.WriteLine("Internal handler works!");
             }
             else if (eventArgs.GetType() ==
-                Type.GetNestedType("PrivateEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
+                     Type.GetNestedType("PrivateEventArgs", BindingFlags.Instance | BindingFlags.NonPublic))
             {
                 Console.WriteLine("Private handler works!");
             }
@@ -320,13 +321,22 @@ namespace Delegates
 
         private static void TestGenerics()
         {
-            var g1 = DelegateFactory.StaticMethod<TestClass, Func<TestClass, TestClass>, TestClass>("StaticGenericMethod");
-            var g2 = DelegateFactory.StaticMethod<TestClass, Func<TestClass, int, TestClass>, TestClass>("StaticGenericMethod");
-            var g3 = DelegateFactory.StaticMethod<TestClass, Func<TestStruct, int, bool, TestStruct>, TestStruct>("StaticGenericMethod");
+            var g1 =
+                DelegateFactory.StaticMethod<TestClass, Func<TestClass, TestClass>, TestClass>("StaticGenericMethod");
+            var g2 =
+                DelegateFactory.StaticMethod<TestClass, Func<TestClass, int, TestClass>, TestClass>(
+                    "StaticGenericMethod");
+            var g3 =
+                DelegateFactory.StaticMethod<TestClass, Func<TestStruct, int, bool, TestStruct>, TestStruct>(
+                    "StaticGenericMethod");
             var g4 = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass>("StaticGenericMethod");
-            var g5 = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass, TestStruct>("StaticGenericMethod");
-            var g6 = DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>, TestClass, TestStruct, int>("StaticGenericMethod");
-            var g7 = DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass), typeof(TestStruct), typeof(int));
+            var g5 =
+                DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass, TestStruct>("StaticGenericMethod");
+            var g6 =
+                DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>, TestClass, TestStruct, int>(
+                    "StaticGenericMethod");
+            var g7 = DelegateFactory.StaticMethod<TestClass, Func<int, TestClass>>("StaticGenericMethod",
+                typeof(TestClass), typeof(TestStruct), typeof(int));
 
             var g8 = Type.StaticMethod<Func<TestClass, TestClass>, TestClass>("StaticGenericMethod");
             var g9 = Type.StaticMethod<Func<TestClass, int, TestClass>, TestClass>("StaticGenericMethod");
@@ -334,15 +344,18 @@ namespace Delegates
             var g11 = Type.StaticMethod<Func<TestClass>, TestClass>("StaticGenericMethod");
             var g12 = Type.StaticMethod<Func<TestClass>, TestClass, TestStruct>("StaticGenericMethod");
             var g13 = Type.StaticMethod<Func<int, TestClass>, TestClass, TestStruct, int>("StaticGenericMethod");
-            var g14 = Type.StaticMethod<Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass), typeof(TestStruct), typeof(int));
+            var g14 = Type.StaticMethod<Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass),
+                typeof(TestStruct), typeof(int));
 
-            var g15 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type }, new[] { Type });
-            var g16 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type, typeof(int) }, new[] { Type });
-            var g17 = Type.StaticGenericMethod("StaticGenericMethod", new[] { typeof(TestStruct), typeof(int), typeof(bool) }, new[] { typeof(TestStruct) });
-            var g18 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type });
-            var g19 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type, typeof(TestStruct) });
-            var g20 = Type.StaticGenericMethod("StaticGenericMethod", new[] { typeof(int) }, new[] { Type, typeof(TestStruct), typeof(int) });
-            var g21 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { Type }, new[] { Type });
+            var g15 = Type.StaticGenericMethod("StaticGenericMethod", new[] {Type}, new[] {Type});
+            var g16 = Type.StaticGenericMethod("StaticGenericMethod", new[] {Type, typeof(int)}, new[] {Type});
+            var g17 = Type.StaticGenericMethod("StaticGenericMethod",
+                new[] {typeof(TestStruct), typeof(int), typeof(bool)}, new[] {typeof(TestStruct)});
+            var g18 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] {Type});
+            var g19 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] {Type, typeof(TestStruct)});
+            var g20 = Type.StaticGenericMethod("StaticGenericMethod", new[] {typeof(int)},
+                new[] {Type, typeof(TestStruct), typeof(int)});
+            var g21 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] {Type}, new[] {Type});
 
             var t = g1(TestInstance);
             var t2 = g2(TestInstance, 0);
@@ -360,64 +373,70 @@ namespace Delegates
             var t13 = g13(0);
             var t14 = g14(0);
 
-            var t15 = g15(new object[] { TestInstance });
-            var t16 = g16(new object[] { TestInstance, 0 });
-            var t17 = g17(new object[] { new TestStruct(), 0, false });
-            var t18 = g18(new object[] { });
-            var t19 = g19(new object[] { });
-            var t20 = g20(new object[] { 0 });
-            g21(new object[] { TestInstance });
+            var t15 = g15(new object[] {TestInstance});
+            var t16 = g16(new object[] {TestInstance, 0});
+            var t17 = g17(new object[] {new TestStruct(), 0, false});
+            var t18 = g18(new object[] {});
+            var t19 = g19(new object[] {});
+            var t20 = g20(new object[] {0});
+            g21(new object[] {TestInstance});
             var t21 = TestClass.StaticGenericMethodVoidParameter;
 
-            var g22 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { typeof(object) }, new[] { typeof(object) });
-            g22(new object[] { "" });
+            var g22 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] {typeof(object)},
+                new[] {typeof(object)});
+            g22(new object[] {""});
             var t22 = TestClass.StaticGenericMethodVoidParameter;
-            g22(new object[] { TestInstance });
+            g22(new object[] {TestInstance});
             var t23 = TestClass.StaticGenericMethodVoidParameter;
 
             var ig1 = DelegateFactory.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
             var ig2 = Type.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
             var ig3 = Type.InstanceMethod<Func<object, TestClass, TestClass>, TestClass>("GenericMethod");
-            var ig4 = Type.InstanceGenericMethod("GenericMethod", new[] { Type }, new[] { Type });
-            var ig5 = Type.InstanceGenericMethodVoid("GenericMethodVoid", new[] { Type }, new[] { Type });
+            var ig4 = Type.InstanceGenericMethod("GenericMethod", new[] {Type}, new[] {Type});
+            var ig5 = Type.InstanceGenericMethodVoid("GenericMethodVoid", new[] {Type}, new[] {Type});
 
             var it1 = ig1(TestInstance, TestInstance);
             var it2 = ig2(TestInstance, TestInstance);
             var it3 = ig3(TestInstance, TestInstance);
-            var it4 = ig4(TestInstance, new object[] { TestInstance });
-            ig5(TestInstance, new object[] { TestInstance });
+            var it4 = ig4(TestInstance, new object[] {TestInstance});
+            ig5(TestInstance, new object[] {TestInstance});
             var it5 = TestInstance.InstanceGenericMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestClass.StaticGenericMethod(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static generic method directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static generic method directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = g1(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static generic method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static generic method proxy: {_stopWatch.ElapsedMilliseconds}");
 
-            var methodInfos = Type.GetMethods(BindingFlags.Static | BindingFlags.Public).Where(m => m.Name == "StaticGenericMethod" && m.IsGenericMethod && m.GetParameters().Length == 1 && m.GetGenericArguments().Length == 1);
+            var methodInfos =
+                Type.GetMethods(BindingFlags.Static | BindingFlags.Public)
+                    .Where(
+                        m =>
+                            m.Name == "StaticGenericMethod" && m.IsGenericMethod && m.GetParameters().Length == 1 &&
+                            m.GetGenericArguments().Length == 1);
             var methodInfo = methodInfos.Single();
             methodInfo = methodInfo.MakeGenericMethod(Type);
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(null, new object[] { TestInstance });
+                var test = methodInfo.Invoke(null, new object[] {TestInstance});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static generic method via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static generic method via reflection: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestInstanceMethods()
@@ -426,11 +445,11 @@ namespace Delegates
             var m2 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("InternalMethod");
             var m3 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("ProtectedMethod");
             var m4 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
-            //var m5 = DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PublicMethod");
-            var m5 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
-            var m6 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
-            var m7 = Type.InstanceMethod("PublicMethod", typeof(string));
-            var m8 = Type.InstanceMethodVoid("PublicMethodVoid", typeof(string));
+            var m5 = DelegateFactory.InstanceMethodExpr<Func<TestClass, string, string>>("PublicMethod");
+            var m6 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
+            var m7 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
+            var m8 = Type.InstanceMethod("PublicMethod", typeof(string));
+            var m9 = Type.InstanceMethodVoid("PublicMethodVoid", typeof(string));
 
             var t = m1(TestInstance, "test");
             var t2 = m2(TestInstance, "test");
@@ -438,37 +457,38 @@ namespace Delegates
             var t4 = m4(TestInstance, "test");
             var t5 = m5(TestInstance, "test");
             var t6 = m6(TestInstance, "test");
-            var t7 = m7(TestInstance, new object[] { "test" });
-            m8(TestInstance, new object[] { "test" });
-            var t8 = TestInstance.PublicMethodVoidParameter;
+            var t7 = m7(TestInstance, "test");
+            var t8 = m8(TestInstance, new object[] {"test"});
+            m9(TestInstance, new object[] {"test"});
+            var t9 = TestInstance.PublicMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance.PublicMethod("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public method directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public method directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = m1(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public method proxy: {_stopWatch.ElapsedMilliseconds}");
 
             var methodInfo = Type.GetMethod("PublicMethod");
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(TestInstance, new object[] { "test" });
+                var test = methodInfo.Invoke(TestInstance, new object[] {"test"});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public method proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -477,16 +497,16 @@ namespace Delegates
                 DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private method proxy creator via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private method proxy creator via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < 10000; i++)
             {
-                DelegateFactory.InstanceMethod2<Func<TestClass, string, string>>("PrivateMethod");
+                DelegateFactory.InstanceMethodExpr<Func<TestClass, string, string>>("PrivateMethod");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private method proxy creator via expression: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private method proxy creator via expression: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestStaticMethods()
@@ -516,79 +536,79 @@ namespace Delegates
             var t6 = sm6("test");
             var t7 = sm7("test");
             var t8 = sm8("test");
-            var t9 = sm9(new object[] { "test" });
-            sm10(new object[] { "test" });
+            var t9 = sm9(new object[] {"test"});
+            sm10(new object[] {"test"});
             var t10 = TestClass.StaticPublicMethodVoidParameter;
-            var t11 = sm11(new object[] { "test" });
-            var t12 = sm12(new object[] { "test" });
-            var t13 = sm13(new object[] { "test" });
+            var t11 = sm11(new object[] {"test"});
+            var t12 = sm12(new object[] {"test"});
+            var t13 = sm13(new object[] {"test"});
             var t14 = sm14(0);
             var t15 = sm15(0);
-            var t16 = sm16(new object[] { 0 });
+            var t16 = sm16(new object[] {0});
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestClass.StaticPublicMethod("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public method directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public method directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sm1("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public method proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = sm9(new object[] { "test" });
+                var test = sm9(new object[] {"test"});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public method via proxy with array: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public method via proxy with array: {_stopWatch.ElapsedMilliseconds}");
 
-            var methodInfo = Type.GetMethod("StaticPublicMethod", new[] { typeof(string) });
+            var methodInfo = Type.GetMethod("StaticPublicMethod", new[] {typeof(string)});
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(null, new object[] { "test" });
+                var test = methodInfo.Invoke(null, new object[] {"test"});
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public method via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public method via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sm2("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static internal method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static internal method proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sm3("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static protected method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static protected method proxy: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sm4("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static private method proxy: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static private method proxy: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestStaticFields()
@@ -607,22 +627,22 @@ namespace Delegates
             var sfs3 = Type.StaticFieldSet("StaticPublicField");
             var sfs4 = Type.StaticFieldSet("StaticPublicReadOnlyField");
 
-            Console.WriteLine("Static public field value: {0}", sfg1());
+            Console.WriteLine($"Static public field value: {sfg1()}");
             sfg2();
             sfg3();
-            Console.WriteLine("Static internal field value: {0}", sfg4());
-            Console.WriteLine("Static protected field value: {0}", sfg5());
-            Console.WriteLine("Static private field value: {0}", sfg6());
+            Console.WriteLine($"Static internal field value: {sfg4()}");
+            Console.WriteLine($"Static protected field value: {sfg5()}");
+            Console.WriteLine($"Static private field value: {sfg6()}");
             sfg7();
-            Console.WriteLine("Static public int field value: {0}", sfg8());
+            Console.WriteLine($"Static public int field value: {sfg8()}");
 
             sfs1("test1");
-            Console.WriteLine("Static public field value: {0}", TestClass.StaticPublicField);
+            Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}");
             sfs2("test2");
-            Console.WriteLine("Static public field value: {0}", TestClass.StaticPublicField);
+            Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}");
             sfs3("test3");
-            Console.WriteLine("Static public field value: {0}", TestClass.StaticPublicField);
-
+            Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}");
+            
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < 10000; i++)
@@ -630,7 +650,7 @@ namespace Delegates
                 DelegateFactory.StaticFieldGet<TestClass, string>("StaticPublicField");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field creator via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field creator via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -639,43 +659,43 @@ namespace Delegates
                 DelegateFactory.StaticFieldGetExpr<TestClass, string>("StaticPublicField");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field creator via expression: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestClass.StaticPublicField;
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public field directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public field directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sfg1();
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public field retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public field retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 TestClass.StaticPublicField = "test";
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field set directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field set directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 sfs1("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field setter: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field setter: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestStaticProperties()
@@ -705,31 +725,33 @@ namespace Delegates
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestClass.StaticPublicProperty;
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = sp1();
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
-            var pi0 = Type.GetProperty("StaticPublicProperty", BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public).GetMethod;
+            var pi0 =
+                Type.GetProperty("StaticPublicProperty",
+                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public).GetMethod;
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = pi0.Invoke(null, null);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static Public property via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static Public property via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -738,66 +760,66 @@ namespace Delegates
                 Type.StaticPropertyGet<string>("StaticPublicProperty");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field creator via reflection: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field creator via reflection: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < 10000; i++)
             {
-                Type.StaticPropertyGet2<string>("StaticPublicProperty");
+                Type.StaticPropertyGetExpr<string>("StaticPublicProperty");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Static public field creator via expression: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 TestInstance.PublicProperty = "ordinal way";
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public set property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public set property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 sps1("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 sps2("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 sps3("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 sps4("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
-            Console.WriteLine("Static public property value is {0}", sp1());
-            Console.WriteLine("Static internal property value is {0}", sp2());
-            Console.WriteLine("Static protected property value is {0}", sp3());
-            Console.WriteLine("Static private property value is {0}", sp4());
+            Console.WriteLine($"Static public property value is {sp1()}");
+            Console.WriteLine($"Static internal property value is {sp2()}");
+            Console.WriteLine($"Static protected property value is {sp3()}");
+            Console.WriteLine($"Static private property value is {sp4()}");
         }
 
         private static void TestFields()
@@ -811,12 +833,12 @@ namespace Delegates
             var fg6 = Type.FieldGet("PublicField");
             var fg7 = Type.FieldGet2<string>("PublicField");
 
-            Console.WriteLine("Public field value: {0}", fg1(TestInstance));
-            Console.WriteLine("Internal field value: {0}", fg2(TestInstance));
-            Console.WriteLine("Protected field value: {0}", fg3(TestInstance));
-            Console.WriteLine("Private field value: {0}", fg4(TestInstance));
-            Console.WriteLine("Public field value by object and field type: {0}", fg5(TestInstance));
-            Console.WriteLine("Public field value by objects: {0}", fg6(TestInstance));
+            Console.WriteLine($"Public field value: {fg1(TestInstance)}");
+            Console.WriteLine($"Internal field value: {fg2(TestInstance)}");
+            Console.WriteLine($"Protected field value: {fg3(TestInstance)}");
+            Console.WriteLine($"Private field value: {fg4(TestInstance)}");
+            Console.WriteLine($"Public field value by object and field type: {fg5(TestInstance)}");
+            Console.WriteLine($"Public field value by objects: {fg6(TestInstance)}");
 
             var fs1 = DelegateFactory.FieldSetWithCast<TestClass, string>("PublicField");
             var fs2 = DelegateFactory.FieldSetWithCast<TestClass, string>("InternalField");
@@ -833,184 +855,185 @@ namespace Delegates
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance.PublicField;
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public field directly: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public field directly: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = fg5(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public field via retriver with casting: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public field via retriver with casting: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = fg7(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public field via retriver without casting: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg1(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Public field retriever: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //var fieldInfo = Type.GetField("PublicField");
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fieldInfo.GetValue(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Public field via reflection: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg2(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Internal field retriever: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg3(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Protected field retriever: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg4(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Private field retriever: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg5(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Public field retriever by object and field type: {0}", _stopWatch.ElapsedMilliseconds);
-
-            //_stopWatch = new Stopwatch();
-            //_stopWatch.Start();
-            //for (var i = 0; i < _delay; i++)
-            //{
-            //    var test = fg6(TestInstance);
-            //}
-            //_stopWatch.Stop();
-            //Console.WriteLine("Public field retriever by objects: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public field via retriver without casting: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg1(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Public field retriever: {_stopWatch.ElapsedMilliseconds}");
+
+            var fieldInfo = Type.GetField("PublicField");
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fieldInfo.GetValue(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Public field via reflection: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg2(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Internal field retriever: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg3(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Protected field retriever: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg4(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Private field retriever: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg5(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Public field retriever by object and field type: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
+            {
+                var test = fg6(TestInstance);
+            }
+            _stopWatch.Stop();
+            Console.WriteLine($"Public field retriever by objects: {_stopWatch.ElapsedMilliseconds}");
+
+            _stopWatch = new Stopwatch();
+            _stopWatch.Start();
+            for (var i = 0; i < Delay; i++)
             {
                 fs1(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public field set retriever with cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public field set retriever with cast: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs2(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal field set retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal field set retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs3(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected field set retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected field set retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs4(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private field set retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private field set retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs6(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public field set retriever without cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public field set retriever without cast: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs7(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal field set retriever without cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal field set retriever without cast: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs8(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected field set retriever without cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected field set retriever without cast: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs9(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private field set retriever without cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private field set retriever without cast: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs10(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private field set retriever by object and field type: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private field set retriever by object and field type: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 fs11(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private field set retriever by object and field type without a cast: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine(
+                $"Private field set retriever by object and field type without a cast: {_stopWatch.ElapsedMilliseconds}");
         }
 
         private static void TestProperties()
@@ -1023,17 +1046,17 @@ namespace Delegates
             var pgo1 = Type.PropertyGet<string>("PublicProperty");
             var pgo2 = Type.PropertyGet("PublicProperty");
             var pgo3 = Type.PropertyGet("PublicPropertyInt");
-            Console.WriteLine("Public property by object and property type {0}", pgo1(TestInstance));
-            Console.WriteLine("Public property by objects {0}", pgo2(TestInstance));
-            Console.WriteLine("Public property by objects and with return value type {0}", pgo3(TestInstance));
+            Console.WriteLine($"Public property by object and property type {pgo1(TestInstance)}");
+            Console.WriteLine($"Public property by objects {pgo2(TestInstance)}");
+            Console.WriteLine($"Public property by objects and with return value type {pgo3(TestInstance)}");
 
             var pso1 = Type.PropertySet<string>("PublicProperty");
             var pso2 = Type.PropertySet("PublicProperty");
 
             pso1(TestInstance, "test");
-            Console.WriteLine("Public property by object and property type {0}", TestInstance.PublicProperty);
+            Console.WriteLine($"Public property by object and property type {TestInstance.PublicProperty}");
             pso2(TestInstance, "test2");
-            Console.WriteLine("Public property by objects {0}", TestInstance.PublicProperty);
+            Console.WriteLine($"Public property by objects {TestInstance.PublicProperty}");
 
             var ps1 = DelegateFactory.PropertySet<TestClass, string>("PublicProperty");
             var ps2 = DelegateFactory.PropertySet<TestClass, string>("InternalProperty");
@@ -1042,10 +1065,10 @@ namespace Delegates
             var ps5 = Type.PropertySet<string>("PublicProperty");
             var ps6 = Type.PropertySet("PublicProperty");
 
-            Console.WriteLine("Public property value is {0}", pg1(TestInstance));
-            Console.WriteLine("Internal property value is {0}", pg2(TestInstance));
-            Console.WriteLine("Protected property value is {0}", pg3(TestInstance));
-            Console.WriteLine("Private property value is {0}", pg4(TestInstance));
+            Console.WriteLine($"Public property value is {pg1(TestInstance)}");
+            Console.WriteLine($"Internal property value is {pg2(TestInstance)}");
+            Console.WriteLine($"Protected property value is {pg3(TestInstance)}");
+            Console.WriteLine($"Private property value is {pg4(TestInstance)}");
 
             ps1(TestInstance, "test");
             ps2(TestInstance, "test");
@@ -1054,109 +1077,109 @@ namespace Delegates
             ps5(TestInstance, "test1");
             ps6(TestInstance, "test2");
 
-            Console.WriteLine("Public property value is {0}", pg1(TestInstance));
-            Console.WriteLine("Internal property value is {0}", pg2(TestInstance));
-            Console.WriteLine("Protected property value is {0}", pg3(TestInstance));
-            Console.WriteLine("Private property value is {0}", pg4(TestInstance));
+            Console.WriteLine($"Public property value is {pg1(TestInstance)}");
+            Console.WriteLine($"Internal property value is {pg2(TestInstance)}");
+            Console.WriteLine($"Protected property value is {pg3(TestInstance)}");
+            Console.WriteLine($"Private property value is {pg4(TestInstance)}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance.PublicProperty;
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = pg1(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = pg2(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = TestInstance.InternalProperty;
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = pg3(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 var test = pg4(TestInstance);
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 TestInstance.PublicProperty = "test";
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public set property: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public set property: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 ps1(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Public set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Public set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 ps2(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Internal set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Internal set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 ps3(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Protected set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Protected set property retriever: {_stopWatch.ElapsedMilliseconds}");
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
-            for (var i = 0; i < _delay; i++)
+            for (var i = 0; i < Delay; i++)
             {
                 ps4(TestInstance, "test");
             }
             _stopWatch.Stop();
-            Console.WriteLine("Private set property retriever: {0}", _stopWatch.ElapsedMilliseconds);
+            Console.WriteLine($"Private set property retriever: {_stopWatch.ElapsedMilliseconds}");
         }
     }
 }
