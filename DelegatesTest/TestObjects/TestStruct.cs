@@ -4,7 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace DelegatesTest.TestObjects
 {
@@ -36,19 +38,36 @@ namespace DelegatesTest.TestObjects
             return _staticPrivateField;
         }
 
-        private readonly List<int> _indexerBackend = new List<int>(new int[10]);
+        public readonly List<int> IndexerBackend;
 
         public int this[int i]
         {
-            get { return _indexerBackend[i]; }
-            set { _indexerBackend[i] = value; }
+            get { return IndexerBackend[i]; }
+            set { IndexerBackend[i] = value; }
         }
 
         public int this[int i1, int i2, int i3]
         {
             get { return i1; }
-            set { }
+            set { Public3IndexIndexer = value; }
         }
+
+        public int this[int i1, int i2, int i3, int i4]
+        {
+            get { return i1; }
+            set { Public4IndexIndexer = value; }
+        }
+
+
+        public double InternalIndexer;
+        internal double this[double s]
+        {
+            get { return s; }
+            set { InternalIndexer = value; }
+        }
+
+        public int Public3IndexIndexer;
+        public int Public4IndexIndexer;
 
         internal string this[string s] => s;
 
@@ -57,16 +76,29 @@ namespace DelegatesTest.TestObjects
             set { }
         }
 
+        public byte this[byte i]
+        {
+            get { return i; }
+            set { }
+        }
+
+        // ReSharper disable once UnusedMember.Local
         private long this[long s] => s;
 
+        public int PrivateIndexer;
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once UnusedParameter.Local
         private int this[int i1, int i2]
         {
             get { return i1; }
-            set { }
+            set { PrivateIndexer = value; }
         }
 
         public TestStruct(int i)
         {
+            InternalIndexer = 0;
+            PrivateIndexer = 0;
+            IndexerBackend = new List<int>(new int[10]);
             PublicProperty = "PublicPropertyStruct";
             InternalProperty = "InternalPropertyStruct";
             PrivateProperty = "PrivatePropertyStruct";
@@ -75,6 +107,8 @@ namespace DelegatesTest.TestObjects
             _privateField = "_privateFieldStruct";
             PublicFieldInt = 10;
             PublicPropertyInt = 10;
+            Public3IndexIndexer = 0;
+            Public4IndexIndexer = 0;
         }
 
         public static string StaticPublicProperty { get; set; }

@@ -53,6 +53,8 @@
     <Compile Include="DelegateFactoryTests_Constructors.cs" />
     <Compile Include="DelegateFactoryTests_Fields_GetValue.cs" />
     <Compile Include="DelegateFactoryTests_Fields_SetValue.cs" />
+    <Compile Include="DelegateFactoryTests_Indexers_Getters.cs" />
+    <Compile Include="DelegateFactoryTests_Indexers_Setters.cs" />
     <Compile Include="DelegateFactoryTests_Properties_Getters.cs" />
     <Compile Include="DelegateFactoryTests_Properties_Setters.cs" />
     <Compile Include="DelegateFactoryTests_StaticField_GetValue.cs" />

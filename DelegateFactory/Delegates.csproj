@@ -40,9 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomDelegates\StructIndex1GetFunc.cs" />
+    <Compile Include="CustomDelegates\StructIndex1SetAction.cs" />
+    <Compile Include="CustomDelegates\StructIndex2GetFunc.cs" />
+    <Compile Include="CustomDelegates\StructIndex2SetAction.cs" />
+    <Compile Include="CustomDelegates\StructIndex3GetFunc.cs" />
+    <Compile Include="CustomDelegates\StructIndex3SetAction.cs" />
+    <Compile Include="CustomDelegates\StructIndexesSetAction.cs" />
     <Compile Include="DelegateFactory.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomDelegates\StructGetFunc.cs" />
+    <Compile Include="CustomDelegates\StructSetAction.cs" />
+    <Compile Include="CustomDelegates\StructSetActionRef.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

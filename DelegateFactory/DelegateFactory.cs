@@ -9,18 +9,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Delegates.CustomDelegates;
 using Delegates.Extensions;
 
 namespace Delegates
 {
     public static class DelegateFactory
     {
-        public delegate TProp StructPropertyGetFunc<T, out TProp>(ref T i);
-
-        public delegate T StructSetAction<T, in TProp>(T i, TProp value);
-
-        public delegate void StructSetActionRef<T, in TProp>(ref T i, TProp value);
-
         private const string AddAccessor = "add";
         private const string Item = "Item";
 
@@ -99,8 +94,8 @@ namespace Delegates
         public static Delegate DelegateIndexerGet(Type source, Type returnType,
             params Type[] indexTypes)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, returnType, indexTypes);
-            if (propertyInfo?.GetMethod == null)
+            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            if (indexerInfo?.GetMethod == null)
             {
                 return null;
             }
@@ -112,19 +107,28 @@ namespace Delegates
                 paramsExpression[i] = Expression.Parameter(indexType);
             }
             return Expression.Lambda(
-                Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod, paramsExpression),
-                new[] {sourceObjectParam}.Concat(paramsExpression)).Compile();
+                Expression.Call(Expression.Convert(sourceObjectParam, source), indexerInfo.GetMethod, paramsExpression),
+                new[] { sourceObjectParam }.Concat(paramsExpression)).Compile();
         }
 
-        public static Delegate DelegateIndexerSet(Type source, Type returnType,
+        public static TDelegate DelegateIndexerSet<TDelegate>(Type source, Type returnType,
             params Type[] indexTypes)
+            where TDelegate : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, returnType, indexTypes);
-            if (propertyInfo?.SetMethod == null)
+            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            if (indexerInfo?.SetMethod == null)
             {
                 return null;
             }
-            var sourceObjectParam = Expression.Parameter(typeof(object));
+            ParameterExpression sourceObjectParam;
+            if (source.IsClass)
+            {
+                sourceObjectParam = Expression.Parameter(typeof(object));
+            }
+            else
+            {
+                sourceObjectParam = Expression.Parameter(typeof(object).MakeByRefType());
+            }
             var valueParam = Expression.Parameter(returnType);
             var indexExpressions = new ParameterExpression[indexTypes.Length];
             for (var i = 0; i < indexTypes.Length; i++)
@@ -132,11 +136,24 @@ namespace Delegates
                 var indexType = indexTypes[i];
                 indexExpressions[i] = Expression.Parameter(indexType);
             }
-            var callArgs = indexExpressions.Concat(new[] {valueParam}).ToArray();
-            var paramsExpressions = new[] {sourceObjectParam}.Concat(callArgs);
-            return Expression.Lambda(
-                Expression.Call(Expression.Convert(sourceObjectParam, source),
-                    propertyInfo.SetMethod, callArgs), paramsExpressions).Compile();
+            var callArgs = indexExpressions.Concat(new[] { valueParam }).ToArray();
+            var paramsExpressions = new[] { sourceObjectParam }.Concat(callArgs);
+            var structVariable = Expression.Variable(source, "struct");
+            Expression blockExpr;
+            if (!source.IsClass)
+            {
+                blockExpr = Expression.Block(typeof(object), new[] { structVariable },
+                        Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
+                        Expression.Call(structVariable, indexerInfo.SetMethod, callArgs),
+                        Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
+                    );
+            }
+            else
+            {
+                blockExpr = Expression.Call(Expression.Convert(sourceObjectParam, source),
+                    indexerInfo.SetMethod, callArgs);
+            }
+            return Expression.Lambda<TDelegate>(blockExpr, paramsExpressions).Compile();
         }
 
         public static Action<TSource, EventHandler<TEventArgs>> EventAdd<TSource, TEventArgs>(string eventName)
@@ -231,10 +248,10 @@ namespace Delegates
             return typeof(TSource).FieldGetImpl<Func<TSource, TField>>(fieldName);
         }
 
-        public static StructPropertyGetFunc<TSource, TField> FieldGetStruct<TSource, TField>(string fieldName)
+        public static StructGetFunc<TSource, TField> FieldGetStruct<TSource, TField>(string fieldName)
             where TSource : struct
         {
-            return typeof(TSource).FieldGetImpl<StructPropertyGetFunc<TSource, TField>>(fieldName, true);
+            return typeof(TSource).FieldGetImpl<StructGetFunc<TSource, TField>>(fieldName, true);
         }
 
         public static Func<object, TField> FieldGet<TField>(this Type source,
@@ -322,7 +339,7 @@ namespace Delegates
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
                 }
                 var structVariable = Expression.Variable(source, "struct");
-                var body = Expression.Block(typeof(void), new[] {structVariable},
+                var body = Expression.Block(typeof(void), new[] { structVariable },
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -352,7 +369,7 @@ namespace Delegates
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
                 }
                 var structVariable = Expression.Variable(source, "struct");
-                var body = Expression.Block(typeof(object), new[] {structVariable},
+                var body = Expression.Block(typeof(object), new[] { structVariable },
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -416,7 +433,7 @@ namespace Delegates
                 {
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
                 }
-                var body = Expression.Block(typeof(void), new[] {structVariable},
+                var body = Expression.Block(typeof(void), new[] { structVariable },
                     Expression.Assign(structVariable, sourcExpr),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(TSource)))
@@ -487,7 +504,7 @@ namespace Delegates
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
-                var body = Expression.Block(typeof(void), new[] {structVariable},
+                var body = Expression.Block(typeof(void), new[] { structVariable },
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     returnExpression,
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -520,7 +537,7 @@ namespace Delegates
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
-                var body = Expression.Block(typeof(object), new[] {structVariable},
+                var body = Expression.Block(typeof(object), new[] { structVariable },
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     returnExpression,
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -544,27 +561,57 @@ namespace Delegates
         }
 
         public static Func<TSource, TIndex, TReturn> IndexerGet<TSource, TReturn, TIndex>()
+            where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), typeof(TReturn), new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
             return (Func<TSource, TIndex, TReturn>)
                 propertyInfo?.GetMethod?.CreateDelegate(typeof(Func<TSource, TIndex, TReturn>));
         }
 
-        public static Func<TSource, TIndex, TIndex2, TReturn> IndexerGet<TSource, TReturn, TIndex, TIndex2>()
+        public static StructIndex1GetFunc<TSource, TIndex, TReturn> IndexerGetStruct<TSource, TReturn, TIndex>()
+            where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), typeof(TReturn),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
+            return (StructIndex1GetFunc<TSource, TIndex, TReturn>)
+                propertyInfo?.GetMethod?.CreateDelegate(typeof(StructIndex1GetFunc<TSource, TIndex, TReturn>));
+        }
+
+        public static Func<TSource, TIndex, TIndex2, TReturn> IndexerGet<TSource, TReturn, TIndex, TIndex2>()
+            where TSource : class
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return (Func<TSource, TIndex, TIndex2, TReturn>)
                 propertyInfo?.GetMethod?.CreateDelegate(typeof(Func<TSource, TIndex, TIndex2, TReturn>));
         }
 
-        public static Func<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGet
-            <TSource, TReturn, TIndex, TIndex2, TIndex3>()
+        public static StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>
+            IndexerGetStruct<TSource, TReturn, TIndex, TIndex2>()
+            where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), typeof(TReturn),
-                new[] {typeof(TIndex), typeof(TIndex2), typeof(TIndex3)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2) });
+            return (StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>)
+                propertyInfo?.GetMethod?.CreateDelegate(typeof(StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>));
+        }
+
+        public static Func<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGet
+            <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : class
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return (Func<TSource, TIndex, TIndex2, TIndex2, TReturn>)
                 propertyInfo?.GetMethod?.CreateDelegate(typeof(Func<TSource, TIndex, TIndex2, TIndex2, TReturn>));
+        }
+
+        public static StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGetStruct
+            <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
+            return (StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>)
+                propertyInfo?.GetMethod?.CreateDelegate(
+                    typeof(StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>));
         }
 
         public static Func<object, TIndex, TReturn> IndexerGet<TReturn, TIndex>(this Type source)
@@ -596,7 +643,7 @@ namespace Delegates
         public static Func<object, object[], object> IndexerGet(this Type source, Type returnType,
             params Type[] indexTypes)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, returnType, indexTypes);
+            var propertyInfo = GetIndexerPropertyInfo(source, indexTypes);
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -622,7 +669,7 @@ namespace Delegates
 
         public static Func<object, object, object> IndexerGet(this Type source, Type returnType, Type indexType)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, returnType, new[] {indexType});
+            var propertyInfo = GetIndexerPropertyInfo(source, new[] { indexType });
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -642,16 +689,32 @@ namespace Delegates
         public static Action<object, TIndex, TReturn> IndexerSet<TReturn, TIndex>(this Type source)
         {
             var indexType = typeof(TIndex);
-            return (Action<object, TIndex, TReturn>)DelegateIndexerSet(source, typeof(TReturn), indexType);
+            return DelegateIndexerSet<Action<object, TIndex, TReturn>>
+                (source, typeof(TReturn), indexType);
+        }
+
+        public static StructIndex1SetAction<object, TIndex, TReturn> IndexerSetStruct<TReturn, TIndex>(this Type source)
+        {
+            var indexType = typeof(TIndex);
+            return DelegateIndexerSet<StructIndex1SetAction<object, TIndex, TReturn>>
+                (source, typeof(TReturn), indexType);
         }
 
         public static Action<object, TIndex, TIndex2, TReturn> IndexerSet<TReturn, TIndex, TIndex2>(this Type source)
         {
             var indexType = typeof(TIndex);
             var indexType2 = typeof(TIndex2);
-            return
-                (Action<object, TIndex, TIndex2, TReturn>)
-                DelegateIndexerSet(source, typeof(TReturn), indexType, indexType2);
+            return DelegateIndexerSet<Action<object, TIndex, TIndex2, TReturn>>
+                (source, typeof(TReturn), indexType, indexType2);
+        }
+
+        public static StructIndex2SetAction<object, TIndex, TIndex2, TReturn> IndexerSetStruct<TReturn, TIndex, TIndex2>
+            (this Type source)
+        {
+            var indexType = typeof(TIndex);
+            var indexType2 = typeof(TIndex2);
+            return DelegateIndexerSet<StructIndex2SetAction<object, TIndex, TIndex2, TReturn>>
+                (source, typeof(TReturn), indexType, indexType2);
         }
 
         public static Action<object, TIndex, TIndex2, TIndex3, TReturn> IndexerSet<TReturn, TIndex, TIndex2, TIndex3>(
@@ -660,46 +723,106 @@ namespace Delegates
             var indexType = typeof(TIndex);
             var indexType2 = typeof(TIndex2);
             var indexType3 = typeof(TIndex3);
-            return
-                (Action<object, TIndex, TIndex2, TIndex3, TReturn>)
-                DelegateIndexerSet(source, typeof(TReturn), indexType, indexType2, indexType3);
+            return DelegateIndexerSet<Action<object, TIndex, TIndex2, TIndex3, TReturn>>
+                (source, typeof(TReturn), indexType, indexType2, indexType3);
+        }
+
+        public static StructIndex3SetAction<object, TIndex, TIndex2, TIndex3, TReturn>
+            IndexerSetStruct<TReturn, TIndex, TIndex2, TIndex3>(this Type source)
+        {
+            var indexType = typeof(TIndex);
+            var indexType2 = typeof(TIndex2);
+            var indexType3 = typeof(TIndex3);
+            return DelegateIndexerSet<StructIndex3SetAction<object, TIndex, TIndex2, TIndex3, TReturn>>
+                (source, typeof(TReturn), indexType, indexType2, indexType3);
         }
 
         public static Action<TSource, TIndex, TProperty> IndexerSet<TSource, TIndex, TProperty>()
+            where TSource : class
         {
             var sourceType = typeof(TSource);
-            var propertyInfo = GetIndexerPropertyInfo(sourceType, typeof(TProperty), new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
             return (Action<TSource, TIndex, TProperty>)
                 propertyInfo?.SetMethod?.CreateDelegate(typeof(Action<TSource, TIndex, TProperty>));
         }
 
-        public static Action<TSource, TIndex, TIndex2, TReturn> IndexerSet<TSource, TReturn, TIndex, TIndex2>()
+        public static StructIndex1SetAction<TSource, TIndex, TProperty> IndexerSetStruct<TSource, TIndex, TProperty>()
+            where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), typeof(TReturn),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+            var sourceType = typeof(TSource);
+            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
+            return (StructIndex1SetAction<TSource, TIndex, TProperty>)
+                propertyInfo?.SetMethod?.CreateDelegate(typeof(StructIndex1SetAction<TSource, TIndex, TProperty>));
+        }
+
+        public static Action<TSource, TIndex, TIndex2, TReturn> IndexerSet<TSource, TReturn, TIndex, TIndex2>()
+            where TSource : class
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return (Action<TSource, TIndex, TIndex2, TReturn>)
                 propertyInfo?.SetMethod?.CreateDelegate(typeof(Action<TSource, TIndex, TIndex2, TReturn>));
+        }
+
+        public static StructIndex2SetAction<TSource, TIndex, TIndex2, TReturn> IndexerSetStruct<TSource, TReturn, TIndex, TIndex2>()
+            where TSource : struct
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2) });
+            return (StructIndex2SetAction<TSource, TIndex, TIndex2, TReturn>)
+                propertyInfo?.SetMethod?.CreateDelegate(typeof(StructIndex2SetAction<TSource, TIndex, TIndex2, TReturn>));
         }
 
         public static Action<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerSet
             <TSource, TReturn, TIndex, TIndex2, TIndex3>()
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), typeof(TReturn),
-                new[] {typeof(TIndex), typeof(TIndex2), typeof(TIndex3)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return (Action<TSource, TIndex, TIndex2, TIndex2, TReturn>)
                 propertyInfo?.SetMethod?.CreateDelegate(
                     typeof(Action<TSource, TIndex, TIndex2, TIndex2, TReturn>));
         }
 
+        public static StructIndex3SetAction<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerSetStruct
+            <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
+        {
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
+            return (StructIndex3SetAction<TSource, TIndex, TIndex2, TIndex2, TReturn>)
+                propertyInfo?.SetMethod?.CreateDelegate(
+                    typeof(StructIndex3SetAction<TSource, TIndex, TIndex2, TIndex2, TReturn>));
+        }
+
         public static Action<object, object[], object> IndexerSet(this Type source, Type returnType,
             params Type[] indexTypes)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, returnType, indexTypes);
-            if (propertyInfo?.SetMethod == null)
+            return source.IndexerSetObjectsImpl<Action<object, object[], object>>(returnType, indexTypes);
+        }
+
+        public static StructIndexesSetAction<object, object> IndexerSetStruct(this Type source, Type returnType,
+            params Type[] indexTypes)
+        {
+            return source.IndexerSetObjectsImpl<StructIndexesSetAction<object, object>>(returnType, indexTypes);
+        }
+
+        private static TDelegate IndexerSetObjectsImpl<TDelegate>(this Type source, Type returnType,
+            params Type[] indexTypes)
+            where TDelegate : class
+        {
+            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            if (indexerInfo?.SetMethod == null)
             {
                 return null;
             }
-            var sourceObjectParam = Expression.Parameter(typeof(object));
+            ParameterExpression sourceObjectParam;
+            if (source.IsClass)
+            {
+                sourceObjectParam = Expression.Parameter(typeof(object));
+            }
+            else
+            {
+                sourceObjectParam = Expression.Parameter(typeof(object).MakeByRefType());
+            }
             var indexesParam = Expression.Parameter(typeof(object[]));
             var valueParam = Expression.Parameter(typeof(object));
             var paramsExpression = new Expression[indexTypes.Length + 1];
@@ -710,10 +833,22 @@ namespace Delegates
                     indexType);
             }
             paramsExpression[indexTypes.Length] = Expression.Convert(valueParam, returnType);
-            Expression returnExpression =
-                Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.SetMethod, paramsExpression);
-            return (Action<object, object[], object>)Expression.Lambda(
-                returnExpression, sourceObjectParam, indexesParam, valueParam).Compile();
+            Expression returnExpression;
+            if (source.IsClass)
+            {
+                returnExpression = Expression.Call(Expression.Convert(sourceObjectParam, source), 
+                    indexerInfo.SetMethod, paramsExpression); 
+            }
+            else
+            {
+                var structVariable = Expression.Variable(source, "struct");
+                returnExpression = Expression.Block(typeof(object), new[] { structVariable },
+                    Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
+                    Expression.Call(structVariable, indexerInfo.SetMethod, paramsExpression),
+                    Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
+                );
+            }
+            return Expression.Lambda<TDelegate>(returnExpression, sourceObjectParam, indexesParam, valueParam).Compile();
         }
 
         public static Func<object, object[], object> InstanceGenericMethod(this Type source,
@@ -792,19 +927,19 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate, TParam1>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1) });
         }
 
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2) });
         }
 
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2, TParam3>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2), typeof(TParam3)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2), typeof(TParam3) });
         }
 
         public static TDelegate InstanceMethod<TDelegate>(this Type source, string name, Type[] typeParams = null)
@@ -833,7 +968,7 @@ namespace Delegates
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
-                var lamdaParams = new[] {sourceParameter}.Concat(expressions);
+                var lamdaParams = new[] { sourceParameter }.Concat(expressions);
                 deleg = Expression.Lambda(returnExpression, lamdaParams).Compile();
             }
             return deleg as TDelegate;
@@ -844,7 +979,7 @@ namespace Delegates
         {
             var source = typeof(TDelegate).GenericTypeArguments[0];
             var param = Expression.Parameter(source);
-            var parameters = new List<ParameterExpression> {param};
+            var parameters = new List<ParameterExpression> { param };
             var @params = GetFuncDelegateArguments<TDelegate>().Skip(1);
             foreach (var type in @params)
             {
@@ -947,7 +1082,7 @@ namespace Delegates
                 valueExpression = Expression.Convert(propertyValueParam, propertyInfo.PropertyType);
             }
             var structVariable = Expression.Variable(source, "struct");
-            var blockExpr = Expression.Block(typeof(void), new[] {structVariable},
+            var blockExpr = Expression.Block(typeof(void), new[] { structVariable },
                 Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
                 Expression.Call(structVariable, propertyInfo.SetMethod, valueExpression),
                 Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
@@ -980,7 +1115,7 @@ namespace Delegates
                 valueExpression = Expression.Convert(propertyValueParam, propertyInfo.PropertyType);
             }
             var structVariable = Expression.Variable(source, "struct");
-            var blockExpr = Expression.Block(typeof(object), new[] {structVariable},
+            var blockExpr = Expression.Block(typeof(object), new[] { structVariable },
                 Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
                 Expression.Call(structVariable, propertyInfo.SetMethod, valueExpression),
                 Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
@@ -1377,23 +1512,39 @@ namespace Delegates
             return typeof(TDelegate).GenericTypeArguments.Last();
         }
 
-        private static PropertyInfo GetIndexerPropertyInfo(Type source, Type returnType, Type[] indexesTypes,
+        private static PropertyInfo GetIndexerPropertyInfo(Type source, Type[] indexesTypes,
             string indexerName = null)
         {
             indexerName = indexerName ?? Item;
 
-            var propertyInfo = (source.GetProperty(indexerName, returnType, indexesTypes) ??
-                                source.GetProperty(indexerName, BindingFlags.NonPublic, null,
-                                    returnType, indexesTypes, null)) ??
-                               source.GetProperty(indexerName,
-                                   BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance,
-                                   null, returnType, indexesTypes, null);
-            if (propertyInfo != null)
+            var properties = source.GetProperties().Concat(
+                source.GetProperties(BindingFlags.NonPublic)).Concat(
+                source.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)).ToArray();
+            if (indexerName == Item)
             {
-                return propertyInfo;
+                var firstIndexerInfo = properties.FirstOrDefault(p => p.GetIndexParameters().Length > 0);
+                if (firstIndexerInfo != null && firstIndexerInfo.Name != indexerName)
+                {
+                    indexerName = firstIndexerInfo.Name;
+                }
             }
-            var indexer = source.GetProperties().FirstOrDefault(p => p.GetIndexParameters().Length > 0);
-            return indexer != null ? GetIndexerPropertyInfo(source, returnType, indexesTypes, indexer.Name) : null;
+            var indexerInfo = properties.FirstOrDefault(p => p.Name == indexerName
+                && IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
+            if (indexerInfo != null)
+            {
+                return indexerInfo;
+            }
+            return null;
+        }
+
+        private static bool IndexParametersEquals(ParameterInfo[] first, Type[] second)
+        {
+            if (first.Length != second.Length)
+            {
+                return false;
+            }
+            var indexParametersEquals = first.Select((t, i) => t.ParameterType == second[i]).All(p => p);
+            return indexParametersEquals;
         }
 
         private static MethodInfo GetMethodInfo(Type source, string name, Type[] parametersTypes,
@@ -1566,15 +1717,15 @@ namespace Delegates
             return (Func<TSource, TProperty>)propertyInfo?.GetMethod?.CreateDelegate(typeof(Func<TSource, TProperty>));
         }
 
-        public static StructPropertyGetFunc<TSource, TProperty> PropertyGetStruct<TSource, TProperty>(
+        public static StructGetFunc<TSource, TProperty> PropertyGetStruct<TSource, TProperty>(
             string propertyName = null)
             where TSource : struct
         {
             var source = typeof(TSource);
             var propertyInfo = GetPropertyInfo(source, propertyName);
             return
-                (StructPropertyGetFunc<TSource, TProperty>)
-                propertyInfo?.GetMethod?.CreateDelegate(typeof(StructPropertyGetFunc<TSource, TProperty>));
+                (StructGetFunc<TSource, TProperty>)
+                propertyInfo?.GetMethod?.CreateDelegate(typeof(StructGetFunc<TSource, TProperty>));
         }
 
         private static TDelegate PropertyGetImpl<TDelegate>(this Type source, string propertyName)

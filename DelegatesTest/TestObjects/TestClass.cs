@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace DelegatesTest
+namespace DelegatesTest.TestObjects
 {
     public class TestClass : ITestInterface
     {
@@ -23,7 +23,7 @@ namespace DelegatesTest
         public static int StaticPublicValueField = 0;
 
         private static string _staticOnlySetPropertyBackend;
-        private readonly List<int> _indexerBackend = new List<int>(new int[10]);
+        public readonly List<int> IndexerBackend = new List<int>(new int[10]);
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
         private string _onlySetPropertyBackend;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
@@ -101,35 +101,68 @@ namespace DelegatesTest
         [IndexerName("TheItem")]
         public int this[int i]
         {
-            get { return _indexerBackend[i]; }
-            set { _indexerBackend[i] = value; }
+            get { return IndexerBackend[i]; }
+            set { IndexerBackend[i] = value; }
         }
+
+
+        public int PrivateIndexer;
+
+        [IndexerName("TheItem")]
+        // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once UnusedParameter.Local
+        private int this[int i1, int i2]
+        {
+            get { return i1; }
+            set { PrivateIndexer = value; }
+        }
+
 
         [IndexerName("TheItem")]
         public int this[int i1, int i2, int i3]
         {
             get { return i1; }
-            set { }
+            set { Public3IndexIndexer = value; }
+        }
+
+        [IndexerName("TheItem")]
+        public int this[int i1, int i2, int i3, int i4]
+        {
+            get { return i1; }
+            set { Public4IndexIndexer = value; }
         }
 
         [IndexerName("TheItem")]
         internal string this[string s] => s;
 
+        public double InternalIndexer;
         [IndexerName("TheItem")]
-        internal string this[string s, string s2]
+        internal double this[double s]
+        {
+            get { return s; }
+            set { InternalIndexer = value; }
+        }
+
+        [IndexerName("TheItem")]
+        protected string this[string s, string s2]
         {
             set { }
         }
 
+        public double ProtectedIndexer;
+        public int Public3IndexIndexer;
+        public int Public4IndexIndexer;
+
         [IndexerName("TheItem")]
+        protected byte this[byte i]
+        {
+            get { return i; }
+            set { ProtectedIndexer = value; }
+        }
+
+        [IndexerName("TheItem")]
+        // ReSharper disable once UnusedMember.Local
         private long this[long s] => s;
-
-        [IndexerName("TheItem")]
-        private int this[int i1, int i2]
-        {
-            get { return i1; }
-            set { }
-        }
 
         public event EventHandler<PublicEventArgs> PublicEvent;
 
