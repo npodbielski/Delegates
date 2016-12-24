@@ -80,9 +80,6 @@
     <Compile Include="..\..\NETCore\Delegates\DelegateFactory.cs">
       <Link>DelegateFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionExt.cs">
-      <Link>Extensions\ExpressionExt.cs</Link>
-    </Compile>
     <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
       <Link>Extensions\ExpressionsExtensions.cs</Link>
     </Compile>

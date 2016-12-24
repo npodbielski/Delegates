@@ -34,9 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
+      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\NET35\Delegates\Extensions\CEventInfo.cs">
       <Link>Extensions\CEventInfo.cs</Link>
     </Compile>
@@ -78,12 +81,6 @@
     </Compile>
     <Compile Include="..\..\NETCore\Delegates\DelegateFactory.cs">
       <Link>DelegateFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\EventInfoExtensions.cs">
-      <Link>Extensions\EventInfoExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionExt.cs">
-      <Link>Extensions\ExpressionExt.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
       <Link>Extensions\ExpressionsExtensions.cs</Link>

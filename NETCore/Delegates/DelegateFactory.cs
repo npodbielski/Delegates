@@ -11,9 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
-#if NET35
-using WeakReference = System.WeakReference;
-#elif NET45||NETCORE
+#if NET45||NETCORE
 using WeakReference = System.WeakReference<object>;
 #endif
 

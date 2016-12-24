@@ -50,6 +50,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
+      <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\CAssert.cs">
       <Link>CAssert.cs</Link>
     </Compile>

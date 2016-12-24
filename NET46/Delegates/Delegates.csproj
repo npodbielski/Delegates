@@ -80,10 +80,12 @@
     <Compile Include="..\..\NETCore\Delegates\DelegateFactory.cs">
       <Link>DelegateFactory.cs</Link>
     </Compile>
-    <Compile Include="Extensions\EventInfoExtensions.cs" />
-    <Compile Include="Extensions\ExpressionExt.cs" />
-    <Compile Include="Extensions\ExpressionsExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
+      <Link>Extensions\ExpressionsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\Delegates\Extensions\TypeExtensions.cs">
+      <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

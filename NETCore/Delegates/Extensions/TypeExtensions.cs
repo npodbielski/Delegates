@@ -10,10 +10,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-#if NET45||NETCORE
-using System.Reflection;
-#endif
-
 namespace Delegates.Extensions
 {
     public static class TypeExtensions
@@ -25,12 +21,12 @@ namespace Delegates.Extensions
                 return false;
             }
 
-            if (destination == source || source.IsSubclassOf(destination))
+            if (destination == source || source.GetTypeInfo().IsSubclassOf(destination))
             {
                 return true;
             }
 
-            if (destination.IsInterface())
+            if (destination.GetTypeInfo().IsInterface)
             {
                 return source.ImplementsInterface(destination);
             }
@@ -40,7 +36,7 @@ namespace Delegates.Extensions
                 return false;
             }
 
-            var constraints = destination.GetGenericParameterConstraints();
+            var constraints = destination.GetTypeInfo().GetGenericParameterConstraints();
             return constraints.All(t1 => t1.CanBeAssignedFrom(source));
         }
 
@@ -48,63 +44,18 @@ namespace Delegates.Extensions
         {
             while (source != null)
             {
-                var interfaces = source.GetInterfaces();
+                var interfaces = source.GetTypeInfo().GetInterfaces();
                 if (interfaces.Any(i => i == interfaceType
                                         || i.ImplementsInterface(interfaceType)))
                 {
                     return true;
                 }
 
-                source = source.GetBaseType();
+                source = source.GetTypeInfo().BaseType;
             }
             return false;
         }
-
-        public static bool IsSubclassOf(this Type source, Type destination)
-        {
-#if NET35||NET4||PORTABLE
-            return source.IsSubclassOf(destination);
-#elif NET45||NETCORE
-            return source.GetTypeInfo().IsSubclassOf(destination);
-#endif
-        }
-
-        public static bool IsInterface(this Type source)
-        {
-#if NET35||NET4||PORTABLE
-            return source.IsInterface;
-#elif NET45||NETCORE
-            return source.GetTypeInfo().IsInterface;
-#endif
-        }
-
-        public static Type[] GetGenericParameterConstraints(this Type source)
-        {
-#if NET35||NET4||PORTABLE
-            return source.GetGenericParameterConstraints();
-#elif NET45||NETCORE
-            return source.GetTypeInfo().GetGenericParameterConstraints();
-#endif
-        }
-
-        public static Type[] GetInterfaces(this Type source)
-        {
-#if NET35||NET4||PORTABLE
-            return source.GetInterfaces();
-#elif NET45||NETCORE
-            return source.GetTypeInfo().GetInterfaces();
-#endif
-        }
-
-        public static Type GetBaseType(this Type source)
-        {
-#if NET35||NET4||PORTABLE
-            return source.BaseType;
-#elif NET45||NETCORE
-            return source.GetTypeInfo().BaseType;
-#endif
-        }
-
+        
         public static Type[] GenericTypeArguments(this Type source)
         {
 #if NET35||NET4||PORTABLE
@@ -166,14 +117,6 @@ namespace Delegates.Extensions
             return Delegate.CreateDelegate(delegateType, method);
 #endif
         }
-
-#if NET45
-        public static ConstructorInfo GetConstructor(this Type source, BindingFlags bindingFlags, Binder binder,
-            Type[] paramTypes, ParameterModifier[] modifiers)
-        {
-            return source.GetTypeInfo().GetConstructor(bindingFlags, binder, paramTypes, modifiers);
-        }
-#endif
 
         public static List<ParameterExpression> GetParamsFromTypes(this Type[] types)
         {
