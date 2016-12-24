@@ -173,7 +173,7 @@ namespace Delegates
         }
 
         public static Action<TSource, EventHandler<TEventArgs>> EventAdd<TSource, TEventArgs>(string eventName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             where TEventArgs : EventArgs
 #endif
         {
@@ -182,7 +182,7 @@ namespace Delegates
 
         public static Action<object, EventHandler<TEventArgs>> EventAdd<TEventArgs>(
             this Type source, string eventName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             where TEventArgs : EventArgs
 #endif
         {
@@ -202,7 +202,7 @@ namespace Delegates
         public static EventHandler<TEventArgs> EventHandlerFactory<TEventArgs, TSource>(
             object handler, bool isRemove)
             where TEventArgs :
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             EventArgs
 #else
             class
@@ -251,7 +251,7 @@ namespace Delegates
 
         public static Action<object, EventHandler<TEventArgs>> EventRemove<TEventArgs>(
             this Type source, string eventName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             where TEventArgs : EventArgs
 #endif
         {
@@ -259,7 +259,7 @@ namespace Delegates
         }
 
         public static Action<TSource, EventHandler<TEventArgs>> EventRemove<TSource, TEventArgs>(string eventName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             where TEventArgs : EventArgs
 #endif
         {
@@ -1191,7 +1191,7 @@ namespace Delegates
         }
 
         public static Action<EventHandler<TEvent>> StaticEventAdd<TEvent>(this Type source, string eventName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             where TEvent : EventArgs
 #endif
         {
@@ -1448,7 +1448,7 @@ namespace Delegates
 
         private static Action<object, EventHandler<TEventArgs>> EventAccessor<TEventArgs>
             (Type source, string eventName, string accessorName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
          where TEventArgs : EventArgs
 #endif
         {
@@ -1467,7 +1467,7 @@ namespace Delegates
 
         private static Action<TSource, EventHandler<TEventArgs>> EventAccessor<TSource, TEventArgs>
             (string eventName, string accessorName)
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
          where TEventArgs : EventArgs
 #endif
         {
@@ -1511,7 +1511,7 @@ namespace Delegates
 
         private static ConstructorInfo GetConstructorInfo(Type source, Type[] types)
         {
-#if NETCORE
+#if NETCORE||PORTABLE
             ConstructorInfo constructor = null;
             var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public);
             if (!constructors.Any())
@@ -1557,7 +1557,7 @@ namespace Delegates
         }
 
         private static
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             CEventInfo
 #else
             EventInfo
@@ -1568,7 +1568,7 @@ namespace Delegates
                              ?? sourceType.GetTypeInfo().GetEvent(eventName, BindingFlags.NonPublic))
                             ?? sourceType.GetTypeInfo().GetEvent(eventName,
                                 BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             return new CEventInfo(eventInfo);
 #else
             return eventInfo;
@@ -1602,7 +1602,7 @@ namespace Delegates
         }
 
         private static
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             CPropertyInfo
 #else
             PropertyInfo
@@ -1627,7 +1627,7 @@ namespace Delegates
                 && IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
             if (indexerInfo != null)
             {
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
                 return new CPropertyInfo(indexerInfo);
 #else
                 return indexerInfo;
@@ -1652,7 +1652,7 @@ namespace Delegates
             MethodInfo methodInfo = null;
             try
             {
-#if NETCORE
+#if NETCORE||PORTABLE
                 var methods = source.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.Public);
                 if (!methods.Any())
                 {
@@ -1751,7 +1751,7 @@ namespace Delegates
         }
 
         private static
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             CPropertyInfo
 #else
             PropertyInfo
@@ -1762,7 +1762,7 @@ namespace Delegates
                                source.GetTypeInfo().GetProperty(propertyName, BindingFlags.NonPublic) ??
                                source.GetTypeInfo().GetProperty(propertyName,
                                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
             return propertyInfo;
@@ -1784,7 +1784,7 @@ namespace Delegates
             MethodInfo methodInfo = null;
             try
             {
-#if NETCORE
+#if NETCORE||PORTABLE
                 var methods = source.GetTypeInfo().GetMethods(BindingFlags.Static);
                 if (!methods.Any())
                 {
@@ -1883,7 +1883,7 @@ namespace Delegates
         }
 
         private static
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             CPropertyInfo
 #else
             PropertyInfo
@@ -1894,7 +1894,7 @@ namespace Delegates
                                 source.GetTypeInfo().GetProperty(propertyName, BindingFlags.Static | BindingFlags.NonPublic)) ??
                                source.GetTypeInfo().GetProperty(propertyName,
                                    BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
             return propertyInfo;
@@ -1906,7 +1906,7 @@ namespace Delegates
             where TSource : class
         {
             var source = typeof(TSource);
-#if NET35||NET4
+#if NET35||NET4||PORTABLE
             var cpropertyInfo = propertyInfo != null ? new CPropertyInfo(propertyInfo)
                 : GetPropertyInfo(source, propertyName);
             return cpropertyInfo.GetMethod?.CreateDelegate<Func<TSource, TProperty>>();
