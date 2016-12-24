@@ -55,7 +55,7 @@ namespace Delegates.Extensions
             }
             return false;
         }
-        
+
         public static Type[] GenericTypeArguments(this Type source)
         {
 #if NET35||NET4||PORTABLE

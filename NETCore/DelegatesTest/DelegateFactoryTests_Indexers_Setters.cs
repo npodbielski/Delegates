@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactoryTests_Indexers_Setters.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 #if NETCORE
@@ -7,6 +13,7 @@ using TestMethodAttribute = Xunit.FactAttribute;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+
 #endif
 
 namespace DelegatesTest
@@ -16,13 +23,8 @@ namespace DelegatesTest
 #endif
     public class DelegateFactoryTests_Indexers_Setters
     {
-        private readonly TestClass _testClassInstance = new TestClass();
-        private readonly Type _testClassType = typeof(TestClass);
-        private readonly Type _testStrucType = typeof(TestStruct);
-        private TestStruct _testStructInstance = new TestStruct(0);
         private const string FirstStringIndex = "index1";
         private const string SecondStringIndex = "index2";
-        private string _secondStringIndex = "test2";
         private const int FirstIntIndex = 0;
         private const byte NewByteValue = 0;
         private const long FirstLongIndex = 0;
@@ -33,6 +35,11 @@ namespace DelegatesTest
         private const string NewStringValue = "TEST";
         private const int NewIntValue = 100;
         private const double NewDoubleValue = 11.0;
+        private readonly TestClass _testClassInstance = new TestClass();
+        private readonly Type _testClassType = typeof(TestClass);
+        private readonly Type _testStrucType = typeof(TestStruct);
+        private string _secondStringIndex = "test2";
+        private TestStruct _testStructInstance = new TestStruct(0);
 
 
         [TestMethod]
@@ -74,7 +81,7 @@ namespace DelegatesTest
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, FirstDoubleIndex, NewDoubleValue);
             Assert.AreEqual(NewDoubleValue, ((TestStruct)objectStruct).InternalIndexer);
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -95,7 +102,7 @@ namespace DelegatesTest
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, FirstIntIndex, SecondIntIndex, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -359,7 +366,7 @@ namespace DelegatesTest
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, FirstIntIndex, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -380,7 +387,7 @@ namespace DelegatesTest
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, FirstIntIndex, SecondIntIndex, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -408,7 +415,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
+            @is(_testClassInstance, new object[] {FirstIntIndex}, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
         }
 
@@ -418,7 +425,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
+            @is(ref objectStruct, new object[] {FirstIntIndex}, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
         }
 
@@ -427,7 +434,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex}, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
         }
 
@@ -437,7 +444,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex}, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
         }
 
@@ -446,7 +453,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
+            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex, 0}, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public3IndexIndexer);
         }
 
@@ -456,7 +463,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
+            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex, 0}, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public3IndexIndexer);
         }
 
@@ -465,7 +472,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
+            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex, 0, 0}, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public4IndexIndexer);
         }
 
@@ -475,9 +482,9 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
+            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex, 0, 0}, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public4IndexIndexer);
-        } 
+        }
 #endif
     }
 }

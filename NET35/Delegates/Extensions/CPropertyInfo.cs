@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CPropertyInfo.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -18,7 +24,7 @@ namespace Delegates.Extensions
             get
             {
                 return _property?.GetAccessors().Concat(_property.GetAccessors(true))
-                  .FirstOrDefault(a => a.Name.StartsWith("get"));
+                    .FirstOrDefault(a => a.Name.StartsWith("get"));
             }
         }
 
@@ -27,7 +33,7 @@ namespace Delegates.Extensions
             get
             {
                 return _property?.GetAccessors().Concat(_property.GetAccessors(true))
-                  .FirstOrDefault(a => a.Name.StartsWith("set"));
+                    .FirstOrDefault(a => a.Name.StartsWith("set"));
             }
         }
 

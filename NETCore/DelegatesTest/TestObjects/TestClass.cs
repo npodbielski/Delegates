@@ -30,7 +30,16 @@ namespace DelegatesTest.TestObjects
         private string _privateField;
         public object InstanceGenericMethodVoidParameter;
         internal string InternalField;
+
+        public double InternalIndexer;
+
+
+        public int PrivateIndexer;
         protected string ProtectedField;
+
+        public double ProtectedIndexer;
+        public int Public3IndexIndexer;
+        public int Public4IndexIndexer;
         public string PublicField;
         public int PublicFieldInt;
         public string PublicMethodVoidParameter;
@@ -105,9 +114,6 @@ namespace DelegatesTest.TestObjects
             set { IndexerBackend[i] = value; }
         }
 
-
-        public int PrivateIndexer;
-
         [IndexerName("TheItem")]
         // ReSharper disable once UnusedMember.Local
         // ReSharper disable once UnusedParameter.Local
@@ -135,7 +141,6 @@ namespace DelegatesTest.TestObjects
         [IndexerName("TheItem")]
         internal string this[string s] => s;
 
-        public double InternalIndexer;
         [IndexerName("TheItem")]
         internal double this[double s]
         {
@@ -148,10 +153,6 @@ namespace DelegatesTest.TestObjects
         {
             set { }
         }
-
-        public double ProtectedIndexer;
-        public int Public3IndexIndexer;
-        public int Public4IndexIndexer;
 
         [IndexerName("TheItem")]
         protected byte this[byte i]

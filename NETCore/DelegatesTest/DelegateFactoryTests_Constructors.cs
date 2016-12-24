@@ -13,6 +13,7 @@ using TestMethodAttribute = Xunit.FactAttribute;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+
 #endif
 
 namespace DelegatesTest
@@ -25,7 +26,7 @@ namespace DelegatesTest
         private static readonly Type TestClassNoDefaultCtorType = typeof(TestClassNoDefaultCtor);
         private static readonly Type TestClassType = typeof(TestClass);
         private static readonly Type TestStructType = typeof(TestStruct);
-        
+
         [TestMethod]
         public void ConstructorByDelegateWithType_BoolParam()
         {

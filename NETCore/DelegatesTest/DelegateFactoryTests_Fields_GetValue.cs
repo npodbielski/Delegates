@@ -13,8 +13,8 @@ using TestMethodAttribute = Xunit.FactAttribute;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
 
+#endif
 
 namespace DelegatesTest
 {
@@ -209,7 +209,7 @@ namespace DelegatesTest
             var fg = DelegateFactory.FieldGetStruct<TestStruct, string>("InternalField");
             Assert.IsNotNull(fg);
             Assert.AreEqual(_testStructInstance.InternalField, fg(ref _testStructInstance));
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -242,7 +242,7 @@ namespace DelegatesTest
             var fg = DelegateFactory.FieldGetStruct<TestStruct, string>("_privateField");
             Assert.IsNotNull(fg);
             Assert.AreEqual(_testStructInstance.GetPrivateField(), fg(ref _testStructInstance));
-        } 
+        }
 #endif
 
         [TestMethod]

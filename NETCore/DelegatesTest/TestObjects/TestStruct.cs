@@ -8,7 +8,6 @@ using System.Collections.Generic;
 #if NET45
 using System.Diagnostics.Contracts;
 #endif
-using System.Runtime.CompilerServices;
 
 namespace DelegatesTest.TestObjects
 {
@@ -62,6 +61,7 @@ namespace DelegatesTest.TestObjects
 
 
         public double InternalIndexer;
+
         internal double this[double s]
         {
             get { return s; }
@@ -133,6 +133,7 @@ namespace DelegatesTest.TestObjects
 #if NET45
         [Pure]
 #endif
+
         public string GetPrivateProperty()
         {
             return PrivateProperty;
@@ -146,6 +147,7 @@ namespace DelegatesTest.TestObjects
 #if NET45
         [Pure]
 #endif
+
         public string GetPrivateField()
         {
             return _privateField;

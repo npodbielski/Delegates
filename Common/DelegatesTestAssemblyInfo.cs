@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Natan Podbielski">
+// <copyright file="DelegatesTestAssemblyInfo.cs" company="Natan Podbielski">
 //   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
