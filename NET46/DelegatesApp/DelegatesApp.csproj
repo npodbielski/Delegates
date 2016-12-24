@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EC076A88-6BAC-41C3-9026-9B974939C856}</ProjectGuid>
+    <ProjectGuid>{7D8FE1D0-40D6-4603-AB35-2D8520390DB0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesApp</RootNamespace>
     <AssemblyName>DelegatesApp</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45,NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -49,20 +49,22 @@
     <Compile Include="..\..\Common\DelegatesAppAssemblyInfo.cs">
       <Link>Properties\DelegatesAppAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ConsoleApplication.cs" />
+    <Compile Include="..\..\NET45\DelegatesApp\ConsoleApplication.cs">
+      <Link>ConsoleApplication.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Delegates\Delegates.csproj">
-      <Project>{112B137A-8F94-4E7B-A77B-685EFF84EC07}</Project>
-      <Name>Delegates</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DelegatesTest\DelegatesTest.csproj">
-      <Project>{C9EF87BC-1DA7-4887-A4E4-E27D2D259191}</Project>
+      <Project>{2cdff5d2-85c3-4404-a17a-76c1b6d6d85c}</Project>
       <Name>DelegatesTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Delegates\Delegates.csproj">
+      <Project>{195c742a-24d5-46f2-9d49-f69964951d14}</Project>
+      <Name>Delegates</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -43,6 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\DelegatesAppAssemblyInfo.cs">
+      <Link>Properties\DelegatesAppAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\NET45\DelegatesApp\ConsoleApplication.cs">
       <Link>ConsoleApplication.cs</Link>
     </Compile>

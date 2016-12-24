@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B26BA86D-3DC9-4D55-93DE-68152849518D}</ProjectGuid>
+    <ProjectGuid>{2CDFF5D2-85C3-4404-A17A-76C1B6D6D85C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesTest</RootNamespace>
     <AssemblyName>DelegatesTest</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,14 +16,13 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45,NET46</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -56,6 +55,9 @@
     </Compile>
     <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\CAssert.cs">
+      <Link>CAssert.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Constructors.cs">
       <Link>DelegateFactoryTests_Constructors.cs</Link>
@@ -106,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Delegates\Delegates.csproj">
-      <Project>{a52068fe-a219-4fd3-a218-44960f877553}</Project>
+      <Project>{195c742a-24d5-46f2-9d49-f69964951d14}</Project>
       <Name>Delegates</Name>
     </ProjectReference>
   </ItemGroup>

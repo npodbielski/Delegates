@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
+      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructGetFunc.cs">
       <Link>CustomDelegates\StructGetFunc.cs</Link>
     </Compile>

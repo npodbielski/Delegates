@@ -4,6 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
-[assembly: Guid("ec076a88-6bac-41c3-9026-9b974939c856")]
+[assembly: AssemblyTitle("DelegatesTest")]
+[assembly: AssemblyProduct("DelegatesTest")]
+[assembly: InternalsVisibleTo("DelegatesApp")]
