@@ -62,7 +62,7 @@ namespace Delegates.Extensions
 
         public static bool IsSubclassOf(this Type source, Type destination)
         {
-#if NET35
+#if NET35||NET4
             return source.IsSubclassOf(destination);
 #elif NET45||NETCORE
             return source.GetTypeInfo().IsSubclassOf(destination);
@@ -71,7 +71,7 @@ namespace Delegates.Extensions
 
         public static bool IsInterface(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.IsInterface;
 #elif NET45||NETCORE
             return source.GetTypeInfo().IsInterface;
@@ -80,7 +80,7 @@ namespace Delegates.Extensions
 
         public static Type[] GetGenericParameterConstraints(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.GetGenericParameterConstraints();
 #elif NET45||NETCORE
             return source.GetTypeInfo().GetGenericParameterConstraints();
@@ -89,7 +89,7 @@ namespace Delegates.Extensions
 
         public static Type[] GetInterfaces(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.GetInterfaces();
 #elif NET45||NETCORE
             return source.GetTypeInfo().GetInterfaces();
@@ -98,7 +98,7 @@ namespace Delegates.Extensions
 
         public static Type GetBaseType(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.BaseType;
 #elif NET45||NETCORE
             return source.GetTypeInfo().BaseType;
@@ -107,7 +107,7 @@ namespace Delegates.Extensions
 
         public static Type[] GenericTypeArguments(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.GetGenericArguments();
 #elif NET45||NETCORE
             return source.GetTypeInfo().GenericTypeArguments;
@@ -116,7 +116,7 @@ namespace Delegates.Extensions
 
         public static bool IsTypeClass(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.IsClass;
 #elif NET45||NETCORE
             return source.GetTypeInfo().IsClass;
@@ -125,7 +125,7 @@ namespace Delegates.Extensions
 
         public static bool IsValueType(this Type source)
         {
-#if NET35
+#if NET35||NET4
             return source.IsValueType;
 #elif NET45||NETCORE
             return source.GetTypeInfo().IsValueType;
@@ -139,7 +139,7 @@ namespace Delegates.Extensions
         }
 #endif
 
-#if NET35
+#if NET35||NET4
         public static Type GetTypeInfo(this Type source)
         {
             return source;
@@ -149,7 +149,7 @@ namespace Delegates.Extensions
         public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
             where TDelegate : class
         {
-#if NET45 || NETCORE
+#if NET45 || NETCORE||NET4
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
 #elif NET35      
             return Delegate.CreateDelegate(typeof(TDelegate), method, true) as TDelegate;
@@ -160,11 +160,11 @@ namespace Delegates.Extensions
         {
 #if NET45 || NETCORE
             return method.CreateDelegate(delegateType);
-#elif NET35      
+#elif NET35 || NET4
             return Delegate.CreateDelegate(delegateType, method, true);
 #endif
         }
-        
+
 #if NET45
         public static ConstructorInfo GetConstructor(this Type source, BindingFlags bindingFlags, Binder binder,
             Type[] paramTypes, ParameterModifier[] modifiers)
@@ -181,7 +181,7 @@ namespace Delegates.Extensions
             var parameters = types
 #if NET35
                 .Select(a => Expression.Parameter(a, "p" + index++))
-#elif NET45 || NETCORE
+#elif NET45 || NETCORE || NET4
                 .Select(Expression.Parameter)
 #endif
                 .ToList();

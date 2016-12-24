@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Delegates;
+using Delegates.Extensions;
 using DelegatesTest;
 using DelegatesTest.TestObjects;
 
@@ -183,7 +184,7 @@ namespace DelegatesApp
             is2(TestInstance, 0, 0, 1);
             is3(TestInstance, 0, 0, 0, 1);
 #if !NET35
-            is4(TestInstance, new object[] {0, 0, 0}, 1);
+            is4(TestInstance, new object[] { 0, 0, 0 }, 1);
 #endif
             is5(TestInstance, 1, 2);
             Console.WriteLine(TestInstance[1]);
@@ -451,7 +452,7 @@ namespace DelegatesApp
             var m3 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("ProtectedMethod");
             var m4 = DelegateFactory.InstanceMethod<Func<TestClass, string, string>>("PrivateMethod");
 #if !NET35
-            var m5 = DelegateFactory.InstanceMethodExpr<Func<TestClass, string, string>>("PublicMethod"); 
+            var m5 = DelegateFactory.InstanceMethodExpr<Func<TestClass, string, string>>("PublicMethod");
 #endif
             var m6 = Type.InstanceMethod<Func<TestClass, string, string>>("PublicMethod");
             var m7 = Type.InstanceMethod<Func<object, string, string>>("PublicMethod");
@@ -463,7 +464,7 @@ namespace DelegatesApp
             var t3 = m3(TestInstance, "test");
             var t4 = m4(TestInstance, "test");
 #if !NET35
-            var t5 = m5(TestInstance, "test"); 
+            var t5 = m5(TestInstance, "test");
 #endif
             var t6 = m6(TestInstance, "test");
             var t7 = m7(TestInstance, "test");
@@ -516,7 +517,7 @@ namespace DelegatesApp
                 DelegateFactory.InstanceMethodExpr<Func<TestClass, string, string>>("PrivateMethod");
             }
             _stopWatch.Stop();
-            Console.WriteLine($"Private method proxy creator via expression: {_stopWatch.ElapsedMilliseconds}"); 
+            Console.WriteLine($"Private method proxy creator via expression: {_stopWatch.ElapsedMilliseconds}");
 #endif
         }
 
@@ -626,7 +627,7 @@ namespace DelegatesApp
         {
             var sfg1 = DelegateFactory.StaticFieldGet<TestClass, string>("StaticPublicField");
 #if !NET35
-            var sfg2 = DelegateFactory.StaticFieldGetExpr<TestClass, string>("StaticPublicField"); 
+            var sfg2 = DelegateFactory.StaticFieldGetExpr<TestClass, string>("StaticPublicField");
 #endif
             var sfg3 = Type.StaticFieldGet<string>("StaticPublicField");
             var sfg4 = Type.StaticFieldGet<string>("StaticInternalField");
@@ -639,12 +640,12 @@ namespace DelegatesApp
             var sfs1 = DelegateFactory.StaticFieldSet<TestClass, string>("StaticPublicField");
             var sfs2 = Type.StaticFieldSet<string>("StaticPublicField");
             var sfs3 = Type.StaticFieldSet("StaticPublicField");
-            var sfs4 = Type.StaticFieldSet("StaticPublicReadOnlyField"); 
+            var sfs4 = Type.StaticFieldSet("StaticPublicReadOnlyField");
 #endif
 
             Console.WriteLine($"Static public field value: {sfg1()}");
 #if !NET35
-            sfg2(); 
+            sfg2();
 #endif
             sfg3();
             Console.WriteLine($"Static internal field value: {sfg4()}");
@@ -659,7 +660,7 @@ namespace DelegatesApp
             sfs2("test2");
             Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}");
             sfs3("test3");
-            Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}"); 
+            Console.WriteLine($"Static public field value: {TestClass.StaticPublicField}");
 #endif
 
             _stopWatch = new Stopwatch();
@@ -679,7 +680,7 @@ namespace DelegatesApp
                 DelegateFactory.StaticFieldGetExpr<TestClass, string>("StaticPublicField");
             }
             _stopWatch.Stop();
-            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}"); 
+            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}");
 #endif
 
             _stopWatch = new Stopwatch();
@@ -717,7 +718,7 @@ namespace DelegatesApp
                 sfs1("test");
             }
             _stopWatch.Stop();
-            Console.WriteLine($"Static public field setter: {_stopWatch.ElapsedMilliseconds}"); 
+            Console.WriteLine($"Static public field setter: {_stopWatch.ElapsedMilliseconds}");
 #endif
         }
 
@@ -766,8 +767,15 @@ namespace DelegatesApp
 
             _stopWatch = new Stopwatch();
             var pi0 =
-                Type.GetProperty("StaticPublicProperty",
-                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public).GetMethod;
+#if NET35 || NET4
+                new CPropertyInfo( 
+#endif
+                    Type.GetProperty("StaticPublicProperty",
+                    BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public)
+#if NET35 || NET4
+                    )
+#endif
+                    .GetMethod;
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
@@ -793,7 +801,7 @@ namespace DelegatesApp
                 Type.StaticPropertyGetExpr<string>("StaticPublicProperty");
             }
             _stopWatch.Stop();
-            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}"); 
+            Console.WriteLine($"Static public field creator via expression: {_stopWatch.ElapsedMilliseconds}");
 #endif
 
             _stopWatch = new Stopwatch();
@@ -877,7 +885,7 @@ namespace DelegatesApp
             var fs10 = Type.FieldSetWithCast<string>("_privateField");
             var fs11 = Type.FieldSet<string>("_privateField");
             var fs12 = Type.FieldSetWithCast<string>("PublicField");
-            var fs13 = Type.FieldSet("PublicReadOnlyField"); 
+            var fs13 = Type.FieldSet("PublicReadOnlyField");
 #endif
 
             _stopWatch = new Stopwatch();

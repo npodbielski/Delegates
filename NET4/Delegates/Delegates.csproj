@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{112B137A-8F94-4E7B-A77B-685EFF84EC07}</ProjectGuid>
+    <ProjectGuid>{7E81BDCC-0C53-42E2-B051-3664E4D5E007}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delegates</RootNamespace>
     <AssemblyName>Delegates</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -46,6 +46,15 @@
     </Compile>
     <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\Delegates\Extensions\CEventInfo.cs">
+      <Link>Extensions\CEventInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\Delegates\Extensions\CPropertyInfo.cs">
+      <Link>Extensions\CPropertyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\Delegates\Extensions\WeakReferenceExtensions.cs">
+      <Link>Extensions\WeakReferenceExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructGetFunc.cs">
       <Link>CustomDelegates\StructGetFunc.cs</Link>

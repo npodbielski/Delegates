@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesApp</RootNamespace>
     <AssemblyName>DelegatesApp</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,13 +57,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Delegates\Delegates.csproj">
-      <Project>{112B137A-8F94-4E7B-A77B-685EFF84EC07}</Project>
-      <Name>Delegates</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DelegatesTest\DelegatesTest.csproj">
-      <Project>{C9EF87BC-1DA7-4887-A4E4-E27D2D259191}</Project>
+      <Project>{c9ef87bc-1da7-4887-a4e4-e27d2d259191}</Project>
       <Name>DelegatesTest</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Delegates\Delegates.csproj">
+      <Project>{112b137a-8f94-4e7b-a77b-685eff84ec07}</Project>
+      <Name>Delegates</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
