@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 #if NET45
 using System.Diagnostics.Contracts;
@@ -133,7 +134,6 @@ namespace DelegatesTest.TestObjects
 #if NET45
         [Pure]
 #endif
-
         public string GetPrivateProperty()
         {
             return PrivateProperty;
@@ -147,10 +147,19 @@ namespace DelegatesTest.TestObjects
 #if NET45
         [Pure]
 #endif
-
         public string GetPrivateField()
         {
             return _privateField;
         }
+
+        public static bool StaticGenericMethodVoidExecuted;
+
+        public static void StaticGenericMethodVoid<T>()
+        {
+            StaticGenericMethodVoidExecuted = true;
+            StaticPublicTypeParams = new[] { typeof(T) };
+        }
+
+        public static Type[] StaticPublicTypeParams;
     }
 }

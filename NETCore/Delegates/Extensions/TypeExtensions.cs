@@ -36,8 +36,82 @@ namespace Delegates.Extensions
                 return false;
             }
 
+            var validNewConstraint = IsNewConstraintValid(destination, source);
+            var validReferenceConstraint = IsReferenceConstraintValid(destination, source);
+            var validValueTypeConstraint = IsValueConstraintValid(destination, source);
             var constraints = destination.GetTypeInfo().GetGenericParameterConstraints();
-            return constraints.All(t1 => t1.CanBeAssignedFrom(source));
+            return validNewConstraint && validReferenceConstraint && validValueTypeConstraint &&
+                constraints.All(t1 => t1.CanBeAssignedFrom(source));
+        }
+
+        public static bool IsCrossConstraintInvalid(this Type source, Type[] allGenericArgs, Type[] typeParameters)
+        {
+            var constraints = source.GetTypeInfo().GetGenericParameterConstraints();
+            var invalid = false;
+            foreach (var constraint in constraints)
+            {
+                //if constraint is in collection of other generic parameters types definitions -> cross constraint; check inheritance
+                var indexOf = Array.IndexOf(allGenericArgs, constraint);
+                if (indexOf > -1)
+                {
+                    var sourceTypeParameter = typeParameters[Array.IndexOf(allGenericArgs, source)];
+                    var constraintTypeParameter = typeParameters[indexOf];
+                    if (!constraintTypeParameter.CanBeAssignedFrom(sourceTypeParameter))
+                    {
+                        invalid = true;
+                        break;
+                    }
+                }
+            }
+            return invalid;
+        }
+
+        private static bool IsNewConstraintValid(Type destination, Type source)
+        {
+            //check new() cosntraint which is not included in GetGenericParameterConstraints
+            var valid = destination.GetTypeInfo().GenericParameterAttributes ==
+                                     GenericParameterAttributes.DefaultConstructorConstraint;
+            if (valid)
+            {
+                valid &= source.GetTypeInfo().GetConstructor(new Type[0]) != null;
+            }
+            else
+            {
+                valid = true;
+            }
+            return valid;
+        }
+
+        private static bool IsReferenceConstraintValid(Type destination, Type source)
+        {
+            //check class cosntraint which is not included in GetGenericParameterConstraints
+            var valid = destination.GetTypeInfo().GenericParameterAttributes ==
+                                     GenericParameterAttributes.ReferenceTypeConstraint;
+            if (valid)
+            {
+                valid &= source.GetTypeInfo().IsClass;
+            }
+            else
+            {
+                valid = true;
+            }
+            return valid;
+        }
+
+        private static bool IsValueConstraintValid(Type destination, Type source)
+        {
+            //check new() cosntraint which is not included in GetGenericParameterConstraints
+            var valid = destination.GetTypeInfo().GenericParameterAttributes ==
+                                     GenericParameterAttributes.NotNullableValueTypeConstraint;
+            if (valid)
+            {
+                valid &= source.GetTypeInfo().IsValueType;
+            }
+            else
+            {
+                valid = true;
+            }
+            return valid;
         }
 
         private static bool ImplementsInterface(this Type source, Type interfaceType)
@@ -65,7 +139,7 @@ namespace Delegates.Extensions
 #endif
         }
 
-        public static bool IsTypeClass(this Type source)
+        public static bool IsClassType(this Type source)
         {
 #if NET35||NET4||PORTABLE
             return source.IsClass;

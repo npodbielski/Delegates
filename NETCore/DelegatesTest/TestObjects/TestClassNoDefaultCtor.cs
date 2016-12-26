@@ -8,7 +8,7 @@ namespace DelegatesTest.TestObjects
 {
     public class TestClassNoDefaultCtor
     {
-        public TestClassNoDefaultCtor(TestClassNoDefaultCtor dummyParam)
+        public TestClassNoDefaultCtor(string dummyParam)
         {
         }
     }

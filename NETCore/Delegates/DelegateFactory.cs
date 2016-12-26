@@ -31,10 +31,12 @@ namespace Delegates
         private static readonly Dictionary<WeakReference, WeakReference> EventsProxies =
             new Dictionary<WeakReference, WeakReference>();
 
+        private static readonly Type DelegateType = typeof(Delegate);
+
         public static TDelegate Contructor<TDelegate>() where TDelegate : class
         {
             var source = GetFuncDelegateReturnType<TDelegate>();
-            var ctrArgs = GetFuncDelegateArguments<TDelegate>();
+            var ctrArgs = GetDelegateArguments<TDelegate>();
             var constructorInfo = GetConstructorInfo(source, ctrArgs);
             if (constructorInfo == null)
             {
@@ -63,7 +65,7 @@ namespace Delegates
                     Expression.Convert(Expression.ArrayIndex(argsArray, Expression.Constant(i)), argType);
             }
             Expression returnExpression = Expression.New(constructorInfo, paramsExpression);
-            if (!source.IsTypeClass())
+            if (!source.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -73,7 +75,7 @@ namespace Delegates
         public static TDelegate Contructor<TDelegate>(this Type source)
             where TDelegate : class
         {
-            var ctrArgs = GetFuncDelegateArguments<TDelegate>();
+            var ctrArgs = GetDelegateArguments<TDelegate>();
             var constructorInfo = GetConstructorInfo(source, ctrArgs);
             if (constructorInfo == null)
             {
@@ -83,7 +85,7 @@ namespace Delegates
             var ctorParams = parameters.GetNewExprParams();
             var lambdaParams = parameters.GetLambdaExprParams();
             Expression returnExpression = Expression.New(constructorInfo, ctorParams);
-            if (!source.IsTypeClass())
+            if (!source.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -132,7 +134,7 @@ namespace Delegates
                 return null;
             }
             ParameterExpression sourceObjectParam;
-            if (source.IsTypeClass())
+            if (source.IsClassType())
             {
                 sourceObjectParam = Expression.Parameter(typeof(object), "source");
             }
@@ -147,14 +149,14 @@ namespace Delegates
                 var indexType = indexTypes[i];
                 indexExpressions[i] = Expression.Parameter(indexType, "i" + i);
             }
-            var callArgs = indexExpressions.Concat(new[] {valueParam}).ToArray();
-            var paramsExpressions = new[] {sourceObjectParam}.Concat(callArgs);
+            var callArgs = indexExpressions.Concat(new[] { valueParam }).ToArray();
+            var paramsExpressions = new[] { sourceObjectParam }.Concat(callArgs);
             Expression blockExpr;
-            if (!source.IsTypeClass())
+            if (!source.IsClassType())
             {
 #if !NET35
                 var structVariable = Expression.Variable(source, "struct");
-                blockExpr = Expression.Block(typeof(object), new[] {structVariable},
+                blockExpr = Expression.Block(typeof(object), new[] { structVariable },
                     Expression.Assign(structVariable, Expression.Convert(sourceObjectParam, source)),
                     Expression.Call(structVariable, indexerInfo.SetMethod, callArgs),
                     Expression.Assign(sourceObjectParam, Expression.Convert(structVariable, typeof(object)))
@@ -300,10 +302,12 @@ namespace Delegates
             var fieldInfo = GetFieldInfo(source, fieldName);
             if (fieldInfo != null)
             {
-                var sourceTypeInDelegate = GetFuncDelegateArguments<TDelegate>().First();
+                var sourceTypeInDelegate = GetDelegateArguments<TDelegate>().First();
                 Expression instanceExpression;
                 ParameterExpression sourceParam;
-                if (sourceTypeInDelegate != source)
+                if (sourceTypeInDelegate.IsByRef == false ?
+                    sourceTypeInDelegate != source :
+                    sourceTypeInDelegate.GetElementType() != source)
                 {
                     sourceParam = Expression.Parameter(typeof(object), "source");
                     instanceExpression = Expression.Convert(sourceParam, source);
@@ -322,7 +326,7 @@ namespace Delegates
                     }
                 }
                 Expression returnExpression = Expression.Field(instanceExpression, fieldInfo);
-                if (!fieldInfo.FieldType.IsTypeClass())
+                if (!fieldInfo.FieldType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
                 }
@@ -507,7 +511,7 @@ namespace Delegates
                 Expression returnExpression =
                     Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo),
                         convertedValueExpr);
-                if (!fieldInfo.FieldType.IsTypeClass())
+                if (!fieldInfo.FieldType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
@@ -535,7 +539,7 @@ namespace Delegates
                 }
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsTypeClass())
+                if (!fieldInfo.FieldType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
@@ -568,7 +572,7 @@ namespace Delegates
                 }
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsTypeClass())
+                if (!fieldInfo.FieldType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
@@ -599,14 +603,14 @@ namespace Delegates
         public static Func<TSource, TIndex, TReturn> IndexerGet<TSource, TReturn, TIndex>()
             where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TReturn>>();
         }
 
         public static StructIndex1GetFunc<TSource, TIndex, TReturn> IndexerGetStruct<TSource, TReturn, TIndex>()
             where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
             return propertyInfo?.GetMethod?.CreateDelegate<StructIndex1GetFunc<TSource, TIndex, TReturn>>();
         }
 
@@ -614,7 +618,7 @@ namespace Delegates
             where TSource : class
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -623,7 +627,7 @@ namespace Delegates
             where TSource : struct
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.GetMethod?.CreateDelegate<StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -631,7 +635,7 @@ namespace Delegates
             <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : class
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2), typeof(TIndex3)});
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
 
@@ -639,7 +643,7 @@ namespace Delegates
             <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2), typeof(TIndex3)});
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.GetMethod?.CreateDelegate<
                 StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
@@ -689,7 +693,7 @@ namespace Delegates
             }
             Expression returnExpression =
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod, paramsExpression);
-            if (!propertyInfo.PropertyType.IsTypeClass())
+            if (!propertyInfo.PropertyType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -699,7 +703,7 @@ namespace Delegates
 
         public static Func<object, object, object> IndexerGet(this Type source, Type returnType, Type indexType)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, new[] {indexType});
+            var propertyInfo = GetIndexerPropertyInfo(source, new[] { indexType });
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -708,7 +712,7 @@ namespace Delegates
             var indexObjectParam = Expression.Parameter(typeof(object), "index");
             Expression returnExpression = Expression.Call(Expression.Convert(sourceObjectParam, source),
                 propertyInfo.GetMethod, Expression.Convert(indexObjectParam, indexType));
-            if (!propertyInfo.PropertyType.IsTypeClass())
+            if (!propertyInfo.PropertyType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -771,7 +775,7 @@ namespace Delegates
             where TSource : class
         {
             var sourceType = typeof(TSource);
-            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TProperty>>();
         }
 
@@ -779,7 +783,7 @@ namespace Delegates
             where TSource : struct
         {
             var sourceType = typeof(TSource);
-            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] {typeof(TIndex)});
+            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
             return propertyInfo?.SetMethod?.CreateDelegate<StructIndex1SetAction<TSource, TIndex, TProperty>>();
         }
 
@@ -787,7 +791,7 @@ namespace Delegates
             where TSource : class
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -796,7 +800,7 @@ namespace Delegates
             where TSource : struct
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2)});
+                new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.SetMethod?.CreateDelegate<StructIndex2SetAction<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -804,7 +808,7 @@ namespace Delegates
             <TSource, TReturn, TIndex, TIndex2, TIndex3>()
         {
             var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] {typeof(TIndex), typeof(TIndex2), typeof(TIndex3)});
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
 
@@ -839,7 +843,7 @@ namespace Delegates
                 return null;
             }
             ParameterExpression sourceObjectParam;
-            if (source.IsTypeClass())
+            if (source.IsClassType())
             {
                 sourceObjectParam = Expression.Parameter(typeof(object), "source");
             }
@@ -858,7 +862,7 @@ namespace Delegates
             }
             paramsExpression[indexTypes.Length] = Expression.Convert(valueParam, returnType);
             Expression returnExpression;
-            if (source.IsTypeClass())
+            if (source.IsClassType())
             {
                 returnExpression = Expression.Call(Expression.Convert(sourceObjectParam, source),
                     indexerInfo.SetMethod, paramsExpression);
@@ -902,7 +906,7 @@ namespace Delegates
             }
             Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                 methodInfo, paramsExpression);
-            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsTypeClass())
+            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -942,7 +946,7 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate>(string name, params Type[] typeParameters)
             where TDelegate : class
         {
-            var paramsTypes = GetFuncDelegateArguments<TDelegate>();
+            var paramsTypes = GetDelegateArguments<TDelegate>();
             var source = paramsTypes.First();
             paramsTypes = paramsTypes.Skip(1).ToArray();
             var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParameters);
@@ -952,25 +956,25 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate, TParam1>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1) });
         }
 
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2) });
         }
 
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2, TParam3>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2), typeof(TParam3)});
+            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2), typeof(TParam3) });
         }
 
         public static TDelegate InstanceMethod<TDelegate>(this Type source, string name, Type[] typeParams = null)
             where TDelegate : class
         {
-            var delegateParams = GetFuncDelegateArguments<TDelegate>();
+            var delegateParams = GetDelegateArguments<TDelegate>();
             var instanceParam = delegateParams[0];
             delegateParams = delegateParams.Skip(1).ToArray();
             var methodInfo = GetMethodInfo(source, name, delegateParams, typeParams);
@@ -989,7 +993,7 @@ namespace Delegates
                 var expressions = delegateParams.GetParamsFromTypes();
                 Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                     methodInfo, expressions.GetCallExprParams());
-                if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsTypeClass())
+                if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
@@ -1005,8 +1009,8 @@ namespace Delegates
         {
             var source = typeof(TDelegate).GenericTypeArguments()[0];
             var param = Expression.Parameter(source, "source");
-            var parameters = new List<ParameterExpression> {param};
-            var @params = GetFuncDelegateArguments<TDelegate>().Skip(1);
+            var parameters = new List<ParameterExpression> { param };
+            var @params = GetDelegateArguments<TDelegate>().Skip(1);
             var index = 0;
             foreach (var type in @params)
             {
@@ -1223,7 +1227,7 @@ namespace Delegates
             if (fieldInfo != null)
             {
                 Expression returnExpression = Expression.Field(null, fieldInfo);
-                if (!fieldInfo.FieldType.IsTypeClass())
+                if (!fieldInfo.FieldType.IsClassType())
                 {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
@@ -1291,7 +1295,16 @@ namespace Delegates
         public static TDelegate StaticMethod<TSource, TDelegate>(string name)
             where TDelegate : class
         {
+            CheckDelegate<TDelegate>();
             return typeof(TSource).StaticMethod<TDelegate>(name);
+        }
+
+        private static void CheckDelegate<TDelegate>() where TDelegate : class
+        {
+            if (!typeof(TDelegate).GetTypeInfo().IsSubclassOf(DelegateType))
+            {
+                throw new ArgumentException("TDelegate type param must derive from " + DelegateType.FullName);
+            }
         }
 
         public static TDelegate StaticMethod<TSource, TDelegate, TParam1>(string name)
@@ -1339,8 +1352,9 @@ namespace Delegates
         public static TDelegate StaticMethod<TDelegate>(this Type source, string name, params Type[] typeParameters)
             where TDelegate : class
         {
-            var paramsTypes = GetFuncDelegateArguments<TDelegate>();
-            var methodInfo = GetStaticMethodInfo(source, name, paramsTypes, typeParameters);
+            CheckDelegate<TDelegate>();
+            var paramsTypes = GetDelegateArguments<TDelegate>();
+            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParameters, true);
             return methodInfo?.CreateDelegate<TDelegate>();
         }
 
@@ -1360,7 +1374,7 @@ namespace Delegates
             string name, Type[] typeParams, Type[] paramsTypes)
             where TDelegate : class
         {
-            var methodInfo = GetStaticMethodInfo(source, name, paramsTypes, typeParams);
+            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParams, true);
             if (methodInfo == null)
             {
                 return null;
@@ -1374,7 +1388,7 @@ namespace Delegates
                     Expression.Convert(Expression.ArrayIndex(argsArray, Expression.Constant(i)), argType);
             }
             Expression returnExpression = Expression.Call(methodInfo, paramsExpression);
-            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsTypeClass())
+            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -1406,7 +1420,7 @@ namespace Delegates
                 return null;
             }
             Expression returnExpression = Expression.Call(propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsTypeClass())
+            if (!propertyInfo.PropertyType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -1592,10 +1606,10 @@ namespace Delegates
             return fieldInfo;
         }
 
-        private static Type[] GetFuncDelegateArguments<TDelegate>() where TDelegate : class
+        private static Type[] GetDelegateArguments<TDelegate>() where TDelegate : class
         {
-            IEnumerable<Type> arguments = typeof(TDelegate).GenericTypeArguments();
-            return arguments.Reverse().Skip(1).Reverse().ToArray();
+            var invokeMethod = typeof(TDelegate).GetMethod("Invoke");
+            return invokeMethod.GetParameters().Select(p => p.ParameterType).ToArray();
         }
 
         private static Type GetFuncDelegateReturnType<TDelegate>() where TDelegate : class
@@ -1650,116 +1664,23 @@ namespace Delegates
             return indexParametersEquals;
         }
 
-        private static MethodInfo GetMethodInfo(Type source, string name, Type[] parametersTypes,
-            Type[] typeParameters = null)
+#if !(NETCORE||PORTABLE)
+        private static MethodInfo GetSingleMethod(Type source, string name, Type[] parametersTypes, bool isStatic)
         {
-            MethodInfo methodInfo = null;
-            try
-            {
-#if NETCORE||PORTABLE
-                var methods = source.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.Public);
-                if (!methods.Any())
-                {
-                    methods = source.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
-                }
-                if (!methods.Any())
-                {
-                    methods =
-                        source.GetTypeInfo()
-                            .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                }
-                var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
-                foreach (var method in correctNameMethods)
-                {
-                    var parameters = method.GetParameters();
-                    var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                    if (!parametersTypesValid)
-                    {
-                        continue;
-                    }
-                    for (var index = 0; index < parameters.Length; index++)
-                    {
-                        var parameterInfo = parameters[index];
-                        var parameterType = parametersTypes[index];
-                        if (parameterInfo.ParameterType != parameterType)
-                        {
-                            parametersTypesValid = false;
-                            break;
-                        }
-                    }
-                    if (parametersTypesValid)
-                    {
-                        methodInfo = method;
-                        break;
-                    }
-                }
-#else
-                methodInfo =
-                    (source.GetTypeInfo().GetMethod(name, BindingFlags.Instance | BindingFlags.Public, null, parametersTypes, null) ??
-                     source.GetTypeInfo().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic, null, parametersTypes, null)) ??
-                    source.GetTypeInfo().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null,
-                        parametersTypes, null);
-#endif
-            }
-            catch (AmbiguousMatchException)
-            {
-                //swallow and test generics
-            }
-            //check for generic methods
-            if (typeParameters != null)
-            {
-                var ms = source.GetTypeInfo().GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                    .Concat(source.GetTypeInfo().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
-                    .Concat(
-                        source.GetTypeInfo()
-                            .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance));
-                foreach (var m in ms)
-                {
-                    if (m.Name == name && m.IsGenericMethod)
-                    {
-                        var parameters = m.GetParameters();
-                        var genericArguments = m.GetGenericArguments();
-                        var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                        parametersTypesValid &= genericArguments.Length == typeParameters.Length;
-                        if (!parametersTypesValid)
-                        {
-                            continue;
-                        }
-                        for (var index = 0; index < parameters.Length; index++)
-                        {
-                            var parameterInfo = parameters[index];
-                            var parameterType = parametersTypes[index];
-                            if (parameterInfo.ParameterType != parameterType
-                                && parameterInfo.ParameterType.IsGenericParameter
-                                && !parameterInfo.ParameterType.CanBeAssignedFrom(parameterType))
-                            {
-                                parametersTypesValid = false;
-                                break;
-                            }
-                        }
-                        for (var index = 0; index < genericArguments.Length; index++)
-                        {
-                            var genericArgument = genericArguments[index];
-                            var typeParameter = typeParameters[index];
-                            if (!genericArgument.CanBeAssignedFrom(typeParameter))
-                            {
-                                parametersTypesValid = false;
-                                break;
-                            }
-                        }
-                        if (parametersTypesValid)
-                        {
-                            methodInfo = m.MakeGenericMethod(typeParameters);
-                            break;
-                        }
-                    }
-                }
-            }
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var methodInfo = (source.GetTypeInfo()
+                     .GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
+                 source.GetTypeInfo()
+                     .GetMethod(name, staticOrInstance | _privateOrProtectedBindingFlags, null, parametersTypes,
+                         null)) ??
+                source.GetTypeInfo()
+                    .GetMethod(name, staticOrInstance | _internalBindingFlags, null, parametersTypes, null);
             return methodInfo;
-        }
+        } 
+#endif
 
         private static
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             CPropertyInfo
 #else
             PropertyInfo
@@ -1770,7 +1691,7 @@ namespace Delegates
                                source.GetTypeInfo().GetProperty(propertyName, BindingFlags.NonPublic) ??
                                source.GetTypeInfo().GetProperty(propertyName,
                                    BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
             return propertyInfo;
@@ -1781,34 +1702,99 @@ namespace Delegates
         {
             var fieldInfo = (source.GetTypeInfo().GetField(fieldName, BindingFlags.Static) ??
                              source.GetTypeInfo().GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic)) ??
-                            source.GetTypeInfo().GetField(fieldName,
+                             source.GetTypeInfo().GetField(fieldName,
                                 BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
             return fieldInfo;
         }
 
-        private static MethodInfo GetStaticMethodInfo(Type source, string name, Type[] parametersTypes,
-            Type[] typeParameters = null)
+        private const BindingFlags _privateOrProtectedBindingFlags = BindingFlags.NonPublic;
+        private const BindingFlags _internalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
+
+        private static MethodInfo GetStaticMethodInfoByEnumerate(Type source, string name, Type[] parametersTypes,
+            bool isStatic)
         {
             MethodInfo methodInfo = null;
-            try
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            IEnumerable<MethodInfo> methods = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public);
+            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _privateOrProtectedBindingFlags));
+            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _internalBindingFlags));
+            var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
+            foreach (var method in correctNameMethods)
             {
-#if NETCORE||PORTABLE
-                var methods = source.GetTypeInfo().GetMethods(BindingFlags.Static);
-                if (!methods.Any())
+                var parameters = method.GetParameters();
+                var parametersTypesValid = parameters.Length == parametersTypes.Length;
+                if (!parametersTypesValid)
                 {
-                    methods = source.GetTypeInfo().GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
+                    continue;
                 }
-                if (!methods.Any())
+                for (var index = 0; index < parameters.Length; index++)
                 {
-                    methods =
-                        source.GetTypeInfo()
-                            .GetMethods(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                    var parameterInfo = parameters[index];
+                    var parameterType = parametersTypes[index];
+                    if (parameterInfo.ParameterType != parameterType)
+                    {
+                        parametersTypesValid = false;
+                        break;
+                    }
                 }
-                var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
-                foreach (var method in correctNameMethods)
+                if (parametersTypesValid)
                 {
-                    var parameters = method.GetParameters();
+                    methodInfo = method;
+                    break;
+                }
+            }
+            return methodInfo;
+        }
+
+        private static MethodInfo GetMethodInfo(Type source, string name, Type[] parametersTypes,
+               Type[] typeParameters = null, bool isStatic = false)
+        {
+            MethodInfo methodInfo = null;
+            if (typeParameters == null)
+            {
+#if !(NETCORE || PORTABLE)
+                var enumerateMethods = false;
+                try
+                {
+                    methodInfo = GetSingleMethod(source, name, parametersTypes, isStatic);
+                }
+                catch (AmbiguousMatchException)
+                {
+                    //if more than one method it means there are also generic -> enumerate
+                    enumerateMethods = true;
+                }
+                if (enumerateMethods)
+                {
+                    methodInfo = GetStaticMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
+                }
+#else
+                methodInfo = GetStaticMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
+#endif
+            }
+            //check for generic methods
+            else
+            {
+                methodInfo = GetGenericMethod(source, name, parametersTypes, typeParameters, isStatic);
+            }
+            return methodInfo;
+        }
+
+        private static MethodInfo GetGenericMethod(Type source, string name, Type[] parametersTypes, Type[] typeParameters,
+            bool isStatic)
+        {
+            MethodInfo methodInfo = null;
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var ms = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public)
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _privateOrProtectedBindingFlags))
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _internalBindingFlags));
+            foreach (var m in ms)
+            {
+                if (m.Name == name && m.IsGenericMethod)
+                {
+                    var parameters = m.GetParameters();
+                    var genericArguments = m.GetGenericArguments();
                     var parametersTypesValid = parameters.Length == parametersTypes.Length;
+                    parametersTypesValid &= genericArguments.Length == typeParameters.Length;
                     if (!parametersTypesValid)
                     {
                         continue;
@@ -1817,7 +1803,21 @@ namespace Delegates
                     {
                         var parameterInfo = parameters[index];
                         var parameterType = parametersTypes[index];
-                        if (parameterInfo.ParameterType != parameterType)
+                        if (parameterInfo.ParameterType != parameterType
+                            && parameterInfo.ParameterType.IsGenericParameter
+                            && !parameterInfo.ParameterType.CanBeAssignedFrom(parameterType))
+                        {
+                            parametersTypesValid = false;
+                            break;
+                        }
+                    }
+                    for (var index = 0; index < genericArguments.Length; index++)
+                    {
+                        var genericArgument = genericArguments[index];
+                        var typeParameter = typeParameters[index];
+                        if (!genericArgument.CanBeAssignedFrom(typeParameter)
+                            //check cross parameters constraints
+                            || genericArgument.IsCrossConstraintInvalid(genericArguments, typeParameters))
                         {
                             parametersTypesValid = false;
                             break;
@@ -1825,69 +1825,8 @@ namespace Delegates
                     }
                     if (parametersTypesValid)
                     {
-                        methodInfo = method;
+                        methodInfo = m.MakeGenericMethod(typeParameters);
                         break;
-                    }
-                }
-#else
-                methodInfo = (source.GetTypeInfo().GetMethod(name, BindingFlags.Static, null, parametersTypes, null) ??
-                              source.GetTypeInfo().GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic, null, parametersTypes,
-                                  null)) ??
-                             source.GetTypeInfo().GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public,
-                                 null, parametersTypes, null);
-#endif
-            }
-            catch (AmbiguousMatchException)
-            {
-                //swallow and test generics
-            }
-            //check for generic methods
-            if (typeParameters != null)
-            {
-                var ms = source.GetTypeInfo().GetMethods(BindingFlags.Static)
-                    .Concat(source.GetTypeInfo().GetMethods(BindingFlags.NonPublic | BindingFlags.Static))
-                    .Concat(
-                        source.GetTypeInfo()
-                            .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static));
-                foreach (var m in ms)
-                {
-                    if (m.Name == name && m.IsGenericMethod)
-                    {
-                        var parameters = m.GetParameters();
-                        var genericArguments = m.GetGenericArguments();
-                        var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                        parametersTypesValid &= genericArguments.Length == typeParameters.Length;
-                        if (!parametersTypesValid)
-                        {
-                            continue;
-                        }
-                        for (var index = 0; index < parameters.Length; index++)
-                        {
-                            var parameterInfo = parameters[index];
-                            var parameterType = parametersTypes[index];
-                            if (parameterInfo.ParameterType != parameterType
-                                && parameterInfo.ParameterType.IsGenericParameter
-                                && !parameterInfo.ParameterType.CanBeAssignedFrom(parameterType))
-                            {
-                                parametersTypesValid = false;
-                                break;
-                            }
-                        }
-                        for (var index = 0; index < genericArguments.Length; index++)
-                        {
-                            var genericArgument = genericArguments[index];
-                            var typeParameter = typeParameters[index];
-                            if (!genericArgument.CanBeAssignedFrom(typeParameter))
-                            {
-                                parametersTypesValid = false;
-                                break;
-                            }
-                        }
-                        if (parametersTypesValid)
-                        {
-                            methodInfo = m.MakeGenericMethod(typeParameters);
-                            break;
-                        }
                     }
                 }
             }
@@ -1895,7 +1834,7 @@ namespace Delegates
         }
 
         private static
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             CPropertyInfo
 #else
             PropertyInfo
@@ -1907,7 +1846,7 @@ namespace Delegates
                                     .GetProperty(propertyName, BindingFlags.Static | BindingFlags.NonPublic)) ??
                                source.GetTypeInfo().GetProperty(propertyName,
                                    BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
             return propertyInfo;
@@ -1919,7 +1858,7 @@ namespace Delegates
             where TSource : class
         {
             var source = typeof(TSource);
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             var cpropertyInfo = propertyInfo != null
                 ? new CPropertyInfo(propertyInfo)
                 : GetPropertyInfo(source, propertyName);
@@ -1951,7 +1890,7 @@ namespace Delegates
             var sourceObjectParam = Expression.Parameter(typeof(object), "source");
             Expression returnExpression =
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsTypeClass())
+            if (!propertyInfo.PropertyType.IsClassType())
             {
                 returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
             }

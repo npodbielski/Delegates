@@ -57,6 +57,9 @@
     <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\AssertHelper.cs">
+      <Link>AssertHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Constructors.cs">
       <Link>DelegateFactoryTests_Constructors.cs</Link>
     </Compile>
@@ -84,11 +87,29 @@
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticField_SetValue.cs">
       <Link>DelegateFactoryTests_StaticField_SetValue.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
+      <Link>DelegateFactoryTests_StaticMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods_Generic.cs">
+      <Link>DelegateFactoryTests_StaticMethods_Generic.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticProperties_Getters.cs">
       <Link>DelegateFactoryTests_StaticProperties_Getters.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticProperties_Setters.cs">
       <Link>DelegateFactoryTests_StaticProperties_Setters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Action17.cs">
+      <Link>TestObjects\Action17.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Base.cs">
+      <Link>TestObjects\Base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Derived.cs">
+      <Link>TestObjects\Derived.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Func17.cs">
+      <Link>TestObjects\Func17.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\ITestInterface.cs">
       <Link>TestObjects\ITestInterface.cs</Link>

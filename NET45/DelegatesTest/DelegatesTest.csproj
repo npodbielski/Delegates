@@ -45,6 +45,27 @@
     <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\AssertHelper.cs">
+      <Link>AssertHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
+      <Link>DelegateFactoryTests_StaticMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods_Generic.cs">
+      <Link>DelegateFactoryTests_StaticMethods_Generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Action17.cs">
+      <Link>TestObjects\Action17.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Base.cs">
+      <Link>TestObjects\Base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Derived.cs">
+      <Link>TestObjects\Derived.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Func17.cs">
+      <Link>TestObjects\Func17.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>
@@ -55,7 +76,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>

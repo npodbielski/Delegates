@@ -7,6 +7,7 @@
 using System;
 #if NETCORE
 using Xunit;
+using Xunit.Sdk;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endif
@@ -89,6 +90,24 @@ namespace DelegatesTest
             Assert.IsType(expectedType, value);
 #else
             Assert.IsInstanceOfType(value, expectedType);
+#endif
+        }
+
+
+        /// <summary>Verifies that the specified condition is true. The assertion fails if the condition is false.</summary>
+        /// <param name="value">The condition to verify is true.</param>
+#if NETCORE
+        /// <exception cref="TrueException">Thrown when the condition is false</exception>
+#else
+        /// <exception cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+        /// <paramref name="value" /> evaluates to false.</exception>
+#endif
+        public static void IsTrue(bool value)
+        {
+#if NETCORE
+            Assert.True(value);
+#else
+            Assert.IsTrue(value);
 #endif
         }
     }
