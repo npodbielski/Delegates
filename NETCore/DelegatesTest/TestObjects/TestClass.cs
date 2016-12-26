@@ -58,8 +58,8 @@ namespace DelegatesTest.TestObjects
         private string _onlySetPropertyBackend;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private string _privateField;
-        public static string[] StaticVoidPublicParams;
-        public static string[] StaticPublicParams;
+        public static object[] StaticVoidPublicParams;
+        public static object[] StaticPublicParams;
         public static string StaticPrivateParameterlessReturnValue = "StaticPrivate";
 
         public TestClass()
@@ -214,106 +214,124 @@ namespace DelegatesTest.TestObjects
 
         public static void PublicStaticGenericMethodVoid<T>()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
         internal static void InternalStaticGenericMethodVoid<T>()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
 
         internal static void ProtectedStaticGenericMethodVoid<T>()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
 
         internal static void PrivateStaticGenericMethodVoid<T>()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
         public static T PublicStaticGenericMethod<T>() where T : new()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
         internal static T InternalStaticGenericMethod<T>() where T : new()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
         protected static T ProtectedStaticGenericMethod<T>() where T : new()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
         private static T PrivateStaticGenericMethod<T>() where T : new()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
         public static T StaticGenericMethod<T>(T param)
         {
+            StaticPublicParams = new object[] { param };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T StaticGenericMethod<T>(T param, int i) where T : ITestInterface
         {
+            StaticPublicParams = new object[] { param, i };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T StaticGenericMethodWithType<T>(T param) where T : Base
         {
+            StaticPublicParams = new object[] { param };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T StaticGenericMethodWithClass<T>(T param) where T : class
         {
+            StaticPublicParams = new object[] { param };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T StaticGenericMethodWithStruc<T>(T param) where T : struct
         {
+            StaticPublicParams = new object[] { param };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T StaticGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
         {
+            StaticPublicParams = new object[] { param };
             StaticPublicTypeParams = new[] { typeof(T), typeof(T2) };
             return param;
         }
 
         public static T StaticGenericMethod<T>(T param, int i, bool p) where T : struct
         {
+            StaticPublicParams = new object[] { param, i, p };
             StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
         public static T1 StaticGenericMethod<T1, T2>() where T1 : new()
         {
+            StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T1), typeof(T2) };
             return new T1();
         }
 
         public static T1 StaticGenericMethod<T1, T2, T3>(int i) where T1 : new()
         {
+            StaticPublicParams = new object[] { i };
             StaticPublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
             return new T1();
         }
 
         public static void StaticGenericMethodVoid<T>(T s) where T : class
         {
+            StaticPublicParams = new object[] { s };
             StaticGenericMethodVoidParameter = s;
         }
 

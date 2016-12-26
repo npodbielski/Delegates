@@ -9,11 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using static Delegates.Helper.ParametersIndexes;
 
 namespace Delegates.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
+        private const string Item = "Item";
+
+        private const BindingFlags PrivateOrProtectedBindingFlags = BindingFlags.NonPublic;
+        private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
+
         public static bool CanBeAssignedFrom(this Type destination, Type source)
         {
             if (source == null || destination == null)
@@ -171,27 +177,6 @@ namespace Delegates.Extensions
         }
 #endif
 
-        public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
-            where TDelegate : class
-        {
-#if NET45 || NETCORE||NET4||PORTABLE
-            return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
-#elif NET35      
-            return Delegate.CreateDelegate(typeof(TDelegate), method, true) as TDelegate;
-#endif
-        }
-
-        public static Delegate CreateDelegate(this MethodInfo method, Type delegateType)
-        {
-#if NET45 || NETCORE
-            return method.CreateDelegate(delegateType);
-#elif NET35 || NET4
-            return Delegate.CreateDelegate(delegateType, method, true);
-#elif PORTABLE
-            return Delegate.CreateDelegate(delegateType, method);
-#endif
-        }
-
         public static List<ParameterExpression> GetParamsFromTypes(this Type[] types)
         {
 #if NET35
@@ -205,6 +190,277 @@ namespace Delegates.Extensions
 #endif
                 .ToList();
             return parameters;
+        }
+
+        public static MethodInfo GetGenericMethod(this Type source, string name, Type[] parametersTypes, Type[] typeParameters,
+            bool isStatic)
+        {
+            MethodInfo methodInfo = null;
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var ms = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public)
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | PrivateOrProtectedBindingFlags))
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | InternalBindingFlags));
+            foreach (var m in ms)
+            {
+                if (m.Name == name && m.IsGenericMethod)
+                {
+                    var parameters = m.GetParameters();
+                    var genericArguments = m.GetGenericArguments();
+                    var parametersTypesValid = parameters.Length == parametersTypes.Length;
+                    parametersTypesValid &= genericArguments.Length == typeParameters.Length;
+                    if (!parametersTypesValid)
+                    {
+                        continue;
+                    }
+                    for (var index = 0; index < parameters.Length; index++)
+                    {
+                        var parameterInfo = parameters[index];
+                        var parameterType = parametersTypes[index];
+                        if (parameterInfo.ParameterType != parameterType
+                            && parameterInfo.ParameterType.IsGenericParameter
+                            && !parameterInfo.ParameterType.CanBeAssignedFrom(parameterType))
+                        {
+                            parametersTypesValid = false;
+                            break;
+                        }
+                    }
+                    for (var index = 0; index < genericArguments.Length; index++)
+                    {
+                        var genericArgument = genericArguments[index];
+                        var typeParameter = typeParameters[index];
+                        if (!genericArgument.CanBeAssignedFrom(typeParameter)
+                            //check cross parameters constraints
+                            || genericArgument.IsCrossConstraintInvalid(genericArguments, typeParameters))
+                        {
+                            parametersTypesValid = false;
+                            break;
+                        }
+                    }
+                    if (parametersTypesValid)
+                    {
+                        methodInfo = m.MakeGenericMethod(typeParameters);
+                        break;
+                    }
+                }
+            }
+            return methodInfo;
+        }
+
+        public static MethodInfo GetMethodInfoByEnumerate(this Type source, string name, Type[] parametersTypes,
+            bool isStatic)
+        {
+            MethodInfo methodInfo = null;
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            IEnumerable<MethodInfo> methods = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public);
+            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | PrivateOrProtectedBindingFlags));
+            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | InternalBindingFlags));
+            var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
+            foreach (var method in correctNameMethods)
+            {
+                var parameters = method.GetParameters();
+                var parametersTypesValid = parameters.Length == parametersTypes.Length;
+                if (!parametersTypesValid)
+                {
+                    continue;
+                }
+                for (var index = 0; index < parameters.Length; index++)
+                {
+                    var parameterInfo = parameters[index];
+                    var parameterType = parametersTypes[index];
+                    if (parameterInfo.ParameterType != parameterType)
+                    {
+                        parametersTypesValid = false;
+                        break;
+                    }
+                }
+                if (parametersTypesValid)
+                {
+                    methodInfo = method;
+                    break;
+                }
+            }
+            return methodInfo;
+        }
+
+        public static MethodInfo GetMethodInfo(this Type source, string name, Type[] parametersTypes,
+              Type[] typeParameters = null, bool isStatic = false)
+        {
+            MethodInfo methodInfo = null;
+            if (typeParameters == null)
+            {
+#if !(NETCORE || PORTABLE)
+                var enumerateMethods = false;
+                try
+                {
+                    methodInfo = source.GetSingleMethod(name, parametersTypes, isStatic);
+                }
+                catch (AmbiguousMatchException)
+                {
+                    //if more than one method it means there are also generic -> enumerate
+                    enumerateMethods = true;
+                }
+                if (enumerateMethods)
+                {
+                    methodInfo = GetMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
+                }
+#else
+                methodInfo = GetMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
+#endif
+            }
+            //check for generic methods
+            else
+            {
+                methodInfo = GetGenericMethod(source, name, parametersTypes, typeParameters, isStatic);
+            }
+            return methodInfo;
+        }
+
+
+#if !(NETCORE || PORTABLE)
+        public static MethodInfo GetSingleMethod(this Type source, string name, Type[] parametersTypes, bool isStatic)
+        {
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var methodInfo = (source.GetTypeInfo()
+                     .GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
+                 source.GetTypeInfo()
+                     .GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes,
+                         null)) ??
+                source.GetTypeInfo()
+                    .GetMethod(name, staticOrInstance | InternalBindingFlags, null, parametersTypes, null);
+            return methodInfo;
+        }
+#endif
+
+        public static
+#if NET35 || NET4 || PORTABLE
+            CPropertyInfo
+#else
+            PropertyInfo
+#endif
+            GetPropertyInfo(this Type source, string propertyName, bool isStatic)
+        {
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var propertyInfo = source.GetTypeInfo().GetProperty(propertyName, staticOrInstance) ??
+                               source.GetTypeInfo().GetProperty(propertyName, staticOrInstance | PrivateOrProtectedBindingFlags) ??
+                               source.GetTypeInfo().GetProperty(propertyName, staticOrInstance | InternalBindingFlags);
+#if NET35 || NET4 || PORTABLE
+            return new CPropertyInfo(propertyInfo);
+#else
+            return propertyInfo;
+#endif
+        }
+
+        public static FieldInfo GetFieldInfo(this Type source, string fieldName, bool isStatic)
+        {
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var fieldInfo = (source.GetTypeInfo().GetField(fieldName, staticOrInstance) ??
+                             source.GetTypeInfo().GetField(fieldName, staticOrInstance | PrivateOrProtectedBindingFlags)) ??
+                            source.GetTypeInfo().GetField(fieldName, staticOrInstance | InternalBindingFlags);
+            return fieldInfo;
+        }
+
+        public static
+#if NET35||NET4||PORTABLE
+            CPropertyInfo
+#else
+            PropertyInfo
+#endif
+            GetIndexerPropertyInfo(this Type source, Type[] indexesTypes,
+                string indexerName = null)
+        {
+            indexerName = indexerName ?? Item;
+            var properties = source.GetTypeInfo().GetProperties().Concat(
+                    source.GetTypeInfo().GetProperties(BindingFlags.NonPublic)).Concat(
+                    source.GetTypeInfo().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+                .ToArray();
+            if (indexerName == Item)
+            {
+                var firstIndexerInfo = properties.FirstOrDefault(p => p.GetIndexParameters().Length > 0);
+                if (firstIndexerInfo != null && firstIndexerInfo.Name != indexerName)
+                {
+                    indexerName = firstIndexerInfo.Name;
+                }
+            }
+            var indexerInfo = properties.FirstOrDefault(p => p.Name == indexerName
+                                                             &&
+                                                             IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
+            if (indexerInfo != null)
+            {
+#if NET35||NET4||PORTABLE
+                return new CPropertyInfo(indexerInfo);
+#else
+                return indexerInfo;
+#endif
+            }
+            return null;
+        }
+
+        public static ConstructorInfo GetConstructorInfo(this Type source, Type[] types)
+        {
+#if NETCORE||PORTABLE
+            ConstructorInfo constructor = null;
+            var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public);
+            if (!constructors.Any())
+            {
+                constructors = source.GetTypeInfo().GetConstructors(PrivateOrProtectedBindingFlags);
+            }
+            if (!constructors.Any())
+            {
+                constructors =
+                    source.GetTypeInfo()
+                        .GetConstructors(InternalBindingFlags | BindingFlags.Instance);
+            }
+            foreach (var c in constructors)
+            {
+                var parameters = c.GetParameters();
+                var parametersTypesValid = parameters.Length == types.Length;
+                if (!parametersTypesValid)
+                {
+                    continue;
+                }
+                for (var index = 0; index < parameters.Length; index++)
+                {
+                    var parameterInfo = parameters[index];
+                    var parameterType = types[index];
+                    if (parameterInfo.ParameterType != parameterType)
+                    {
+                        parametersTypesValid = false;
+                        break;
+                    }
+                }
+                if (parametersTypesValid)
+                {
+                    constructor = c;
+                    break;
+                }
+            }
+            return constructor;
+#else
+            return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
+                    source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
+                    source.GetConstructor(
+                       InternalBindingFlags | BindingFlags.Instance, null,
+                       types, null);
+#endif
+        }
+
+        public static
+#if NET35||NET4||PORTABLE
+            CEventInfo
+#else
+            EventInfo
+#endif
+            GetEventInfo(this Type sourceType, string eventName)
+        {
+            var eventInfo = (sourceType.GetTypeInfo().GetEvent(eventName)
+                             ?? sourceType.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
+                            ?? sourceType.GetTypeInfo().GetEvent(eventName,
+                                InternalBindingFlags | BindingFlags.Instance);
+#if NET35||NET4||PORTABLE
+            return new CEventInfo(eventInfo);
+#else
+            return eventInfo;
+#endif
         }
     }
 }

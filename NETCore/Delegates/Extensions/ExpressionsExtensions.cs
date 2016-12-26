@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace Delegates.Extensions
 {
-    public static class ExpressionsExtensions
+    internal static class ExpressionsExtensions
     {
         public static
 #if NET35

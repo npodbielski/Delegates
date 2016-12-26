@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
-
+using static Delegates.Helper.DelegateHelper;
 #if NET45||NETCORE
 using WeakReference = System.WeakReference<object>;
 #endif
@@ -21,7 +21,6 @@ namespace Delegates
     public static class DelegateFactory
     {
         private const string AddAccessor = "add";
-        private const string Item = "Item";
 
         private const string RemoveAccessor = "remove";
 
@@ -31,13 +30,11 @@ namespace Delegates
         private static readonly Dictionary<WeakReference, WeakReference> EventsProxies =
             new Dictionary<WeakReference, WeakReference>();
 
-        private static readonly Type DelegateType = typeof(Delegate);
-
         public static TDelegate Contructor<TDelegate>() where TDelegate : class
         {
             var source = GetFuncDelegateReturnType<TDelegate>();
             var ctrArgs = GetDelegateArguments<TDelegate>();
-            var constructorInfo = GetConstructorInfo(source, ctrArgs);
+            var constructorInfo = source.GetConstructorInfo(ctrArgs);
             if (constructorInfo == null)
             {
                 return null;
@@ -51,7 +48,7 @@ namespace Delegates
 
         public static Func<object[], object> Contructor(this Type source, params Type[] ctrArgs)
         {
-            var constructorInfo = GetConstructorInfo(source, ctrArgs);
+            var constructorInfo = source.GetConstructorInfo(ctrArgs);
             if (constructorInfo == null)
             {
                 return null;
@@ -76,7 +73,7 @@ namespace Delegates
             where TDelegate : class
         {
             var ctrArgs = GetDelegateArguments<TDelegate>();
-            var constructorInfo = GetConstructorInfo(source, ctrArgs);
+            var constructorInfo = source.GetConstructorInfo(ctrArgs);
             if (constructorInfo == null)
             {
                 return null;
@@ -105,7 +102,7 @@ namespace Delegates
         public static Delegate DelegateIndexerGet(Type source, Type returnType,
             params Type[] indexTypes)
         {
-            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            var indexerInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (indexerInfo?.GetMethod == null)
             {
                 return null;
@@ -128,7 +125,7 @@ namespace Delegates
             params Type[] indexTypes)
             where TDelegate : class
         {
-            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            var indexerInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (indexerInfo?.SetMethod == null)
             {
                 return null;
@@ -299,7 +296,7 @@ namespace Delegates
         private static TDelegate FieldGetImpl<TDelegate>(this Type source, string fieldName, bool byRef = false)
             where TDelegate : class
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null)
             {
                 var sourceTypeInDelegate = GetDelegateArguments<TDelegate>().First();
@@ -346,7 +343,7 @@ namespace Delegates
         public static Func<object, TField> FieldGet2<TField>(this Type source,
             string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null)
             {
                 var sourceParam = Expression.Parameter(typeof(object), "source");
@@ -361,7 +358,7 @@ namespace Delegates
         public static StructSetActionRef<object, TProperty> FieldSetStructRef<TProperty>(this Type source,
             string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object).MakeByRefType(), "source");
@@ -391,7 +388,7 @@ namespace Delegates
 
         public static StructSetAction<object, TProperty> FieldSetStruct<TProperty>(this Type source, string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object), "source");
@@ -421,7 +418,7 @@ namespace Delegates
 
         public static Action<object, TProperty> FieldSet<TProperty>(this Type source, string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object), "source");
@@ -448,7 +445,7 @@ namespace Delegates
             where TSource : struct
         {
             var source = typeof(TSource);
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 Expression sourcExpr;
@@ -487,7 +484,7 @@ namespace Delegates
             where TSource : class
         {
             var source = typeof(TSource);
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(source, "source");
@@ -502,7 +499,7 @@ namespace Delegates
 
         public static Action<object, object> FieldSet(this Type source, string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object), "source");
@@ -523,7 +520,7 @@ namespace Delegates
 
         public static StructSetActionRef<object, object> FieldSetStructRef(this Type source, string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object).MakeByRefType(), "source");
@@ -556,7 +553,7 @@ namespace Delegates
 
         public static StructSetAction<object, object> FieldSetStruct(this Type source, string fieldName)
         {
-            var fieldInfo = GetFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, false);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var sourceParam = Expression.Parameter(typeof(object), "source");
@@ -603,22 +600,21 @@ namespace Delegates
         public static Func<TSource, TIndex, TReturn> IndexerGet<TSource, TReturn, TIndex>()
             where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TReturn>>();
         }
 
         public static StructIndex1GetFunc<TSource, TIndex, TReturn> IndexerGetStruct<TSource, TReturn, TIndex>()
             where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource), new[] { typeof(TIndex) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex) });
             return propertyInfo?.GetMethod?.CreateDelegate<StructIndex1GetFunc<TSource, TIndex, TReturn>>();
         }
 
         public static Func<TSource, TIndex, TIndex2, TReturn> IndexerGet<TSource, TReturn, TIndex, TIndex2>()
             where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] { typeof(TIndex), typeof(TIndex2) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -626,15 +622,14 @@ namespace Delegates
             IndexerGetStruct<TSource, TReturn, TIndex, TIndex2>()
             where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] { typeof(TIndex), typeof(TIndex2) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.GetMethod?.CreateDelegate<StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>>();
         }
 
         public static Func<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGet
             <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
                 new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
@@ -642,7 +637,7 @@ namespace Delegates
         public static StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGetStruct
             <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
                 new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.GetMethod?.CreateDelegate<
                 StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
@@ -677,7 +672,7 @@ namespace Delegates
         public static Func<object, object[], object> IndexerGet(this Type source, Type returnType,
             params Type[] indexTypes)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, indexTypes);
+            var propertyInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -703,7 +698,7 @@ namespace Delegates
 
         public static Func<object, object, object> IndexerGet(this Type source, Type returnType, Type indexType)
         {
-            var propertyInfo = GetIndexerPropertyInfo(source, new[] { indexType });
+            var propertyInfo = source.GetIndexerPropertyInfo(new[] { indexType });
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -775,7 +770,7 @@ namespace Delegates
             where TSource : class
         {
             var sourceType = typeof(TSource);
-            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
+            var propertyInfo = sourceType.GetIndexerPropertyInfo(new[] { typeof(TIndex) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TProperty>>();
         }
 
@@ -783,15 +778,14 @@ namespace Delegates
             where TSource : struct
         {
             var sourceType = typeof(TSource);
-            var propertyInfo = GetIndexerPropertyInfo(sourceType, new[] { typeof(TIndex) });
+            var propertyInfo = sourceType.GetIndexerPropertyInfo(new[] { typeof(TIndex) });
             return propertyInfo?.SetMethod?.CreateDelegate<StructIndex1SetAction<TSource, TIndex, TProperty>>();
         }
 
         public static Action<TSource, TIndex, TIndex2, TReturn> IndexerSet<TSource, TReturn, TIndex, TIndex2>()
             where TSource : class
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] { typeof(TIndex), typeof(TIndex2) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TIndex2, TReturn>>();
         }
 
@@ -799,23 +793,21 @@ namespace Delegates
             <TSource, TReturn, TIndex, TIndex2>()
             where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] { typeof(TIndex), typeof(TIndex2) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.SetMethod?.CreateDelegate<StructIndex2SetAction<TSource, TIndex, TIndex2, TReturn>>();
         }
 
         public static Action<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerSet
             <TSource, TReturn, TIndex, TIndex2, TIndex3>()
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
-                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
 
         public static StructIndex3SetAction<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerSetStruct
             <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
         {
-            var propertyInfo = GetIndexerPropertyInfo(typeof(TSource),
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
                 new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.SetMethod?.CreateDelegate<StructIndex3SetAction<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
@@ -837,7 +829,7 @@ namespace Delegates
             params Type[] indexTypes)
             where TDelegate : class
         {
-            var indexerInfo = GetIndexerPropertyInfo(source, indexTypes);
+            var indexerInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (indexerInfo?.SetMethod == null)
             {
                 return null;
@@ -890,7 +882,7 @@ namespace Delegates
             string name, Type[] typeParams, Type[] paramsTypes)
             where TDelegate : class
         {
-            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParams);
+            var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParams);
             if (methodInfo == null)
             {
                 return null;
@@ -949,7 +941,7 @@ namespace Delegates
             var paramsTypes = GetDelegateArguments<TDelegate>();
             var source = paramsTypes.First();
             paramsTypes = paramsTypes.Skip(1).ToArray();
-            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParameters);
+            var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParameters);
             return methodInfo?.CreateDelegate<TDelegate>();
         }
 
@@ -977,7 +969,7 @@ namespace Delegates
             var delegateParams = GetDelegateArguments<TDelegate>();
             var instanceParam = delegateParams[0];
             delegateParams = delegateParams.Skip(1).ToArray();
-            var methodInfo = GetMethodInfo(source, name, delegateParams, typeParams);
+            var methodInfo = source.GetMethodInfo(name, delegateParams, typeParams);
             if (methodInfo == null)
             {
                 return null;
@@ -1067,7 +1059,7 @@ namespace Delegates
 
         public static Action<object, TProperty> PropertySet<TProperty>(this Type source, string propertyName)
         {
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             if (propertyInfo?.SetMethod == null)
             {
                 return null;
@@ -1096,7 +1088,7 @@ namespace Delegates
         public static StructSetActionRef<object, TProperty> PropertySetStructRef<TProperty>
             (this Type source, string propertyName)
         {
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             if (propertyInfo?.SetMethod == null)
             {
                 return null;
@@ -1129,7 +1121,7 @@ namespace Delegates
         public static StructSetAction<object, TProperty> PropertySetStruct<TProperty>
             (this Type source, string propertyName)
         {
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             if (propertyInfo?.SetMethod == null)
             {
                 return null;
@@ -1180,7 +1172,7 @@ namespace Delegates
         public static Action<TSource, TProperty> PropertySet<TSource, TProperty>(string propertyName)
         {
             var source = typeof(TSource);
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             return
                 propertyInfo?.SetMethod?.CreateDelegate<Action<TSource, TProperty>>();
         }
@@ -1189,7 +1181,7 @@ namespace Delegates
             string propertyName)
         {
             var source = typeof(TSource);
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             return
                 propertyInfo?.SetMethod?.CreateDelegate<StructSetActionRef<TSource, TProperty>>();
         }
@@ -1199,7 +1191,7 @@ namespace Delegates
             where TEvent : EventArgs
 #endif
         {
-            var eventInfo = GetEventInfo(eventName, source);
+            var eventInfo = source.GetEventInfo(eventName);
             return eventInfo?.AddMethod.CreateDelegate<Action<EventHandler<TEvent>>>();
         }
 
@@ -1212,7 +1204,7 @@ namespace Delegates
         public static Func<TField> StaticFieldGet<TField>(this Type source,
             string fieldName)
         {
-            var fieldInfo = GetStaticFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, true);
             if (fieldInfo != null)
             {
                 var lambda = Expression.Lambda(Expression.Field(null, fieldInfo));
@@ -1223,7 +1215,7 @@ namespace Delegates
 
         public static Func<object> StaticFieldGet(this Type source, string fieldName)
         {
-            var fieldInfo = GetStaticFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, true);
             if (fieldInfo != null)
             {
                 Expression returnExpression = Expression.Field(null, fieldInfo);
@@ -1254,7 +1246,7 @@ namespace Delegates
 
         public static Action<TField> StaticFieldSet<TField>(this Type source, string fieldName)
         {
-            var fieldInfo = GetStaticFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, true);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var valueParam = Expression.Parameter(typeof(TField), "value");
@@ -1267,7 +1259,7 @@ namespace Delegates
 
         public static Action<object> StaticFieldSet(this Type source, string fieldName)
         {
-            var fieldInfo = GetStaticFieldInfo(source, fieldName);
+            var fieldInfo = source.GetFieldInfo(fieldName, true);
             if (fieldInfo != null && !fieldInfo.IsInitOnly)
             {
                 var valueParam = Expression.Parameter(typeof(object), "value");
@@ -1297,14 +1289,6 @@ namespace Delegates
         {
             CheckDelegate<TDelegate>();
             return typeof(TSource).StaticMethod<TDelegate>(name);
-        }
-
-        private static void CheckDelegate<TDelegate>() where TDelegate : class
-        {
-            if (!typeof(TDelegate).GetTypeInfo().IsSubclassOf(DelegateType))
-            {
-                throw new ArgumentException("TDelegate type param must derive from " + DelegateType.FullName);
-            }
         }
 
         public static TDelegate StaticMethod<TSource, TDelegate, TParam1>(string name)
@@ -1354,7 +1338,7 @@ namespace Delegates
         {
             CheckDelegate<TDelegate>();
             var paramsTypes = GetDelegateArguments<TDelegate>();
-            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParameters, true);
+            var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParameters, true);
             return methodInfo?.CreateDelegate<TDelegate>();
         }
 
@@ -1374,7 +1358,12 @@ namespace Delegates
             string name, Type[] typeParams, Type[] paramsTypes)
             where TDelegate : class
         {
-            var methodInfo = GetMethodInfo(source, name, paramsTypes, typeParams, true);
+
+            if (paramsTypes == null)
+            {
+                paramsTypes = new Type[0];
+            }
+            var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParams, true);
             if (methodInfo == null)
             {
                 return null;
@@ -1408,13 +1397,13 @@ namespace Delegates
 
         public static Func<TProperty> StaticPropertyGet<TProperty>(this Type source, string propertyName)
         {
-            var propertyInfo = GetStaticPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, true);
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TProperty>>();
         }
 
         public static Func<object> StaticPropertyGet(this Type source, string propertyName)
         {
-            var propertyInfo = GetStaticPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, true);
             if (propertyInfo?.GetMethod == null)
             {
                 return null;
@@ -1443,13 +1432,13 @@ namespace Delegates
 
         public static Action<TProperty> StaticPropertySet<TProperty>(this Type source, string propertyName)
         {
-            var propertyInfo = GetStaticPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, true);
             return propertyInfo?.SetMethod?.CreateDelegate<Action<TProperty>>();
         }
 
         public static Action<object> StaticPropertySet(this Type source, string propertyName)
         {
-            var propertyInfo = GetStaticPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, true);
             if (propertyInfo?.SetMethod == null)
             {
                 return null;
@@ -1493,7 +1482,7 @@ namespace Delegates
         private static TDelegate EventAccessorImpl<TDelegate>(Type source, string eventName, string accessorName)
             where TDelegate : class
         {
-            var eventInfo = GetEventInfo(eventName, source);
+            var eventInfo = source.GetEventInfo(eventName);
             if (eventInfo != null)
             {
                 var accessor = accessorName == AddAccessor ? eventInfo.AddMethod : eventInfo.RemoveMethod;
@@ -1523,87 +1512,10 @@ namespace Delegates
             return EventAccessorImpl<TDelegate>(source, eventName, RemoveAccessor);
         }
 
-        private static ConstructorInfo GetConstructorInfo(Type source, Type[] types)
-        {
-#if NETCORE||PORTABLE
-            ConstructorInfo constructor = null;
-            var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public);
-            if (!constructors.Any())
-            {
-                constructors = source.GetTypeInfo().GetConstructors(BindingFlags.NonPublic);
-            }
-            if (!constructors.Any())
-            {
-                constructors =
-                    source.GetTypeInfo()
-                        .GetConstructors(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-            }
-            foreach (var c in constructors)
-            {
-                var parameters = c.GetParameters();
-                var parametersTypesValid = parameters.Length == types.Length;
-                if (!parametersTypesValid)
-                {
-                    continue;
-                }
-                for (var index = 0; index < parameters.Length; index++)
-                {
-                    var parameterInfo = parameters[index];
-                    var parameterType = types[index];
-                    if (parameterInfo.ParameterType != parameterType)
-                    {
-                        parametersTypesValid = false;
-                        break;
-                    }
-                }
-                if (parametersTypesValid)
-                {
-                    constructor = c;
-                    break;
-                }
-            }
-            return constructor;
-#else
-            return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
-                    source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
-                    source.GetConstructor(
-                       BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null,
-                       types, null);
-#endif
-        }
-
-        private static
-#if NET35||NET4||PORTABLE
-            CEventInfo
-#else
-            EventInfo
-#endif
-            GetEventInfo(string eventName, Type sourceType)
-        {
-            var eventInfo = (sourceType.GetTypeInfo().GetEvent(eventName)
-                             ?? sourceType.GetTypeInfo().GetEvent(eventName, BindingFlags.NonPublic))
-                            ?? sourceType.GetTypeInfo().GetEvent(eventName,
-                                BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-#if NET35||NET4||PORTABLE
-            return new CEventInfo(eventInfo);
-#else
-            return eventInfo;
-#endif
-        }
-
         private static MethodInfo GetEventInfoAccessor(string eventName, Type sourceType, string accessor)
         {
-            var eventInfo = GetEventInfo(eventName, sourceType);
+            var eventInfo = sourceType.GetEventInfo(eventName);
             return accessor == AddAccessor ? eventInfo?.AddMethod : eventInfo?.RemoveMethod;
-        }
-
-        private static FieldInfo GetFieldInfo(Type source, string fieldName)
-        {
-            var fieldInfo = (source.GetTypeInfo().GetField(fieldName) ??
-                             source.GetTypeInfo().GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic)) ??
-                            source.GetTypeInfo().GetField(fieldName,
-                                BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            return fieldInfo;
         }
 
         private static Type[] GetDelegateArguments<TDelegate>() where TDelegate : class
@@ -1617,254 +1529,17 @@ namespace Delegates
             return typeof(TDelegate).GenericTypeArguments().Last();
         }
 
-        private static
-#if NET35||NET4||PORTABLE
-            CPropertyInfo
-#else
-            PropertyInfo
-#endif
-            GetIndexerPropertyInfo(Type source, Type[] indexesTypes,
-                string indexerName = null)
-        {
-            indexerName = indexerName ?? Item;
-
-            var properties = source.GetTypeInfo().GetProperties().Concat(
-                    source.GetTypeInfo().GetProperties(BindingFlags.NonPublic)).Concat(
-                    source.GetTypeInfo().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
-                .ToArray();
-            if (indexerName == Item)
-            {
-                var firstIndexerInfo = properties.FirstOrDefault(p => p.GetIndexParameters().Length > 0);
-                if (firstIndexerInfo != null && firstIndexerInfo.Name != indexerName)
-                {
-                    indexerName = firstIndexerInfo.Name;
-                }
-            }
-            var indexerInfo = properties.FirstOrDefault(p => p.Name == indexerName
-                                                             &&
-                                                             IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
-            if (indexerInfo != null)
-            {
-#if NET35||NET4||PORTABLE
-                return new CPropertyInfo(indexerInfo);
-#else
-                return indexerInfo;
-#endif
-            }
-            return null;
-        }
-
-        private static bool IndexParametersEquals(ParameterInfo[] first, Type[] second)
-        {
-            if (first.Length != second.Length)
-            {
-                return false;
-            }
-            var indexParametersEquals = first.Select((t, i) => t.ParameterType == second[i]).All(p => p);
-            return indexParametersEquals;
-        }
-
-#if !(NETCORE||PORTABLE)
-        private static MethodInfo GetSingleMethod(Type source, string name, Type[] parametersTypes, bool isStatic)
-        {
-            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            var methodInfo = (source.GetTypeInfo()
-                     .GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
-                 source.GetTypeInfo()
-                     .GetMethod(name, staticOrInstance | _privateOrProtectedBindingFlags, null, parametersTypes,
-                         null)) ??
-                source.GetTypeInfo()
-                    .GetMethod(name, staticOrInstance | _internalBindingFlags, null, parametersTypes, null);
-            return methodInfo;
-        } 
-#endif
-
-        private static
-#if NET35 || NET4 || PORTABLE
-            CPropertyInfo
-#else
-            PropertyInfo
-#endif
-            GetPropertyInfo(Type source, string propertyName)
-        {
-            var propertyInfo = source.GetTypeInfo().GetProperty(propertyName) ??
-                               source.GetTypeInfo().GetProperty(propertyName, BindingFlags.NonPublic) ??
-                               source.GetTypeInfo().GetProperty(propertyName,
-                                   BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-#if NET35 || NET4 || PORTABLE
-            return new CPropertyInfo(propertyInfo);
-#else
-            return propertyInfo;
-#endif
-        }
-
-        private static FieldInfo GetStaticFieldInfo(Type source, string fieldName)
-        {
-            var fieldInfo = (source.GetTypeInfo().GetField(fieldName, BindingFlags.Static) ??
-                             source.GetTypeInfo().GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic)) ??
-                             source.GetTypeInfo().GetField(fieldName,
-                                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            return fieldInfo;
-        }
-
-        private const BindingFlags _privateOrProtectedBindingFlags = BindingFlags.NonPublic;
-        private const BindingFlags _internalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
-
-        private static MethodInfo GetStaticMethodInfoByEnumerate(Type source, string name, Type[] parametersTypes,
-            bool isStatic)
-        {
-            MethodInfo methodInfo = null;
-            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            IEnumerable<MethodInfo> methods = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public);
-            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _privateOrProtectedBindingFlags));
-            methods = methods.Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _internalBindingFlags));
-            var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
-            foreach (var method in correctNameMethods)
-            {
-                var parameters = method.GetParameters();
-                var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                if (!parametersTypesValid)
-                {
-                    continue;
-                }
-                for (var index = 0; index < parameters.Length; index++)
-                {
-                    var parameterInfo = parameters[index];
-                    var parameterType = parametersTypes[index];
-                    if (parameterInfo.ParameterType != parameterType)
-                    {
-                        parametersTypesValid = false;
-                        break;
-                    }
-                }
-                if (parametersTypesValid)
-                {
-                    methodInfo = method;
-                    break;
-                }
-            }
-            return methodInfo;
-        }
-
-        private static MethodInfo GetMethodInfo(Type source, string name, Type[] parametersTypes,
-               Type[] typeParameters = null, bool isStatic = false)
-        {
-            MethodInfo methodInfo = null;
-            if (typeParameters == null)
-            {
-#if !(NETCORE || PORTABLE)
-                var enumerateMethods = false;
-                try
-                {
-                    methodInfo = GetSingleMethod(source, name, parametersTypes, isStatic);
-                }
-                catch (AmbiguousMatchException)
-                {
-                    //if more than one method it means there are also generic -> enumerate
-                    enumerateMethods = true;
-                }
-                if (enumerateMethods)
-                {
-                    methodInfo = GetStaticMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
-                }
-#else
-                methodInfo = GetStaticMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
-#endif
-            }
-            //check for generic methods
-            else
-            {
-                methodInfo = GetGenericMethod(source, name, parametersTypes, typeParameters, isStatic);
-            }
-            return methodInfo;
-        }
-
-        private static MethodInfo GetGenericMethod(Type source, string name, Type[] parametersTypes, Type[] typeParameters,
-            bool isStatic)
-        {
-            MethodInfo methodInfo = null;
-            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            var ms = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public)
-                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _privateOrProtectedBindingFlags))
-                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | _internalBindingFlags));
-            foreach (var m in ms)
-            {
-                if (m.Name == name && m.IsGenericMethod)
-                {
-                    var parameters = m.GetParameters();
-                    var genericArguments = m.GetGenericArguments();
-                    var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                    parametersTypesValid &= genericArguments.Length == typeParameters.Length;
-                    if (!parametersTypesValid)
-                    {
-                        continue;
-                    }
-                    for (var index = 0; index < parameters.Length; index++)
-                    {
-                        var parameterInfo = parameters[index];
-                        var parameterType = parametersTypes[index];
-                        if (parameterInfo.ParameterType != parameterType
-                            && parameterInfo.ParameterType.IsGenericParameter
-                            && !parameterInfo.ParameterType.CanBeAssignedFrom(parameterType))
-                        {
-                            parametersTypesValid = false;
-                            break;
-                        }
-                    }
-                    for (var index = 0; index < genericArguments.Length; index++)
-                    {
-                        var genericArgument = genericArguments[index];
-                        var typeParameter = typeParameters[index];
-                        if (!genericArgument.CanBeAssignedFrom(typeParameter)
-                            //check cross parameters constraints
-                            || genericArgument.IsCrossConstraintInvalid(genericArguments, typeParameters))
-                        {
-                            parametersTypesValid = false;
-                            break;
-                        }
-                    }
-                    if (parametersTypesValid)
-                    {
-                        methodInfo = m.MakeGenericMethod(typeParameters);
-                        break;
-                    }
-                }
-            }
-            return methodInfo;
-        }
-
-        private static
-#if NET35 || NET4 || PORTABLE
-            CPropertyInfo
-#else
-            PropertyInfo
-#endif
-            GetStaticPropertyInfo(Type source, string propertyName)
-        {
-            var propertyInfo = (source.GetTypeInfo().GetProperty(propertyName, BindingFlags.Static) ??
-                                source.GetTypeInfo()
-                                    .GetProperty(propertyName, BindingFlags.Static | BindingFlags.NonPublic)) ??
-                               source.GetTypeInfo().GetProperty(propertyName,
-                                   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-#if NET35 || NET4 || PORTABLE
-            return new CPropertyInfo(propertyInfo);
-#else
-            return propertyInfo;
-#endif
-        }
-
         private static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName = null,
             PropertyInfo propertyInfo = null)
             where TSource : class
         {
             var source = typeof(TSource);
 #if NET35 || NET4 || PORTABLE
-            var cpropertyInfo = propertyInfo != null
-                ? new CPropertyInfo(propertyInfo)
-                : GetPropertyInfo(source, propertyName);
+            var cpropertyInfo = propertyInfo != null ? new CPropertyInfo(propertyInfo)
+                : source.GetPropertyInfo(propertyName, false);
             return cpropertyInfo.GetMethod?.CreateDelegate<Func<TSource, TProperty>>();
 #else
-            propertyInfo = propertyInfo ?? GetPropertyInfo(source, propertyName);
+            propertyInfo = propertyInfo ?? source.GetPropertyInfo(propertyName, false);
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TProperty>>();
 #endif
         }
@@ -1874,7 +1549,7 @@ namespace Delegates
             where TSource : struct
         {
             var source = typeof(TSource);
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             return
                 propertyInfo?.GetMethod?.CreateDelegate<StructGetFunc<TSource, TProperty>>();
         }
@@ -1882,7 +1557,7 @@ namespace Delegates
         private static TDelegate PropertyGetImpl<TDelegate>(this Type source, string propertyName)
             where TDelegate : class
         {
-            var propertyInfo = GetPropertyInfo(source, propertyName);
+            var propertyInfo = source.GetPropertyInfo(propertyName, false);
             if (propertyInfo?.GetMethod == null)
             {
                 return null;

@@ -92,8 +92,17 @@
     <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
       <Link>Extensions\ExpressionsExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\Delegates\Extensions\MethodInfoExtensions.cs">
+      <Link>Extensions\MethodInfoExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\Delegates\Extensions\TypeExtensions.cs">
       <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\netcore\delegates\helper\DelegateHelper.cs">
+      <Link>Helper\DelegateHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\Delegates\Helper\ParametersIndexes.cs">
+      <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
