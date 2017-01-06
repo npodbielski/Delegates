@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Delegates.Helper;
 
 namespace Delegates.Extensions
 {
@@ -8,7 +9,8 @@ namespace Delegates.Extensions
         public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
             where TDelegate : class
         {
-#if NET45 || NETCORE||NET4||PORTABLE
+#if NET45 || NETCORE || NET4 || PORTABLE
+            DelegateHelper.CheckDelegateReturnType<TDelegate>(method);
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
 #elif NET35      
             return Delegate.CreateDelegate(typeof(TDelegate), method, true) as TDelegate;

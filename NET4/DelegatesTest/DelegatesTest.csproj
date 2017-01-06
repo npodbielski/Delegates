@@ -48,6 +48,9 @@
     <Compile Include="..\..\NETCore\DelegatesTest\AssertHelper.cs">
       <Link>AssertHelper.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_InstanceMethods.cs">
+      <Link>DelegateFactoryTests_InstanceMethods.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
       <Link>DelegateFactoryTests_StaticMethods.cs</Link>
     </Compile>

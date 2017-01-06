@@ -286,7 +286,7 @@ namespace Delegates.Extensions
               Type[] typeParameters = null, bool isStatic = false)
         {
             MethodInfo methodInfo = null;
-            if (typeParameters == null)
+            if (typeParameters == null || typeParameters.Length == 0)
             {
 #if !(NETCORE || PORTABLE)
                 var enumerateMethods = false;

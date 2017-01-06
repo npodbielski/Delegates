@@ -23,6 +23,13 @@ namespace DelegatesTest.TestObjects
         public const string StaticPublicParameterlessReturnValue = "StaticPublic";
         public const string StaticInternalParameterlessReturnValue = "StaticInternal";
         public const string StaticProtectedParameterlessReturnValue = "StaticProtected";
+        public const string StaticPrivateParameterlessReturnValue = "StaticPrivate";
+
+        public string PublicParameterlessReturnValue = "PublicMethodVoid";
+        public string InternalParameterlessReturnValue = "InternalMethodVoid";
+        public string ProtectedParameterlessReturnValue = "ProtectedMethodVoid";
+        public string PrivateParameterlessReturnValue = "PrivateMethodVoid";
+
         public static readonly string StaticPublicReadOnlyField = "StaticPublicReadOnlyField";
 
         public static object StaticGenericMethodVoidParameter;
@@ -52,6 +59,9 @@ namespace DelegatesTest.TestObjects
         public string PublicField;
         public int PublicFieldInt;
         public string PublicMethodVoidParameter;
+        public string InternalMethodVoidParameter;
+        public string ProtectedMethodVoidParameter;
+        public string PrivateMethodVoidParameter;
         internal string InternalField;
         protected string ProtectedField;
         private static string _staticOnlySetPropertyBackend;
@@ -60,7 +70,7 @@ namespace DelegatesTest.TestObjects
         private string _privateField;
         public static object[] StaticVoidPublicParams;
         public static object[] StaticPublicParams;
-        public static string StaticPrivateParameterlessReturnValue = "StaticPrivate";
+        public object[] PublicParams;
 
         public TestClass()
         {
@@ -192,6 +202,7 @@ namespace DelegatesTest.TestObjects
         [IndexerName("TheItem")]
         // ReSharper disable once UnusedMember.Local
         private long this[long s] => s;
+
         public static string GetStaticPrivateField()
         {
             return StaticPrivateField;
@@ -224,13 +235,11 @@ namespace DelegatesTest.TestObjects
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
-
         internal static void ProtectedStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
-
 
         internal static void PrivateStaticGenericMethodVoid<T>()
         {
@@ -695,15 +704,288 @@ namespace DelegatesTest.TestObjects
             PublicEvent?.Invoke(this, new PublicEventArgs());
         }
 
+        public string PublicMethod()
+        {
+            return PublicParameterlessReturnValue;
+        }
+
         public string PublicMethod(string s)
         {
             return s;
+        }
+
+        public string PublicMethod(string s, string s1)
+        {
+            PublicParams = new object[] { s, s1};
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2)
+        {
+            PublicParams = new object[] { s, s1, s2 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3)
+        {
+            PublicParams = new object[] { s, s1, s2, s3 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
+            return s;
+        }
+
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
+            return s;
+        }
+        
+        public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
+        {
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
+            return s;
+        }
+
+        public string InternalMethod()
+        {
+            return InternalParameterlessReturnValue;
+        }
+
+        internal string InternalMethod(string s)
+        {
+            return s;
+        }
+
+        public string ProtectedMethod()
+        {
+            return ProtectedParameterlessReturnValue;
+        }
+
+        protected string ProtectedMethod(string s)
+        {
+            return s;
+        }
+
+        public string PrivateMethod()
+        {
+            return PrivateParameterlessReturnValue;
+        }
+
+        private string PrivateMethod(string s)
+        {
+            return s;
+        }
+
+        public void PublicMethodVoid()
+        {
+            PublicMethodVoidExecuted = true;
         }
 
         public void PublicMethodVoid(string s)
         {
             PublicMethodVoidParameter = s;
         }
+
+        public void PublicMethodVoid(string s, string s1)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4 };
+        }
+        
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
+        }
+        
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
+        }
+
+        public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
+            string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
+        {
+            PublicMethodVoidParameter = s;
+            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
+        }
+
+        public void InternalMethodVoid()
+        {
+            InternalMethodVoidExecuted = true;
+        }
+
+        public void InternalMethodVoid(string s)
+        {
+            InternalMethodVoidParameter = s;
+        }
+
+        public void ProtectedMethodVoid()
+        {
+            ProtectedMethodVoidExecuted = true;
+        }
+
+        public void ProtectedMethodVoid(string s)
+        {
+            ProtectedMethodVoidParameter = s;
+        }
+
+        public void PrivateMethodVoid(string s)
+        {
+            PrivateMethodVoidParameter = s;
+        }
+
+        public void PrivateMethodVoid()
+        {
+            PrivateMethodVoidExecuted = true;
+        }
+
+        public bool PublicMethodVoidExecuted;
+        public bool InternalMethodVoidExecuted;
+        public bool ProtectedMethodVoidExecuted;
+        public bool PrivateMethodVoidExecuted;
 
         internal static string StaticInternalMethod(string s)
         {
@@ -715,15 +997,11 @@ namespace DelegatesTest.TestObjects
             StaticVoidInternalExecuted = true;
             return;
         }
+
         internal static void StaticVoidInternal(string s)
         {
             StaticVoidInternalParam = s;
             return;
-        }
-
-        internal string InternalMethod(string s)
-        {
-            return s;
         }
 
         protected static string StaticProtectedMethod(string s)
@@ -736,15 +1014,11 @@ namespace DelegatesTest.TestObjects
             StaticVoidProtectedExecuted = true;
             return;
         }
+
         protected static void StaticVoidProtected(string s)
         {
             StaticVoidProtectedParam = s;
             return;
-        }
-
-        protected string ProtectedMethod(string s)
-        {
-            return s;
         }
 
         private static string StaticPrivateMethod(string s)
@@ -757,15 +1031,13 @@ namespace DelegatesTest.TestObjects
             StaticVoidPrivateExecuted = true;
             return;
         }
+
         private static void StaticVoidPrivate(string s)
         {
             StaticVoidPrivateParam = s;
             return;
         }
-        private string PrivateMethod(string s)
-        {
-            return s;
-        }
+
         public class PublicEventArgs : EventArgs
         {
         }

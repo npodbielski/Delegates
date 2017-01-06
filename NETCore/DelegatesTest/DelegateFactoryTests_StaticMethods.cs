@@ -732,7 +732,20 @@ namespace DelegatesTest
                 () => DelegateFactory.StaticMethod<TestClass, string>("NonExisting"));
         }
 
-        //-------------------------------
+        [TestMethod]
+        public void Public_Method_ByTypes_VoidDelegate_For_NonVoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                DelegateFactory.StaticMethod<TestClass, Action<string>>("StaticPublic"));
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoidDelegate_For_VoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                DelegateFactory.StaticMethod<TestClass, Func<string>>("StaticVoidPublic"));
+        }
+
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_NoParameters()
         {
@@ -1443,9 +1456,21 @@ namespace DelegatesTest
             AssertHelper.ThrowsException<ArgumentException>(
                 () => _testClassType.StaticMethod<TestClass, string>("NonExisting"));
         }
+        
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_VoidDelegate_For_NonVoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                _testClassType.StaticMethod<Action<string>>("StaticPublic"));
+        }
 
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoidDelegate_For_VoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                _testClassType.StaticMethod<Func<string>>("StaticVoidPublic"));
+        }
 
-        //-----------------------
         [TestMethod]
         public void Public_Method_ByObjecs_Void_NoParameters()
         {
@@ -2181,6 +2206,22 @@ namespace DelegatesTest
         {
             AssertHelper.ThrowsException<ArgumentException>(
                 () => _testClassType.StaticMethod<TestClass, string>("NonExisting"));
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjects_VoidDelegate_For_NonVoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+            {
+                _testClassType.StaticMethodVoid("StaticPublic", typeof(string));
+            });
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjects_NoVoidDelegate_For_VoidMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                _testClassType.StaticMethod("StaticVoidPublic", typeof(string)));
         }
     }
 }

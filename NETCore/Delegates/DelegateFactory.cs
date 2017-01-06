@@ -882,6 +882,13 @@ namespace Delegates
             string name, Type[] typeParams, Type[] paramsTypes)
             where TDelegate : class
         {
+            if (!(typeof(TDelegate) == typeof(Action<object, object[]>)
+                 || typeof(TDelegate) == typeof(Func<object, object[], object>)))
+            {
+                throw new ArgumentException("This method only accepts delegates of types " +
+                    typeof(Action<object, object[]>).FullName + " or " +
+                    typeof(Func<object, object[], object>).FullName + ".");
+            }
             var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParams);
             if (methodInfo == null)
             {
@@ -902,6 +909,7 @@ namespace Delegates
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
+            CheckDelegateReturnType<TDelegate>(methodInfo);
             return Expression.Lambda<TDelegate>(returnExpression, sourceParameter, argsArray).Compile();
         }
 
@@ -938,6 +946,7 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate>(string name, params Type[] typeParameters)
             where TDelegate : class
         {
+            CheckDelegate<TDelegate>();
             var paramsTypes = GetDelegateArguments<TDelegate>();
             var source = paramsTypes.First();
             paramsTypes = paramsTypes.Skip(1).ToArray();
@@ -977,9 +986,9 @@ namespace Delegates
             TDelegate deleg;
             if (instanceParam == source)
             {
-                deleg = methodInfo.CreateDelegate(typeof(TDelegate)) as TDelegate;
+                deleg = methodInfo.CreateDelegate<TDelegate>();
             }
-            else
+            else if (instanceParam.CanBeAssignedFrom(source))
             {
                 var sourceParameter = Expression.Parameter(typeof(object), "source");
                 var expressions = delegateParams.GetParamsFromTypes();
@@ -990,7 +999,12 @@ namespace Delegates
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 }
                 var lamdaParams = expressions.GetCallExprParams(sourceParameter);
+                CheckDelegateReturnType<TDelegate>(methodInfo);
                 deleg = Expression.Lambda<TDelegate>(returnExpression, lamdaParams).Compile();
+            }
+            else
+            {
+                throw new ArgumentException($"TDelegate type cannot have instance parameter of type {instanceParam.FullName}. This parameter type must be compatible with {source.FullName} type.");
             }
             return deleg;
         }
@@ -1381,6 +1395,7 @@ namespace Delegates
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
+            CheckDelegateReturnType<TDelegate>(methodInfo);
             return Expression.Lambda<TDelegate>(returnExpression, argsArray).Compile();
         }
 
@@ -1516,12 +1531,6 @@ namespace Delegates
         {
             var eventInfo = sourceType.GetEventInfo(eventName);
             return accessor == AddAccessor ? eventInfo?.AddMethod : eventInfo?.RemoveMethod;
-        }
-
-        private static Type[] GetDelegateArguments<TDelegate>() where TDelegate : class
-        {
-            var invokeMethod = typeof(TDelegate).GetMethod("Invoke");
-            return invokeMethod.GetParameters().Select(p => p.ParameterType).ToArray();
         }
 
         private static Type GetFuncDelegateReturnType<TDelegate>() where TDelegate : class

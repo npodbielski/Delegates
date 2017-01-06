@@ -77,6 +77,9 @@
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Indexers_Setters.cs">
       <Link>DelegateFactoryTests_Indexers_Setters.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_InstanceMethods.cs">
+      <Link>DelegateFactoryTests_InstanceMethods.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Properties_Getters.cs">
       <Link>DelegateFactoryTests_Properties_Getters.cs</Link>
     </Compile>
