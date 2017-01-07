@@ -2794,5 +2794,59 @@ namespace DelegatesTest
             AssertHelper.ThrowsException<ArgumentException>(() =>
                 _testClassType.InstanceGenericMethod<Action>("PublicMethodVoid", null, new[] { typeof(string) }));
         }
+
+        [TestMethod]
+        public void CustomDelegate_ByTypes_Void_NoParams()
+        {
+            var m = DelegateFactory.InstanceMethod<CustomAction<TestClass>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(true, _testClassInstance.PublicMethodVoidExecuted);
+        }
+
+        [TestMethod]
+        public void CustomDelegate_ByTypes_Void_SingleParams()
+        {
+            var m = DelegateFactory.InstanceMethod<CustomActionSingleParam<TestClass>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance, TestValue);
+            Assert.AreEqual(TestValue, _testClassInstance.PublicMethodVoidParameter);
+        }
+
+        [TestMethod]
+        public void CustomDelegate_ByTypes_NoVoid_Param()
+        {
+            var m = DelegateFactory.InstanceMethod<CustomFunc<TestClass>>("PublicMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(result, _testClassInstance.PublicParameterlessReturnValue);
+        }
+
+        [TestMethod]
+        public void CustomDelegate_ByObjectAndTypes_Void_NoParams()
+        {
+            var m = _testClassType.InstanceMethod<CustomAction<TestClass>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(true, _testClassInstance.PublicMethodVoidExecuted);
+        }
+
+        [TestMethod]
+        public void CustomDelegate_ByObjectAndTypes_Void_SingleParams()
+        {
+            var m = _testClassType.InstanceMethod<CustomActionSingleParam<TestClass>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance, TestValue);
+            Assert.AreEqual(TestValue, _testClassInstance.PublicMethodVoidParameter);
+        }
+
+        [TestMethod]
+        public void CustomDelegate_ByObjectAndTypes_NoVoid_Param()
+        {
+            var m = _testClassType.InstanceMethod<CustomFunc<TestClass>>("PublicMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(result, _testClassInstance.PublicParameterlessReturnValue);
+        }
     }
 }

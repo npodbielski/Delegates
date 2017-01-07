@@ -16,6 +16,11 @@ namespace DelegatesTest.TestObjects
         {
             return param;
         }
+
+        public T InstanceGenericMethod(T param)
+        {
+            return param;
+        }
     }
 
     public class TestClass : ITestInterface
@@ -229,10 +234,24 @@ namespace DelegatesTest.TestObjects
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
+        public void PublicInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+
+        public Type[] PublicTypeParams { get; set; }
+
         internal static void InternalStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
+        }
+
+        internal void InternalInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
         }
 
         internal static void ProtectedStaticGenericMethodVoid<T>()
@@ -241,16 +260,35 @@ namespace DelegatesTest.TestObjects
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
+        internal void ProtectedInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+
         internal static void PrivateStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
         }
 
+        internal void PrivateInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+
         public static T PublicStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        public T PublicInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
@@ -261,6 +299,13 @@ namespace DelegatesTest.TestObjects
             return new T();
         }
 
+        internal T InternalInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
         protected static T ProtectedStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
@@ -268,10 +313,24 @@ namespace DelegatesTest.TestObjects
             return new T();
         }
 
+        protected T ProtectedInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
         private static T PrivateStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        private T PrivateInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
             return new T();
         }
 
@@ -342,6 +401,75 @@ namespace DelegatesTest.TestObjects
         {
             StaticPublicParams = new object[] { s };
             StaticGenericMethodVoidParameter = s;
+        }
+
+        public T InstanceGenericMethod<T>(T param)
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethod<T>(T param, int i) where T : ITestInterface
+        {
+            PublicParams = new object[] { param, i };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodWithType<T>(T param) where T : Base
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodWithClass<T>(T param) where T : class
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodWithStruc<T>(T param) where T : struct
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T), typeof(T2) };
+            return param;
+        }
+
+        public T InstanceGenericMethod<T>(T param, int i, bool p) where T : struct
+        {
+            PublicParams = new object[] { param, i, p };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T1 InstanceGenericMethod<T1, T2>() where T1 : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T1), typeof(T2) };
+            return new T1();
+        }
+
+        public T1 InstanceGenericMethod<T1, T2, T3>(int i) where T1 : new()
+        {
+            PublicParams = new object[] { i };
+            PublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
+            return new T1();
+        }
+
+        public void InstanceGenericMethodVoid<T>(T s) where T : class
+        {
+            PublicParams = new object[] { s };
+            InstanceGenericMethodVoidParameter = s;
         }
 
         public static string StaticPublicMethod(string s)
@@ -716,7 +844,7 @@ namespace DelegatesTest.TestObjects
 
         public string PublicMethod(string s, string s1)
         {
-            PublicParams = new object[] { s, s1};
+            PublicParams = new object[] { s, s1 };
             return s;
         }
 
@@ -731,7 +859,7 @@ namespace DelegatesTest.TestObjects
             PublicParams = new object[] { s, s1, s2, s3 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4)
         {
             PublicParams = new object[] { s, s1, s2, s3, s4 };
@@ -763,21 +891,21 @@ namespace DelegatesTest.TestObjects
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10)
         {
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
@@ -798,14 +926,14 @@ namespace DelegatesTest.TestObjects
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
         {
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
             return s;
         }
-        
+
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
@@ -876,7 +1004,7 @@ namespace DelegatesTest.TestObjects
             PublicMethodVoidParameter = s;
             PublicParams = new object[] { s, s1, s2, s3, s4 };
         }
-        
+
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5)
         {
             PublicMethodVoidParameter = s;
@@ -902,7 +1030,7 @@ namespace DelegatesTest.TestObjects
             PublicMethodVoidParameter = s;
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
         }
-        
+
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {

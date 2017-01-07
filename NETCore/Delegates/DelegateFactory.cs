@@ -882,6 +882,10 @@ namespace Delegates
             string name, Type[] typeParams, Type[] paramsTypes)
             where TDelegate : class
         {
+            if (paramsTypes == null)
+            {
+                paramsTypes = new Type[0];
+            }
             if (!(typeof(TDelegate) == typeof(Action<object, object[]>)
                  || typeof(TDelegate) == typeof(Func<object, object[], object>)))
             {

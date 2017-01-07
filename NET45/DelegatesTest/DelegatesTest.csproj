@@ -51,6 +51,9 @@
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_InstanceMethods.cs">
       <Link>DelegateFactoryTests_InstanceMethods.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_InstanceMethods_Generic.cs">
+      <Link>DelegateFactoryTests_InstanceMethods_Generic.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
       <Link>DelegateFactoryTests_StaticMethods.cs</Link>
     </Compile>
@@ -62,6 +65,9 @@
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Base.cs">
       <Link>TestObjects\Base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\CustomDelegates.cs">
+      <Link>TestObjects\CustomDelegates.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Derived.cs">
       <Link>TestObjects\Derived.cs</Link>

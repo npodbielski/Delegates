@@ -105,7 +105,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByTypes()
         {
-            var m = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass>("ProtectedStaticGenericMethod");
+            var m = DelegateFactory.StaticMethod<TestClass, Func<TestClass>, TestClass>("PrivateStaticGenericMethod");
             Assert.IsNotNull(m);
             var result = m();
             Assert.AreEqual(null, TestClass.StaticPublicParams);
@@ -188,7 +188,6 @@ namespace DelegatesTest
         {
             var m = DelegateFactory.StaticMethod<TestClass, Func<TestClassNoDefaultCtor>, TestClassNoDefaultCtor>
                 ("PublicStaticGenericMethod");
-            TestClass.PublicStaticGenericMethod<TestStruct>();
             Assert.IsNull(m);
         }
 
@@ -494,7 +493,7 @@ namespace DelegatesTest
             var m = _testClassType.StaticGenericMethod("PublicStaticGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(new object[] { _testClassInstance });
+            var result = m(new object[] { });
             Assert.AreEqual(null, TestClass.StaticPublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), TestClass.StaticPublicTypeParams[0]);
@@ -506,7 +505,7 @@ namespace DelegatesTest
             var m = _testClassType.StaticGenericMethod("InternalStaticGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(new object[] { _testClassInstance });
+            var result = m(new object[] { });
             Assert.AreEqual(null, TestClass.StaticPublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), TestClass.StaticPublicTypeParams[0]);
@@ -518,7 +517,7 @@ namespace DelegatesTest
             var m = _testClassType.StaticGenericMethod("ProtectedStaticGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(new object[] { _testClassInstance });
+            var result = m(new object[] { });
             Assert.AreEqual(null, TestClass.StaticPublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), TestClass.StaticPublicTypeParams[0]);
@@ -530,7 +529,7 @@ namespace DelegatesTest
             var m = _testClassType.StaticGenericMethod("PrivateStaticGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(new object[] { _testClassInstance });
+            var result = m(new object[] { });
             Assert.AreEqual(null, TestClass.StaticPublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), TestClass.StaticPublicTypeParams[0]);
@@ -577,7 +576,6 @@ namespace DelegatesTest
             Assert.AreEqual(typeof(TestStruct), TestClass.StaticPublicTypeParams[0]);
         }
 
-
         [TestMethod]
         public void GenericMethod_NoVoid_NoParameter_2TypeParameters_ByObjects()
         {
@@ -604,6 +602,21 @@ namespace DelegatesTest
             Assert.AreEqual(typeof(TestClass), TestClass.StaticPublicTypeParams[0]);
             Assert.AreEqual(typeof(TestStruct), TestClass.StaticPublicTypeParams[1]);
             Assert.AreEqual(typeof(TestClassNoDefaultCtor), TestClass.StaticPublicTypeParams[2]);
+        }
+
+        [TestMethod]
+        public void InstanceGenericMethod_DoNotThrowExc_When_ParametersArray_IsNull()
+        {
+            var m = _testClassType.StaticGenericMethod("InternalStaticGenericMethod", null,
+                new[] { _testClassType });
+            Assert.IsNotNull(m);
+        }
+
+        [TestMethod]
+        public void InstanceGenericMethod_DoNotThrowExc_When_TypeParametersArray_IsNull()
+        {
+            var m = _testClassType.StaticGenericMethod("StaticPublic", new Type[0], null);
+            Assert.IsNotNull(m);
         }
     }
 }
