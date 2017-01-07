@@ -177,7 +177,7 @@ namespace Delegates.Extensions
         }
 #endif
 
-        public static List<ParameterExpression> GetParamsFromTypes(this Type[] types)
+        public static List<ParameterExpression> GetParamsExprFromTypes(this Type[] types)
         {
 #if NET35
             var index = 0;

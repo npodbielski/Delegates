@@ -2223,5 +2223,12 @@ namespace DelegatesTest
             AssertHelper.ThrowsException<ArgumentException>(() =>
                 _testClassType.StaticMethod("StaticVoidPublic", typeof(string)));
         }
+
+        [TestMethod]
+        public void Incorrect_TDelegate_For_InstanceGenericMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                _testClassType.InstanceGenericMethod<Action>("StaticVoidPublic", null, new[] { typeof(string) }));
+        }
     }
 }

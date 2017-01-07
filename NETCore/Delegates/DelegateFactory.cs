@@ -39,7 +39,7 @@ namespace Delegates
             {
                 return null;
             }
-            var parameters = ctrArgs.GetParamsFromTypes();
+            var parameters = ctrArgs.GetParamsExprFromTypes();
             var ctorParams = parameters.GetNewExprParams();
             var lambdaParams = parameters.GetLambdaExprParams();
             return Expression.Lambda<TDelegate>(Expression.New(constructorInfo, ctorParams), lambdaParams)
@@ -78,7 +78,7 @@ namespace Delegates
             {
                 return null;
             }
-            var parameters = ctrArgs.GetParamsFromTypes();
+            var parameters = ctrArgs.GetParamsExprFromTypes();
             var ctorParams = parameters.GetNewExprParams();
             var lambdaParams = parameters.GetLambdaExprParams();
             Expression returnExpression = Expression.New(constructorInfo, ctorParams);
@@ -995,12 +995,12 @@ namespace Delegates
             else if (instanceParam.CanBeAssignedFrom(source))
             {
                 var sourceParameter = Expression.Parameter(typeof(object), "source");
-                var expressions = delegateParams.GetParamsFromTypes();
+                var expressions = delegateParams.GetParamsExprFromTypes();
                 Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                     methodInfo, expressions.GetCallExprParams());
                 if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
                 {
-                    returnExpression = Expression.Convert(returnExpression, typeof(object));
+                    returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
                 }
                 var lamdaParams = expressions.GetCallExprParams(sourceParameter);
                 CheckDelegateReturnType<TDelegate>(methodInfo);
@@ -1380,6 +1380,13 @@ namespace Delegates
             if (paramsTypes == null)
             {
                 paramsTypes = new Type[0];
+            }
+            if (!(typeof(TDelegate) == typeof(Action<object[]>)
+                 || typeof(TDelegate) == typeof(Func<object[], object>)))
+            {
+                throw new ArgumentException("This method only accepts delegates of types " +
+                    typeof(Action<object[]>).FullName + " or " +
+                    typeof(Func<object[], object>).FullName + ".");
             }
             var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParams, true);
             if (methodInfo == null)

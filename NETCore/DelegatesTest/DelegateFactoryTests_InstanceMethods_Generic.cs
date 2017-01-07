@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime;
 using Delegates;
 using DelegatesTest.TestObjects;
 #if NETCORE
@@ -302,9 +303,29 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void Public_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Action<object>, string>("PublicInstanceGenericMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void Internal_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Action<TestClass>, string>("InternalInstanceGenericMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
+        public void Internal_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Action<object>, string>("InternalInstanceGenericMethodVoid");
             Assert.IsNotNull(m);
             m(_testClassInstance);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
@@ -322,6 +343,16 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void Protected_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Action<object>, string>("ProtectedInstanceGenericMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void Private_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Action<TestClass>, string>("PrivateInstanceGenericMethodVoid");
@@ -332,9 +363,30 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void Private_GenericMethod_Void_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Action<object>, string>("PrivateInstanceGenericMethodVoid");
+            Assert.IsNotNull(m);
+            m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void Public_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, TestClass>, TestClass>("PublicInstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
+        public void Public_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass>, TestClass>("PublicInstanceGenericMethod");
             Assert.IsNotNull(m);
             var result = m(_testClassInstance);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
@@ -354,6 +406,17 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void Internal_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass>, TestClass>("InternalInstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void Protected_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, TestClass>, TestClass>("ProtectedInstanceGenericMethod");
@@ -365,9 +428,31 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void Protected_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass>, TestClass>("ProtectedInstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void Private_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, TestClass>, TestClass>("PrivateInstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
+        public void Private_GenericMethod_NoVoid_NoParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass>, TestClass>("PrivateInstanceGenericMethod");
             Assert.IsNotNull(m);
             var result = m(_testClassInstance);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
@@ -388,9 +473,35 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void GenericMethod_NoVoid_SingleParameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass, TestClass>, TestClass>("InstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance, _testClassInstance);
+            Assert.AreEqual(1, _testClassInstance.PublicParams.Length);
+            Assert.AreEqual(_testClassInstance, _testClassInstance.PublicParams[0]);
+            Assert.AreEqual(_testClassInstance, result);
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
         public void GenericMethod_NoVoid_2Parameter_OneTypeParameter_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, TestClass, int, TestClass>, TestClass>
+                ("InstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance, _testClassInstance, 0);
+            Assert.AreEqual(2, _testClassInstance.PublicParams.Length);
+            Assert.AreEqual(_testClassInstance, _testClassInstance.PublicParams[0]);
+            Assert.AreEqual(0, _testClassInstance.PublicParams[1]);
+            Assert.AreEqual(_testClassInstance, result);
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+        }
+
+        [TestMethod]
+        public void GenericMethod_NoVoid_2Parameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass, int, TestClass>, TestClass>
                 ("InstanceGenericMethod");
             Assert.IsNotNull(m);
             var result = m(_testClassInstance, _testClassInstance, 0);
@@ -416,6 +527,20 @@ namespace DelegatesTest
             Assert.AreEqual(typeof(TestStruct), _testClassInstance.PublicTypeParams[0]);
         }
 
+        [TestMethod]
+        public void GenericMethod_NoVoid_3Parameter_OneTypeParameter_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestStruct, int, bool, TestStruct>, TestStruct>
+                ("InstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance, _testStructInstance, 0, true);
+            Assert.AreEqual(3, _testClassInstance.PublicParams.Length);
+            Assert.AreEqual(_testStructInstance, _testClassInstance.PublicParams[0]);
+            Assert.AreEqual(0, _testClassInstance.PublicParams[1]);
+            Assert.AreEqual(true, _testClassInstance.PublicParams[2]);
+            Assert.AreEqual(_testStructInstance, result);
+            Assert.AreEqual(typeof(TestStruct), _testClassInstance.PublicTypeParams[0]);
+        }
 
         [TestMethod]
         public void GenericMethod_NoVoid_NoParameter_2TypeParameters_ByObjectAndTypes()
@@ -431,9 +556,37 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void GenericMethod_NoVoid_NoParameter_2TypeParameters_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, TestClass>, TestClass, TestStruct>
+                ("InstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance);
+            Assert.AreEqual(null, _testClassInstance.PublicParams);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+            Assert.AreEqual(typeof(TestStruct), _testClassInstance.PublicTypeParams[1]);
+        }
+
+        [TestMethod]
         public void GenericMethod_NoVoid_SingleParameter_3TypeParameters_ByObjectAndTypes()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, int, TestClass>, TestClass, TestStruct, TestClassNoDefaultCtor>
+                ("InstanceGenericMethod");
+            Assert.IsNotNull(m);
+            var result = m(_testClassInstance, 0);
+            Assert.AreEqual(1, _testClassInstance.PublicParams.Length);
+            Assert.AreEqual(0, _testClassInstance.PublicParams[0]);
+            Assert.IsInstanceOfType(result, typeof(TestClass));
+            Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
+            Assert.AreEqual(typeof(TestStruct), _testClassInstance.PublicTypeParams[1]);
+            Assert.AreEqual(typeof(TestClassNoDefaultCtor), _testClassInstance.PublicTypeParams[2]);
+        }
+
+        [TestMethod]
+        public void GenericMethod_NoVoid_SingleParameter_3TypeParameters_ByObjectAndTypes_WithCast()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, int, TestClass>, TestClass, TestStruct, TestClassNoDefaultCtor>
                 ("InstanceGenericMethod");
             Assert.IsNotNull(m);
             var result = m(_testClassInstance, 0);
@@ -620,7 +773,5 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("PublicMethod", new Type[0], null);
             Assert.IsNotNull(m);
         }
-
-        //TODO: check delegates with interfaces
     }
 }
