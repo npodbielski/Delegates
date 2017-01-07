@@ -23,6 +23,7 @@ namespace DelegatesTest
 #endif
     public class DelegateFactoryTests_Properties_Setters
     {
+        //TODO: test interfaces properties setters
         private const int NewIntValue = 0;
         private const string NewStringValue = "Test";
         private readonly TestClass _testClassInstance = new TestClass();

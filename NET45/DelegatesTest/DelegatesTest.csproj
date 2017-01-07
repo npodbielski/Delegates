@@ -75,6 +75,12 @@
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Func17.cs">
       <Link>TestObjects\Func17.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\IService.cs">
+      <Link>TestObjects\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Service.cs">
+      <Link>TestObjects\Service.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>

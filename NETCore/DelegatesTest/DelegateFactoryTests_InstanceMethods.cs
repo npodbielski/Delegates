@@ -23,6 +23,8 @@ namespace DelegatesTest
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStructType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
+        private readonly Type _interfaceType = typeof(IService);
+        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void Public_Method_ByTypes_Void_NoParameters()
@@ -2847,6 +2849,47 @@ namespace DelegatesTest
             Assert.IsNotNull(m);
             var result = m(_testClassInstance);
             Assert.AreEqual(result, _testClassInstance.PublicParameterlessReturnValue);
+        }
+
+        //NOTE: custom delegates are not supported in delegates called by objects; only Action<object, object[]> and 
+        //...Func<object, object[], object> are supported
+
+        //TODO: test interfaces methods calls instead of concrete types
+
+        [TestMethod]
+        public void InterfaceMethod_ByTypes()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<IService, string, string>>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_ByObjectAndTypes()
+        {
+            var m = _interfaceType.InstanceMethod<Func<IService, string, string>>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_ByObjectAndTypes_WithCast()
+        {
+            var m = _interfaceType.InstanceMethod<Func<object, string, string>>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_ByObjects()
+        {
+            var m = _interfaceType.InstanceMethod("Echo", typeof(string));
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, new object[] { TestValue });
+            Assert.AreEqual(TestValue, result);
         }
     }
 }

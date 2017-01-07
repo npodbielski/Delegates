@@ -23,6 +23,7 @@ namespace DelegatesTest
 #endif
     public class DelegateFactoryTests_Properties_Getters
     {
+        //TODO: test interfaces properties getters
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStrucType = typeof(TestStruct);
