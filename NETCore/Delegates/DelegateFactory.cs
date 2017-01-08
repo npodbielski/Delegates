@@ -32,7 +32,7 @@ namespace Delegates
 
         public static TDelegate Contructor<TDelegate>() where TDelegate : class
         {
-            var source = GetFuncDelegateReturnType<TDelegate>();
+            var source = GetDelegateReturnType<TDelegate>();
             var ctrArgs = GetDelegateArguments<TDelegate>();
             var constructorInfo = source.GetConstructorInfo(ctrArgs);
             if (constructorInfo == null)
@@ -325,7 +325,7 @@ namespace Delegates
                 Expression returnExpression = Expression.Field(instanceExpression, fieldInfo);
                 if (!fieldInfo.FieldType.IsClassType())
                 {
-                    returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
+                    returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
                 }
                 var lambda = Expression.Lambda<TDelegate>(returnExpression, sourceParam);
                 var fieldGetImpl = lambda.Compile();
@@ -953,6 +953,10 @@ namespace Delegates
             CheckDelegate<TDelegate>();
             var paramsTypes = GetDelegateArguments<TDelegate>();
             var source = paramsTypes.First();
+            if (source.GetTypeInfo().IsInterface && typeParameters != null && typeParameters.Length > 0)
+            {
+                return source.InstanceMethod<TDelegate>(name, typeParameters);
+            }
             paramsTypes = paramsTypes.Skip(1).ToArray();
             var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParameters);
             return methodInfo?.CreateDelegate<TDelegate>();
@@ -988,13 +992,15 @@ namespace Delegates
                 return null;
             }
             TDelegate deleg;
-            if (instanceParam == source)
+            if (instanceParam == source &&
+                //only if not generic interface method
+                (!instanceParam.GetTypeInfo().IsInterface || (typeParams == null || typeParams.Length == 0)))
             {
                 deleg = methodInfo.CreateDelegate<TDelegate>();
             }
             else if (instanceParam.CanBeAssignedFrom(source))
             {
-                var sourceParameter = Expression.Parameter(typeof(object), "source");
+                var sourceParameter = Expression.Parameter(GetDelegateArguments<TDelegate>().First(), "source");
                 var expressions = delegateParams.GetParamsExprFromTypes();
                 Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                     methodInfo, expressions.GetCallExprParams());
@@ -1544,11 +1550,6 @@ namespace Delegates
             return accessor == AddAccessor ? eventInfo?.AddMethod : eventInfo?.RemoveMethod;
         }
 
-        private static Type GetFuncDelegateReturnType<TDelegate>() where TDelegate : class
-        {
-            return typeof(TDelegate).GenericTypeArguments().Last();
-        }
-
         private static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName = null,
             PropertyInfo propertyInfo = null)
             where TSource : class
@@ -1587,7 +1588,7 @@ namespace Delegates
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
             if (!propertyInfo.PropertyType.IsClassType())
             {
-                returnExpression = Expression.Convert(returnExpression, GetFuncDelegateReturnType<TDelegate>());
+                returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
             }
             return Expression.Lambda<TDelegate>(returnExpression, sourceObjectParam).Compile();
         }

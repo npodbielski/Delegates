@@ -6,5 +6,10 @@
         {
             return text;
         }
+
+        public T Echo<T>(T o)
+        {
+            return o;
+        }
     }
 }

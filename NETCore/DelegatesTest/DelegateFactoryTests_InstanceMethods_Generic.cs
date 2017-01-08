@@ -23,6 +23,8 @@ namespace DelegatesTest
         private readonly Type _testStructType = typeof(TestStruct);
         private readonly TestStruct _testStructInstance = new TestStruct(0);
         private readonly GenericClass<TestClass> _genericClassInstance = new GenericClass<TestClass>();
+        private readonly IService _interfaceImpl = new Service();
+        private readonly Type _interfaceType = typeof(IService);
 
         [TestMethod]
         public void NoGenericMethod_ShouldNot_Return_NonGeneric_With_TheSame_Name()
@@ -615,7 +617,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethodVoid("InternalInstanceGenericMethodVoid", null,
                 new[] { typeof(string) });
             Assert.IsNotNull(m);
-            m(_testClassInstance,new object[0]);
+            m(_testClassInstance, new object[0]);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
         }
@@ -626,7 +628,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethodVoid("ProtectedInstanceGenericMethodVoid", null,
                 new[] { typeof(string) });
             Assert.IsNotNull(m);
-            m(_testClassInstance,new object[0]);
+            m(_testClassInstance, new object[0]);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
         }
@@ -637,7 +639,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethodVoid("PrivateInstanceGenericMethodVoid", null,
                 new[] { typeof(string) });
             Assert.IsNotNull(m);
-            m(_testClassInstance,new object[0]);
+            m(_testClassInstance, new object[0]);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.AreEqual(typeof(string), _testClassInstance.PublicTypeParams[0]);
         }
@@ -648,7 +650,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("PublicInstanceGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testClassInstance });
+            var result = m(_testClassInstance, new object[] { _testClassInstance });
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
@@ -660,7 +662,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("InternalInstanceGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testClassInstance });
+            var result = m(_testClassInstance, new object[] { _testClassInstance });
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
@@ -672,7 +674,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("ProtectedInstanceGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testClassInstance });
+            var result = m(_testClassInstance, new object[] { _testClassInstance });
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
@@ -684,7 +686,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("PrivateInstanceGenericMethod", null,
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testClassInstance });
+            var result = m(_testClassInstance, new object[] { _testClassInstance });
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
@@ -695,7 +697,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceGenericMethod("InstanceGenericMethod", new[] { _testClassType },
                 new[] { _testClassType });
-            var result = m(_testClassInstance,new object[] { _testClassInstance });
+            var result = m(_testClassInstance, new object[] { _testClassInstance });
             Assert.AreEqual(1, _testClassInstance.PublicParams.Length);
             Assert.AreEqual(_testClassInstance, _testClassInstance.PublicParams[0]);
             Assert.AreEqual(_testClassInstance, result);
@@ -708,7 +710,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("InstanceGenericMethod", new[] { _testClassType, typeof(int) },
                 new[] { _testClassType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testClassInstance, 0 });
+            var result = m(_testClassInstance, new object[] { _testClassInstance, 0 });
             Assert.AreEqual(2, _testClassInstance.PublicParams.Length);
             Assert.AreEqual(_testClassInstance, _testClassInstance.PublicParams[0]);
             Assert.AreEqual(0, _testClassInstance.PublicParams[1]);
@@ -722,7 +724,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("InstanceGenericMethod",
                 new[] { _testStructType, typeof(int), typeof(bool) }, new[] { _testStructType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { _testStructInstance, 0, true });
+            var result = m(_testClassInstance, new object[] { _testStructInstance, 0, true });
             Assert.AreEqual(3, _testClassInstance.PublicParams.Length);
             Assert.AreEqual(_testStructInstance, _testClassInstance.PublicParams[0]);
             Assert.AreEqual(0, _testClassInstance.PublicParams[1]);
@@ -737,7 +739,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("InstanceGenericMethod", null,
                 new[] { _testClassType, _testStructType });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[0]);
+            var result = m(_testClassInstance, new object[0]);
             Assert.AreEqual(null, _testClassInstance.PublicParams);
             Assert.IsInstanceOfType(result, typeof(TestClass));
             Assert.AreEqual(typeof(TestClass), _testClassInstance.PublicTypeParams[0]);
@@ -750,7 +752,7 @@ namespace DelegatesTest
             var m = _testClassType.InstanceGenericMethod("InstanceGenericMethod", new[] { typeof(int) },
                 new[] { _testClassType, _testStructType, typeof(TestClassNoDefaultCtor) });
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance,new object[] { 0 });
+            var result = m(_testClassInstance, new object[] { 0 });
             Assert.AreEqual(1, _testClassInstance.PublicParams.Length);
             Assert.AreEqual(0, _testClassInstance.PublicParams[0]);
             Assert.IsInstanceOfType(result, typeof(TestClass));
@@ -772,6 +774,42 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceGenericMethod("PublicMethod", new Type[0], null);
             Assert.IsNotNull(m);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_Generic_ByTypes()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<IService, string, string>, string>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_Generic_ByObjectAndTypes()
+        {
+            var m = _interfaceType.InstanceMethod<Func<IService, string, string>, string>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_Generic_ByObjectAndTypes_WithCast()
+        {
+            var m = _interfaceType.InstanceMethod<Func<object, string, string>, string>("Echo");
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, TestValue);
+            Assert.AreEqual(TestValue, result);
+        }
+
+        [TestMethod]
+        public void InterfaceMethod_Generic_ByObjects()
+        {
+            var m = _interfaceType.InstanceGenericMethod("Echo", new [] { typeof(string) }, new[] { typeof(string) });
+            Assert.IsNotNull(m);
+            var result = m(_interfaceImpl, new object[] { TestValue });
+            Assert.AreEqual(TestValue, result);
         }
     }
 }

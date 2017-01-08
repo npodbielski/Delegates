@@ -17,7 +17,6 @@ namespace DelegatesTest
     public class DelegateFactoryTests_InstanceMethods
     {
         //TODO: consider closed delegates for instance methods without instance parameters
-        //TODO: test creating delegates with custom delegates types
         private const string TestValue = "test";
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
@@ -2853,9 +2852,7 @@ namespace DelegatesTest
 
         //NOTE: custom delegates are not supported in delegates called by objects; only Action<object, object[]> and 
         //...Func<object, object[], object> are supported
-
-        //TODO: test interfaces methods calls instead of concrete types
-
+        
         [TestMethod]
         public void InterfaceMethod_ByTypes()
         {
