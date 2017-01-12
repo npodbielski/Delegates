@@ -20,10 +20,6 @@ namespace Delegates
 {
     public static class DelegateFactory
     {
-        private const string AddAccessor = "add";
-
-        private const string RemoveAccessor = "remove";
-
         private static readonly MethodInfo EventHandlerFactoryMethodInfo =
             typeof(DelegateFactory).GetMethod("EventHandlerFactory");
 
@@ -175,7 +171,7 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TSource, TEventArgs>(eventName, AddAccessor);
+            return EventAccessor<TSource, TEventArgs>(eventName, TypeExtensions.AddAccessor);
         }
 
         public static Action<object, EventHandler<TEventArgs>> EventAdd<TEventArgs>(
@@ -184,7 +180,7 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TEventArgs>(source, eventName, AddAccessor);
+            return EventAccessor<TEventArgs>(source, eventName, TypeExtensions.AddAccessor);
         }
 
         public static Action<TSource, Action<TSource, object>> EventAdd<TSource>(string eventName)
@@ -253,7 +249,7 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TEventArgs>(source, eventName, RemoveAccessor);
+            return EventAccessor<TEventArgs>(source, eventName, TypeExtensions.RemoveAccessor);
         }
 
         public static Action<TSource, EventHandler<TEventArgs>> EventRemove<TSource, TEventArgs>(string eventName)
@@ -261,7 +257,7 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TSource, TEventArgs>(eventName, RemoveAccessor);
+            return EventAccessor<TSource, TEventArgs>(eventName, TypeExtensions.RemoveAccessor);
         }
 
         public static Action<TSource, Action<TSource, object>> EventRemove<TSource>(string eventName)
@@ -440,7 +436,6 @@ namespace Delegates
             return null;
         }
 
-        //TODO: write test when we create delegates with source as interface with property or method instead of concrete class with implementation
         public static StructSetActionRef<TSource, TProperty> FieldSetStruct<TSource, TProperty>(string fieldName)
             where TSource : struct
         {
@@ -1487,7 +1482,7 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            var accessor = GetEventInfoAccessor(eventName, source, accessorName);
+            var accessor = source.GetEventAccessor(eventName, accessorName);
             if (accessor != null)
             {
                 var instanceParameter = Expression.Parameter(typeof(object), "source");
@@ -1507,8 +1502,13 @@ namespace Delegates
 #endif
         {
             var sourceType = typeof(TSource);
-            var accessor = GetEventInfoAccessor(eventName, sourceType, accessorName);
-            return accessor?.CreateDelegate<Action<TSource, EventHandler<TEventArgs>>>();
+            var accessor = sourceType.GetEventAccessor(eventName, accessorName);
+            if (accessor != null)
+            {
+                accessor.IsEventArgsTypeCorrect<EventHandler<TEventArgs>>();
+                return accessor.CreateDelegate<Action<TSource, EventHandler<TEventArgs>>>();
+            }
+            return null;
         }
 
         private static TDelegate EventAccessorImpl<TDelegate>(Type source, string eventName, string accessorName)
@@ -1517,13 +1517,13 @@ namespace Delegates
             var eventInfo = source.GetEventInfo(eventName);
             if (eventInfo != null)
             {
-                var accessor = accessorName == AddAccessor ? eventInfo.AddMethod : eventInfo.RemoveMethod;
+                var accessor = accessorName == TypeExtensions.AddAccessor ? eventInfo.AddMethod : eventInfo.RemoveMethod;
                 var eventArgsType = eventInfo.EventHandlerType.GenericTypeArguments()[0];
                 var instanceParameter = Expression.Parameter(typeof(object), "source");
                 var delegateTypeParameter = Expression.Parameter(typeof(object), "delegate");
                 var methodCallExpression =
                     Expression.Call(EventHandlerFactoryMethodInfo.MakeGenericMethod(eventArgsType, source),
-                        delegateTypeParameter, Expression.Constant(accessorName == RemoveAccessor));
+                        delegateTypeParameter, Expression.Constant(accessorName == TypeExtensions.RemoveAccessor));
                 var lambda = Expression.Lambda<TDelegate>(Expression.Call(Expression.Convert(instanceParameter, source),
                         accessor, methodCallExpression),
                     instanceParameter, delegateTypeParameter);
@@ -1535,19 +1535,13 @@ namespace Delegates
         private static TDelegate EventAddImpl<TDelegate>(this Type source, string eventName)
             where TDelegate : class
         {
-            return EventAccessorImpl<TDelegate>(source, eventName, AddAccessor);
+            return EventAccessorImpl<TDelegate>(source, eventName, TypeExtensions.AddAccessor);
         }
 
         private static TDelegate EventRemoveImpl<TDelegate>(this Type source, string eventName)
             where TDelegate : class
         {
-            return EventAccessorImpl<TDelegate>(source, eventName, RemoveAccessor);
-        }
-
-        private static MethodInfo GetEventInfoAccessor(string eventName, Type sourceType, string accessor)
-        {
-            var eventInfo = sourceType.GetEventInfo(eventName);
-            return accessor == AddAccessor ? eventInfo?.AddMethod : eventInfo?.RemoveMethod;
+            return EventAccessorImpl<TDelegate>(source, eventName, TypeExtensions.RemoveAccessor);
         }
 
         private static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName = null,

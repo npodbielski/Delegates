@@ -110,5 +110,22 @@ namespace DelegatesTest
             Assert.IsTrue(value);
 #endif
         }
+
+        /// <summary>Verifies that the specified condition is false. The assertion fails if the condition is true.</summary>
+        /// <param name="value">The condition to verify is false.</param>
+#if NETCORE
+        /// <exception cref="TrueException">Thrown when the condition is false</exception>
+#else
+        /// <exception cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+        /// <paramref name="value" /> evaluates to true.</exception>
+#endif
+        public static void IsFalse(bool value)
+        {
+#if NETCORE
+            Assert.False(value);
+#else
+            Assert.IsFalse(value);
+#endif
+        }
     }
 }

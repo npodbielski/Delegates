@@ -27,5 +27,14 @@ namespace Delegates.Extensions
             return Delegate.CreateDelegate(delegateType, method);
 #endif
         }
+
+        public static void IsEventArgsTypeCorrect<TEventArgs>(this MethodInfo method)
+        {
+            var argsType = method.GetParameters()[0].ParameterType;
+            if (argsType != typeof(TEventArgs))
+            {
+                throw new ArgumentException("Provided event args type '" + typeof(TEventArgs).Name + "' is not compatible with expected type '" + argsType.Name+"'");
+            }
+        }
     }
 }

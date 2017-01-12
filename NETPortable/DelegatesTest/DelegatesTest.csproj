@@ -65,6 +65,12 @@
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Constructors.cs">
       <Link>DelegateFactoryTests_Constructors.cs</Link>
     </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Events_Add.cs">
+      <Link>DelegateFactoryTests_Events_Add.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
+      <Link>DelegateFactoryTests_Events_Remove.cs</Link>
+    </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs">
       <Link>DelegateFactoryTests_Fields_GetValue.cs</Link>
     </Compile>
@@ -121,6 +127,9 @@
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\Func17.cs">
       <Link>TestObjects\Func17.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\GenericClass.cs">
+      <Link>TestObjects\GenericClass.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesTest\TestObjects\IService.cs">
       <Link>TestObjects\IService.cs</Link>

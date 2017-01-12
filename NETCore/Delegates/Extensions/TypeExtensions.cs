@@ -17,7 +17,12 @@ namespace Delegates.Extensions
     {
         private const string Item = "Item";
 
+        public const string AddAccessor = "add";
+
+        public const string RemoveAccessor = "remove";
+
         private const BindingFlags PrivateOrProtectedBindingFlags = BindingFlags.NonPublic;
+
         private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
 
         public static bool CanBeAssignedFrom(this Type destination, Type source)
@@ -457,10 +462,16 @@ namespace Delegates.Extensions
                             ?? sourceType.GetTypeInfo().GetEvent(eventName,
                                 InternalBindingFlags | BindingFlags.Instance);
 #if NET35||NET4||PORTABLE
-            return new CEventInfo(eventInfo);
+            return eventInfo != null ? new CEventInfo(eventInfo) : null;
 #else
             return eventInfo;
 #endif
+        }
+
+        public static MethodInfo GetEventAccessor(this Type sourceType, string eventName, string accessor)
+        {
+            var eventInfo = sourceType.GetEventInfo(eventName);
+            return accessor == AddAccessor ? eventInfo?.AddMethod : eventInfo?.RemoveMethod;
         }
     }
 }

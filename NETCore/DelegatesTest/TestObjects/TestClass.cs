@@ -10,19 +10,6 @@ using System.Runtime.CompilerServices;
 
 namespace DelegatesTest.TestObjects
 {
-    public class GenericClass<T>
-    {
-        public static T StaticGenericMethod(T param)
-        {
-            return param;
-        }
-
-        public T InstanceGenericMethod(T param)
-        {
-            return param;
-        }
-    }
-
     public class TestClass : ITestInterface
     {
         public const string StaticPublicParameterlessReturnValue = "StaticPublic";
@@ -117,6 +104,26 @@ namespace DelegatesTest.TestObjects
         private event EventHandler<InternalEventArgs> InternalEventBackend;
 
         private event EventHandler<PrivateEventArgs> PrivateEvent;
+
+        public void AddPublicEventHandler(EventHandler<PublicEventArgs> eventHandler)
+        {
+            PublicEvent += eventHandler;
+        }
+
+        internal void AddInternalEventHandler(EventHandler<InternalEventArgs> eventHandler)
+        {
+            InternalEvent += eventHandler;
+        }
+
+        internal void AddProtectedEventHandler(EventHandler<ProtectedEventArgs> eventHandler)
+        {
+            ProtectedEvent += eventHandler;
+        }
+
+        internal void AddPrivateEventHandler(EventHandler<PrivateEventArgs> eventHandler)
+        {
+            PrivateEvent += eventHandler;
+        }
 
         public static string StaticOnlyGetProperty { get; } = "StaticOnlyGetProperty";
 
@@ -1174,11 +1181,11 @@ namespace DelegatesTest.TestObjects
         {
         }
 
-        protected class ProtectedEventArgs : EventArgs
+        public class ProtectedEventArgs : EventArgs
         {
         }
 
-        private class PrivateEventArgs : EventArgs
+        public class PrivateEventArgs : EventArgs
         {
         }
     }
