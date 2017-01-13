@@ -1,7 +1,7 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DelegateFactoryTests_Indexers_Setters.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
-// </copyright>
+// <copyr@isht file="DelegateFactoryTests_Indexers_Setters.cs" company="Natan Podbielski">
+//   Copyr@isht (c) 2016 - 2016 Natan Podbielski. All r@ishts reserved.
+// </copyr@isht>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
@@ -40,7 +40,8 @@ namespace DelegatesTest
         private readonly Type _testStrucType = typeof(TestStruct);
         private string _secondStringIndex = "test2";
         private TestStruct _testStructInstance = new TestStruct(0);
-
+        private readonly Type _interfaceType = typeof(IService);
+        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void IndexerSet_ByExtensionAndReturnType_NonExisting()
@@ -213,7 +214,7 @@ namespace DelegatesTest
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
-        } 
+        }
 #endif
 
         [TestMethod]
@@ -415,7 +416,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] {FirstIntIndex}, NewIntValue);
+            @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
         }
 
@@ -425,7 +426,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] {FirstIntIndex}, NewIntValue);
+            @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
         }
 
@@ -434,7 +435,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex}, NewIntValue);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
         }
 
@@ -444,7 +445,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex}, NewIntValue);
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
         }
 
@@ -453,7 +454,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex, 0}, NewIntValue);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public3IndexIndexer);
         }
 
@@ -463,7 +464,7 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex, 0}, NewIntValue);
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public3IndexIndexer);
         }
 
@@ -472,7 +473,7 @@ namespace DelegatesTest
         {
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
-            @is(_testClassInstance, new object[] {FirstIntIndex, SecondIntIndex, 0, 0}, NewIntValue);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public4IndexIndexer);
         }
 
@@ -482,8 +483,37 @@ namespace DelegatesTest
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
-            @is(ref objectStruct, new object[] {FirstIntIndex, SecondIntIndex, 0, 0}, NewIntValue);
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public4IndexIndexer);
+        }
+#endif
+
+        [TestMethod]
+        public void IndexerGet_Interface_ByTypes()
+        {
+            var @is = DelegateFactory.IndexerSet<IService, int, int>();
+            Assert.IsNotNull(@is);
+            @is(_interfaceImpl, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
+        }
+
+        [TestMethod]
+        public void IndexerGet_Interface_ByObjectAndType()
+        {
+            var @is = _interfaceType.IndexerSet<int, int>();
+            Assert.IsNotNull(@is);
+            @is(_interfaceImpl, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
+        }
+
+#if !NET35
+        [TestMethod]
+        public void IndexerGet_Interface_ByObjects()
+        {
+            var @is = _interfaceType.IndexerSet(typeof(int), typeof(int));
+            Assert.IsNotNull(@is);
+            @is(_interfaceImpl, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
         }
 #endif
     }

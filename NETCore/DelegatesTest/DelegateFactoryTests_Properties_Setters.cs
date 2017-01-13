@@ -23,13 +23,14 @@ namespace DelegatesTest
 #endif
     public class DelegateFactoryTests_Properties_Setters
     {
-        //TODO: test interfaces properties setters
         private const int NewIntValue = 0;
         private const string NewStringValue = "Test";
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStrucType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
+        private readonly Type _interfaceType = typeof(IService);
+        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Internal()
@@ -410,6 +411,33 @@ namespace DelegatesTest
             Assert.IsNotNull(ps);
             ps(ref _testStructInstance, NewIntValue);
             Assert.AreEqual(NewIntValue, _testStructInstance.PublicPropertyInt);
+        }
+
+        [TestMethod]
+        public void PropertySet_Interface_ByTypes()
+        {
+            var ps = DelegateFactory.PropertySet<IService, string>("Property");
+            Assert.IsNotNull(ps);
+            ps(_interfaceImpl, NewStringValue);
+            Assert.AreEqual(NewStringValue, _interfaceImpl.Property);
+        }
+
+        [TestMethod]
+        public void PropertySet_Interface_ByObjectAndType()
+        {
+            var ps = _interfaceType.PropertySet<string>("Property");
+            Assert.IsNotNull(ps);
+            ps(_interfaceImpl, NewStringValue);
+            Assert.AreEqual(NewStringValue, _interfaceImpl.Property);
+        }
+
+        [TestMethod]
+        public void PropertySet_Interface_ByObjects()
+        {
+            var ps = _interfaceType.PropertySet("Property");
+            Assert.IsNotNull(ps);
+            ps(_interfaceImpl, NewStringValue);
+            Assert.AreEqual(NewStringValue, _interfaceImpl.Property);
         }
     }
 }

@@ -127,7 +127,7 @@ namespace Delegates
                 return null;
             }
             ParameterExpression sourceObjectParam;
-            if (source.IsClassType())
+            if (source.IsClassType() || source.GetTypeInfo().IsInterface)
             {
                 sourceObjectParam = Expression.Parameter(typeof(object), "source");
             }
@@ -145,7 +145,7 @@ namespace Delegates
             var callArgs = indexExpressions.Concat(new[] { valueParam }).ToArray();
             var paramsExpressions = new[] { sourceObjectParam }.Concat(callArgs);
             Expression blockExpr;
-            if (!source.IsClassType())
+            if (!(source.IsClassType() || source.GetTypeInfo().IsInterface))
             {
 #if !NET35
                 var structVariable = Expression.Variable(source, "struct");
@@ -687,27 +687,8 @@ namespace Delegates
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
-            return (Func<object, object[], object>)Expression.Lambda(
+            return Expression.Lambda<Func<object, object[], object>>(
                 returnExpression, sourceObjectParam, indexesParam).Compile();
-        }
-
-        public static Func<object, object, object> IndexerGet(this Type source, Type returnType, Type indexType)
-        {
-            var propertyInfo = source.GetIndexerPropertyInfo(new[] { indexType });
-            if (propertyInfo?.GetMethod == null)
-            {
-                return null;
-            }
-            var sourceObjectParam = Expression.Parameter(typeof(object), "source");
-            var indexObjectParam = Expression.Parameter(typeof(object), "index");
-            Expression returnExpression = Expression.Call(Expression.Convert(sourceObjectParam, source),
-                propertyInfo.GetMethod, Expression.Convert(indexObjectParam, indexType));
-            if (!propertyInfo.PropertyType.IsClassType())
-            {
-                returnExpression = Expression.Convert(returnExpression, typeof(object));
-            }
-            return Expression.Lambda<Func<object, object, object>>
-                (returnExpression, sourceObjectParam, indexObjectParam).Compile();
         }
 
         public static Action<object, TIndex, TReturn> IndexerSet<TReturn, TIndex>(this Type source)
@@ -830,7 +811,7 @@ namespace Delegates
                 return null;
             }
             ParameterExpression sourceObjectParam;
-            if (source.IsClassType())
+            if (source.IsClassType() || source.GetTypeInfo().IsInterface)
             {
                 sourceObjectParam = Expression.Parameter(typeof(object), "source");
             }

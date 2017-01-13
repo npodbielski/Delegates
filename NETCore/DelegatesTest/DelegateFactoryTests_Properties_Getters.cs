@@ -23,11 +23,12 @@ namespace DelegatesTest
 #endif
     public class DelegateFactoryTests_Properties_Getters
     {
-        //TODO: test interfaces properties getters
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStrucType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
+        private readonly Type _interfaceType = typeof(IService);
+        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_NonExisting()
@@ -210,7 +211,6 @@ namespace DelegatesTest
             Assert.AreEqual(_testClassInstance.InternalProperty, pg(_testClassInstance));
         }
 
-
         [TestMethod]
         public void PropertyGet_ByTypes_Internal_FromStruct()
         {
@@ -288,6 +288,30 @@ namespace DelegatesTest
             var pg = DelegateFactory.PropertyGetStruct<TestStruct, int>("PublicPropertyInt");
             Assert.IsNotNull(pg);
             Assert.AreEqual(_testStructInstance.PublicPropertyInt, pg(ref _testStructInstance));
+        }
+
+        [TestMethod]
+        public void PropertyGet_Interface_ByTypes()
+        {
+            var pg = DelegateFactory.PropertyGet<IService, string>("Property");
+            Assert.IsNotNull(pg);
+            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
+        }
+
+        [TestMethod]
+        public void PropertyGet_Interface_ByObjectAndType()
+        {
+            var pg = _interfaceType.PropertyGet<string>("Property");
+            Assert.IsNotNull(pg);
+            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
+        }
+
+        [TestMethod]
+        public void PropertyGet_Interface_ByObjects()
+        {
+            var pg = _interfaceType.PropertyGet("Property");
+            Assert.IsNotNull(pg);
+            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
         }
     }
 }

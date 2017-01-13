@@ -4,7 +4,24 @@ namespace DelegatesTest.TestObjects
 {
     public class Service : IService
     {
+        public Service()
+        {
+            Property = "Property";
+        }
+
         public event EventHandler<EventArgs> Event;
+
+        public int IndexerSetValue { get; set; }
+        public string Property { get; set; }
+
+        public int this[int index]
+        {
+            get
+            {
+                return index;
+            }
+            set { IndexerSetValue = value; }
+        }
 
         public string Echo(string text)
         {

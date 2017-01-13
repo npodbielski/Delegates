@@ -59,9 +59,9 @@ namespace DelegatesApp
             var t5 = c3(false);
             var t6 = c4("");
             var t7 = c5(0);
-            var t8 = c6(new object[] {0});
+            var t8 = c6(new object[] { 0 });
             var t9 = c7(0);
-            var t10 = c8(new object[] {0});
+            var t10 = c8(new object[] { 0 });
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -114,7 +114,7 @@ namespace DelegatesApp
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = c6(new object[] {0});
+                var test = c6(new object[] { 0 });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Public constructor with parameter via array proxy: {_stopWatch.ElapsedMilliseconds}");
@@ -163,10 +163,10 @@ namespace DelegatesApp
             var t = ig4(TestInstance, 0);
             var t2 = ig5(TestInstance, 0, 0);
             var t3 = ig6(TestInstance, 0, 0, 0);
-            var t4 = ig7(TestInstance, 0);
+            var t4 = ig7(TestInstance, new object[] { 0 });
             var t5 = ig8(TestInstance, 0, 0);
             var t6 = ig9(TestInstance, 0, 0, 0);
-            var t7 = ig10(TestInstance, new object[] {0, 0, 0});
+            var t7 = ig10(TestInstance, new object[] { 0, 0, 0 });
 
             var is1 = DelegateFactory.IndexerSet<TestClass, int, int>();
             var is2 = DelegateFactory.IndexerSet<TestClass, int, int, int>();
@@ -183,7 +183,7 @@ namespace DelegatesApp
             is2(TestInstance, 0, 0, 1);
             is3(TestInstance, 0, 0, 0, 1);
 #if !NET35
-            is4(TestInstance, new object[] {0, 0, 0}, 1);
+            is4(TestInstance, new object[] { 0, 0, 0 }, 1);
 #endif
             is5(TestInstance, 1, 2);
             Console.WriteLine(TestInstance[1]);
@@ -240,17 +240,17 @@ namespace DelegatesApp
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = ig10(TestInstance, new object[] {0, 0, 0});
+                var test = ig10(TestInstance, new object[] { 0, 0, 0 });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Multiple index indexer via delegate with array: {_stopWatch.ElapsedMilliseconds}");
 
-            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new[] {typeof(int), typeof(int), typeof(int)});
+            var indexerInfo = Type.GetProperty("TheItem", typeof(int), new[] { typeof(int), typeof(int), typeof(int) });
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = indexerInfo.GetValue(TestInstance, new object[] {0, 0, 0});
+                var test = indexerInfo.GetValue(TestInstance, new object[] { 0, 0, 0 });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Multiple index indexer via reflection: {_stopWatch.ElapsedMilliseconds}");
@@ -352,15 +352,15 @@ namespace DelegatesApp
             var g14 = Type.StaticMethod<Func<int, TestClass>>("StaticGenericMethod", typeof(TestClass),
                 typeof(TestStruct), typeof(int));
 
-            var g15 = Type.StaticGenericMethod("StaticGenericMethod", new[] {Type}, new[] {Type});
-            var g16 = Type.StaticGenericMethod("StaticGenericMethod", new[] {Type, typeof(int)}, new[] {Type});
+            var g15 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type }, new[] { Type });
+            var g16 = Type.StaticGenericMethod("StaticGenericMethod", new[] { Type, typeof(int) }, new[] { Type });
             var g17 = Type.StaticGenericMethod("StaticGenericMethod",
-                new[] {typeof(TestStruct), typeof(int), typeof(bool)}, new[] {typeof(TestStruct)});
-            var g18 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] {Type});
-            var g19 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] {Type, typeof(TestStruct)});
-            var g20 = Type.StaticGenericMethod("StaticGenericMethod", new[] {typeof(int)},
-                new[] {Type, typeof(TestStruct), typeof(int)});
-            var g21 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] {Type}, new[] {Type});
+                new[] { typeof(TestStruct), typeof(int), typeof(bool) }, new[] { typeof(TestStruct) });
+            var g18 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type });
+            var g19 = Type.StaticGenericMethod("StaticGenericMethod", Type.EmptyTypes, new[] { Type, typeof(TestStruct) });
+            var g20 = Type.StaticGenericMethod("StaticGenericMethod", new[] { typeof(int) },
+                new[] { Type, typeof(TestStruct), typeof(int) });
+            var g21 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { Type }, new[] { Type });
 
             var t = g1(TestInstance);
             var t2 = g2(TestInstance, 0);
@@ -378,33 +378,33 @@ namespace DelegatesApp
             var t13 = g13(0);
             var t14 = g14(0);
 
-            var t15 = g15(new object[] {TestInstance});
-            var t16 = g16(new object[] {TestInstance, 0});
-            var t17 = g17(new object[] {new TestStruct(), 0, false});
-            var t18 = g18(new object[] {});
-            var t19 = g19(new object[] {});
-            var t20 = g20(new object[] {0});
-            g21(new object[] {TestInstance});
+            var t15 = g15(new object[] { TestInstance });
+            var t16 = g16(new object[] { TestInstance, 0 });
+            var t17 = g17(new object[] { new TestStruct(), 0, false });
+            var t18 = g18(new object[] { });
+            var t19 = g19(new object[] { });
+            var t20 = g20(new object[] { 0 });
+            g21(new object[] { TestInstance });
             var t21 = TestClass.StaticGenericMethodVoidParameter;
 
-            var g22 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] {typeof(object)},
-                new[] {typeof(object)});
-            g22(new object[] {""});
+            var g22 = Type.StaticGenericMethodVoid("StaticGenericMethodVoid", new[] { typeof(object) },
+                new[] { typeof(object) });
+            g22(new object[] { "" });
             var t22 = TestClass.StaticGenericMethodVoidParameter;
-            g22(new object[] {TestInstance});
+            g22(new object[] { TestInstance });
             var t23 = TestClass.StaticGenericMethodVoidParameter;
 
             var ig1 = DelegateFactory.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
             var ig2 = Type.InstanceMethod<Func<TestClass, TestClass, TestClass>, TestClass>("GenericMethod");
             var ig3 = Type.InstanceMethod<Func<object, TestClass, TestClass>, TestClass>("GenericMethod");
-            var ig4 = Type.InstanceGenericMethod("GenericMethod", new[] {Type}, new[] {Type});
-            var ig5 = Type.InstanceGenericMethodVoid("GenericMethodVoid", new[] {Type}, new[] {Type});
+            var ig4 = Type.InstanceGenericMethod("GenericMethod", new[] { Type }, new[] { Type });
+            var ig5 = Type.InstanceGenericMethodVoid("GenericMethodVoid", new[] { Type }, new[] { Type });
 
             var it1 = ig1(TestInstance, TestInstance);
             var it2 = ig2(TestInstance, TestInstance);
             var it3 = ig3(TestInstance, TestInstance);
-            var it4 = ig4(TestInstance, new object[] {TestInstance});
-            ig5(TestInstance, new object[] {TestInstance});
+            var it4 = ig4(TestInstance, new object[] { TestInstance });
+            ig5(TestInstance, new object[] { TestInstance });
             var it5 = TestInstance.InstanceGenericMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
@@ -438,7 +438,7 @@ namespace DelegatesApp
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(null, new object[] {TestInstance});
+                var test = methodInfo.Invoke(null, new object[] { TestInstance });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Static generic method via reflection: {_stopWatch.ElapsedMilliseconds}");
@@ -467,8 +467,8 @@ namespace DelegatesApp
 #endif
             var t6 = m6(TestInstance, "test");
             var t7 = m7(TestInstance, "test");
-            var t8 = m8(TestInstance, new object[] {"test"});
-            m9(TestInstance, new object[] {"test"});
+            var t8 = m8(TestInstance, new object[] { "test" });
+            m9(TestInstance, new object[] { "test" });
             var t9 = TestInstance.PublicMethodVoidParameter;
 
             _stopWatch = new Stopwatch();
@@ -494,7 +494,7 @@ namespace DelegatesApp
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(TestInstance, new object[] {"test"});
+                var test = methodInfo.Invoke(TestInstance, new object[] { "test" });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Public method proxy: {_stopWatch.ElapsedMilliseconds}");
@@ -547,15 +547,15 @@ namespace DelegatesApp
             var t6 = sm6("test");
             var t7 = sm7("test");
             var t8 = sm8("test");
-            var t9 = sm9(new object[] {"test"});
-            sm10(new object[] {"test"});
+            var t9 = sm9(new object[] { "test" });
+            sm10(new object[] { "test" });
             var t10 = TestClass.StaticPublicMethodVoidParameter;
-            var t11 = sm11(new object[] {"test"});
-            var t12 = sm12(new object[] {"test"});
-            var t13 = sm13(new object[] {"test"});
+            var t11 = sm11(new object[] { "test" });
+            var t12 = sm12(new object[] { "test" });
+            var t13 = sm13(new object[] { "test" });
             var t14 = sm14(0);
             var t15 = sm15(0);
-            var t16 = sm16(new object[] {0});
+            var t16 = sm16(new object[] { 0 });
 
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
@@ -579,17 +579,17 @@ namespace DelegatesApp
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = sm9(new object[] {"test"});
+                var test = sm9(new object[] { "test" });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Static Public method via proxy with array: {_stopWatch.ElapsedMilliseconds}");
 
-            var methodInfo = Type.GetMethod("StaticPublicMethod", new[] {typeof(string)});
+            var methodInfo = Type.GetMethod("StaticPublicMethod", new[] { typeof(string) });
             _stopWatch = new Stopwatch();
             _stopWatch.Start();
             for (var i = 0; i < Delay; i++)
             {
-                var test = methodInfo.Invoke(null, new object[] {"test"});
+                var test = methodInfo.Invoke(null, new object[] { "test" });
             }
             _stopWatch.Stop();
             Console.WriteLine($"Static Public method via reflection: {_stopWatch.ElapsedMilliseconds}");
@@ -1069,7 +1069,7 @@ namespace DelegatesApp
             _stopWatch.Stop();
             Console.WriteLine(
                     $"Private field set retriever by object and field type without a cast: {_stopWatch.ElapsedMilliseconds}");
-                /**/
+            /**/
 #endif
         }
 
