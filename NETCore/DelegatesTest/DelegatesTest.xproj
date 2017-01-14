@@ -22,7 +22,7 @@
     <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
     </Compile>
-	<Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>

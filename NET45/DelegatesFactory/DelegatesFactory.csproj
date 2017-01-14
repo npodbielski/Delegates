@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{195C742A-24D5-46F2-9D49-F69964951D14}</ProjectGuid>
+    <ProjectGuid>{112B137A-8F94-4E7B-A77B-685EFF84EC07}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delegates</RootNamespace>
-    <AssemblyName>Delegates</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <AssemblyName>DelegatesFactory</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET46, NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,7 +26,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;NET45</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -47,57 +47,60 @@
     <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructGetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructGetFunc.cs">
       <Link>CustomDelegates\StructGetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex1GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs">
       <Link>CustomDelegates\StructIndex1GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex1SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs">
       <Link>CustomDelegates\StructIndex1SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex2GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex2GetFunc.cs">
       <Link>CustomDelegates\StructIndex2GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex2SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex2SetAction.cs">
       <Link>CustomDelegates\StructIndex2SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex3GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex3GetFunc.cs">
       <Link>CustomDelegates\StructIndex3GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex3SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex3SetAction.cs">
       <Link>CustomDelegates\StructIndex3SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndexesSetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndexesSetAction.cs">
       <Link>CustomDelegates\StructIndexesSetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructSetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructSetAction.cs">
       <Link>CustomDelegates\StructSetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructSetActionRef.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructSetActionRef.cs">
       <Link>CustomDelegates\StructSetActionRef.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\DelegateFactory.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\DelegateFactory.cs">
       <Link>DelegateFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\ExpressionsExtensions.cs">
       <Link>Extensions\ExpressionsExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\MethodInfoExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\MethodInfoExtensions.cs">
       <Link>Extensions\MethodInfoExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\TypeExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\TypeExtensions.cs">
       <Link>Extensions\TypeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\netcore\delegates\helper\DelegateHelper.cs">
+    <Compile Include="..\..\netcore\DelegatesFactory\helper\DelegateHelper.cs">
       <Link>Helper\DelegateHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Helper\ParametersIndexes.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PostBuildEvent>COPY $(TargetPath) $(SolutionDir)Nuget\lib\net45\$(TargetFileName)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

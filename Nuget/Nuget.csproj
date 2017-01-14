@@ -4,64 +4,48 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E633E41-64E1-4AE7-BFD4-C10D78FEDB85}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B2E1214C-48F4-4A96-AD5F-08ABB0AA7A9A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DelegatesApp</RootNamespace>
-    <AssemblyName>DelegatesApp</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Nuget</RootNamespace>
+    <AssemblyName>Nuget</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <Content Include="delegateFactoryIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Common\DelegatesAppAssemblyInfo.cs">
-      <Link>Properties\DelegatesAppAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\NET45\DelegatesApp\ConsoleApplication.cs">
-      <Link>ConsoleApplication.cs</Link>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Package.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DelegatesTest\DelegatesTest.csproj">
-      <Project>{b26ba86d-3dc9-4d55-93de-68152849518d}</Project>
-      <Name>DelegatesTest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
-      <Project>{a52068fe-a219-4fd3-a218-44960f877553}</Project>
-      <Name>DelegatesFactory</Name>
-    </ProjectReference>
+    <Folder Include="lib\net35\" />
+    <Folder Include="lib\net40\" />
+    <Folder Include="lib\net45\" />
+    <Folder Include="lib\net46\" />
+    <Folder Include="lib\netcore\" />
+    <Folder Include="lib\portable-net45+sl50+netcore45+wpa81+wp8\" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

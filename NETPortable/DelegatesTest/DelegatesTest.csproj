@@ -152,9 +152,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Delegates\Delegates.csproj">
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
       <Project>{24b450b4-8c97-47c6-8cf8-9b4d761ab3fc}</Project>
-      <Name>Delegates</Name>
+      <Name>DelegatesFactory</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

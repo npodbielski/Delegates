@@ -63,9 +63,9 @@
       <Project>{5db38d8b-7cda-4f75-8955-e40503f50e68}</Project>
       <Name>DelegatesTest</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Delegates\Delegates.csproj">
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
       <Project>{7e81bdcc-0c53-42e2-b051-3664e4d5e007}</Project>
-      <Name>Delegates</Name>
+      <Name>DelegatesFactory</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

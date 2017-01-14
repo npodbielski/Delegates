@@ -155,9 +155,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Delegates\Delegates.csproj">
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
       <Project>{7e81bdcc-0c53-42e2-b051-3664e4d5e007}</Project>
-      <Name>Delegates</Name>
+      <Name>DelegatesFactory</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

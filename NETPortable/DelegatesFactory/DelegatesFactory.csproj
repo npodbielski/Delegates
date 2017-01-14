@@ -2,48 +2,37 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A52068FE-A219-4FD3-A218-44960F877553}</ProjectGuid>
+    <ProjectGuid>{24B450B4-8C97-47C6-8CF8-9B4D761AB3FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delegates</RootNamespace>
-    <AssemblyName>Delegates</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AssemblyName>DelegatesFactory</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
@@ -51,61 +40,69 @@
     <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructGetFunc.cs">
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\CEventInfo.cs">
+      <Link>Extensions\CEventInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\CPropertyInfo.cs">
+      <Link>Extensions\CPropertyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\WeakReferenceExtensions.cs">
+      <Link>Extensions\WeakReferenceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructGetFunc.cs">
       <Link>CustomDelegates\StructGetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex1GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs">
       <Link>CustomDelegates\StructIndex1GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex1SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs">
       <Link>CustomDelegates\StructIndex1SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex2GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex2GetFunc.cs">
       <Link>CustomDelegates\StructIndex2GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex2SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex2SetAction.cs">
       <Link>CustomDelegates\StructIndex2SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex3GetFunc.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex3GetFunc.cs">
       <Link>CustomDelegates\StructIndex3GetFunc.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndex3SetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndex3SetAction.cs">
       <Link>CustomDelegates\StructIndex3SetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructIndexesSetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructIndexesSetAction.cs">
       <Link>CustomDelegates\StructIndexesSetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructSetAction.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructSetAction.cs">
       <Link>CustomDelegates\StructSetAction.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\CustomDelegates\StructSetActionRef.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructSetActionRef.cs">
       <Link>CustomDelegates\StructSetActionRef.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\DelegateFactory.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\DelegateFactory.cs">
       <Link>DelegateFactory.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\ExpressionsExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\ExpressionsExtensions.cs">
       <Link>Extensions\ExpressionsExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\MethodInfoExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\MethodInfoExtensions.cs">
       <Link>Extensions\MethodInfoExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Extensions\TypeExtensions.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\TypeExtensions.cs">
       <Link>Extensions\TypeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\netcore\delegates\helper\DelegateHelper.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Helper\DelegateHelper.cs">
       <Link>Helper\DelegateHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\NETCore\Delegates\Helper\ParametersIndexes.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>
-    <Compile Include="CustomDelegates\Action.cs" />
-    <Compile Include="Extensions\CEventInfo.cs" />
-    <Compile Include="Extensions\CPropertyInfo.cs" />
-    <Compile Include="Extensions\WeakReferenceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PostBuildEvent>COPY $(TargetPath) "$(SolutionDir)Nuget\lib\portable-net45+sl50+netcore45+wpa81+wp8\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

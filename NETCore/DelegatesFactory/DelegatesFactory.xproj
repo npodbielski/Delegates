@@ -25,4 +25,7 @@
     </Compile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PostBuildEvent>COPY $(ProjectDir)\$(OutDir)$(Configuration)\netstandard1.6\$(TargetFileName) $(SolutionDir)Nuget\lib\netcore\$(TargetFileName)</PostBuildEvent>
+  </PropertyGroup>  
 </Project>
