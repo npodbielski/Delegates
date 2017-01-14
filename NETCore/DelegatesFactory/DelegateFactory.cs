@@ -12,7 +12,7 @@ using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
 using static Delegates.Helper.DelegateHelper;
-#if NET45||NETCORE
+#if NET45||NETCORE||STANDARD
 using WeakReference = System.WeakReference<object>;
 #endif
 

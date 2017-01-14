@@ -14,6 +14,9 @@
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <ItemGroup>
@@ -26,6 +29,6 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PostBuildEvent>COPY $(ProjectDir)\$(OutDir)$(Configuration)\netstandard1.6\$(TargetFileName) $(SolutionDir)Nuget\lib\netcore\$(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>XCOPY /y $(ProjectDir)\$(OutDir)$(Configuration)\netstandard1.6\$(TargetFileName) $(SolutionDir)Nuget\lib\netcore\</PostBuildEvent>
   </PropertyGroup>  
 </Project>

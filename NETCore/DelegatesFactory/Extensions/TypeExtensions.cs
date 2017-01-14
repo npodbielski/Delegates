@@ -145,7 +145,7 @@ namespace Delegates.Extensions
         {
 #if NET35||NET4||PORTABLE
             return source.GetGenericArguments();
-#elif NET45||NETCORE
+#elif NET45||NETCORE||STANDARD
             return source.GetTypeInfo().GenericTypeArguments;
 #endif
         }
@@ -154,7 +154,7 @@ namespace Delegates.Extensions
         {
 #if NET35||NET4||PORTABLE
             return source.IsClass;
-#elif NET45||NETCORE
+#elif NET45||NETCORE||STANDARD
             return source.GetTypeInfo().IsClass;
 #endif
         }
@@ -163,12 +163,12 @@ namespace Delegates.Extensions
         {
 #if NET35||NET4||PORTABLE
             return source.IsValueType;
-#elif NET45||NETCORE
+#elif NET45||NETCORE||STANDARD
             return source.GetTypeInfo().IsValueType;
 #endif
         }
 
-#if NET45 || NETCORE
+#if NET45 || NETCORE||STANDARD
         public static MethodInfo GetMethod(this Type source, string methodName)
         {
             return source.GetTypeInfo().GetMethod(methodName);
@@ -190,7 +190,7 @@ namespace Delegates.Extensions
             var parameters = types
 #if NET35
                 .Select(a => Expression.Parameter(a, "p" + index++))
-#elif NET45 || NETCORE || NET4||PORTABLE
+#elif NET45 || NETCORE || NET4||PORTABLE||STANDARD
                 .Select(Expression.Parameter)
 #endif
                 .ToList();
@@ -293,7 +293,7 @@ namespace Delegates.Extensions
             MethodInfo methodInfo = null;
             if (typeParameters == null || typeParameters.Length == 0)
             {
-#if !(NETCORE || PORTABLE)
+#if !(NETCORE || PORTABLE||STANDARD)
                 var enumerateMethods = false;
                 try
                 {
@@ -321,7 +321,7 @@ namespace Delegates.Extensions
         }
 
 
-#if !(NETCORE || PORTABLE)
+#if !(NETCORE || PORTABLE||STANDARD)
         public static MethodInfo GetSingleMethod(this Type source, string name, Type[] parametersTypes, bool isStatic)
         {
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
@@ -402,7 +402,7 @@ namespace Delegates.Extensions
 
         public static ConstructorInfo GetConstructorInfo(this Type source, Type[] types)
         {
-#if NETCORE||PORTABLE
+#if NETCORE||PORTABLE||STANDARD
             ConstructorInfo constructor = null;
             var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public);
             if (!constructors.Any())

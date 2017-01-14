@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
@@ -101,7 +104,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PostBuildEvent>COPY $(TargetPath) "$(SolutionDir)Nuget\lib\portable-net45+sl50+netcore45+wpa81+wp8\$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>echo f | xcopy /f /y $(TargetPath) "$(SolutionDir)Nuget\lib\portable-net45+sl50+netcore45+wpa81+wp8\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

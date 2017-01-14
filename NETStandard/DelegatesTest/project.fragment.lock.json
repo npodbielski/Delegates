@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "exports": {
+    "DelegatesFactory/1.0.0": {
+      "type": "project",
+      "framework": ".NETStandard,Version=v1.5",
+      "compile": {
+        "bin/Release/DelegatesFactory.dll": {}
+      },
+      "runtime": {
+        "bin/Release/DelegatesFactory.dll": {}
+      },
+      "contentFiles": {
+        "bin/Release/DelegatesFactory.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

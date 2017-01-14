@@ -9,7 +9,7 @@ namespace Delegates.Extensions
         public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
             where TDelegate : class
         {
-#if NET45 || NETCORE || NET4 || PORTABLE
+#if NET45 || NETCORE || NET4 || PORTABLE||STANDARD
             DelegateHelper.CheckDelegateReturnType<TDelegate>(method);
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
 #elif NET35      
@@ -19,7 +19,7 @@ namespace Delegates.Extensions
 
         public static Delegate CreateDelegate(this MethodInfo method, Type delegateType)
         {
-#if NET45 || NETCORE
+#if NET45 || NETCORE||STANDARD
             return method.CreateDelegate(delegateType);
 #elif NET35 || NET4
             return Delegate.CreateDelegate(delegateType, method, true);
@@ -33,7 +33,7 @@ namespace Delegates.Extensions
             var argsType = method.GetParameters()[0].ParameterType;
             if (argsType != typeof(TEventArgs))
             {
-                throw new ArgumentException("Provided event args type '" + typeof(TEventArgs).Name + "' is not compatible with expected type '" + argsType.Name+"'");
+                throw new ArgumentException("Provided event args type '" + typeof(TEventArgs).Name + "' is not compatible with expected type '" + argsType.Name + "'");
             }
         }
     }

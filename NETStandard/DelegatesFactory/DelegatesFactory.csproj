@@ -2,23 +2,27 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{195C742A-24D5-46F2-9D49-F69964951D14}</ProjectGuid>
+    <ProjectGuid>{6D213D45-D740-44FA-8968-09EA1214EC09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Delegates</RootNamespace>
     <AssemblyName>DelegatesFactory</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET46, NET45</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NET45,NET46</DefineConstants>
+    <DefineConstants>TRACE;STANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,21 +38,20 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
+      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
-      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\CEventInfo.cs">
+      <Link>Extensions\CEventInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\CPropertyInfo.cs">
+      <Link>Extensions\CPropertyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\NET35\DelegatesFactory\Extensions\WeakReferenceExtensions.cs">
+      <Link>Extensions\WeakReferenceExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesFactory\CustomDelegates\StructGetFunc.cs">
       <Link>CustomDelegates\StructGetFunc.cs</Link>
@@ -92,7 +95,7 @@
     <Compile Include="..\..\NETCore\DelegatesFactory\Extensions\TypeExtensions.cs">
       <Link>Extensions\TypeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\netcore\DelegatesFactory\helper\DelegateHelper.cs">
+    <Compile Include="..\..\NETCore\DelegatesFactory\Helper\DelegateHelper.cs">
       <Link>Helper\DelegateHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\NETCore\DelegatesFactory\Helper\ParametersIndexes.cs">
@@ -100,9 +103,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="project.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PostBuildEvent>XCOPY /y $(TargetPath) $(SolutionDir)Nuget\lib\net46\</PostBuildEvent>
+    <PostBuildEvent>XCOPY /y $(TargetPath) "$(SolutionDir)Nuget\lib\netstandard1.5\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
