@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable",
-    "define": [ "NETCORE" ]
+    "define": [ "STANDARD" ]
   },
   "dependencies": {
     "System.Runtime.Serialization.Primitives": "4.1.1",

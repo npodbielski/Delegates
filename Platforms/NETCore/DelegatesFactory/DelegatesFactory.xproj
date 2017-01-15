@@ -16,66 +16,18 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory.cs">
-      <Link>DelegateFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\ExpressionsExtensions.cs">
-      <Link>Extensions\ExpressionsExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\MethodInfoExtensions.cs">
-      <Link>Extensions\MethodInfoExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions.cs">
-      <Link>Extensions\TypeExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs">
-      <Link>Helper\DelegateHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
-      <Link>Helper\ParametersIndexes.cs</Link>
-    </Compile>
     <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructGetFunc.cs">
-      <Link>CustomDelegates\StructGetFunc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs">
-      <Link>CustomDelegates\StructIndex1GetFunc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs">
-      <Link>CustomDelegates\StructIndex1SetAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2GetFunc.cs">
-      <Link>CustomDelegates\StructIndex2GetFunc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2SetAction.cs">
-      <Link>CustomDelegates\StructIndex2SetAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3GetFunc.cs">
-      <Link>CustomDelegates\StructIndex3GetFunc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3SetAction.cs">
-      <Link>CustomDelegates\StructIndex3SetAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndexesSetAction.cs">
-      <Link>CustomDelegates\StructIndexesSetAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetAction.cs">
-      <Link>CustomDelegates\StructSetAction.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetActionRef.cs">
-      <Link>CustomDelegates\StructSetActionRef.cs</Link>
-    </Compile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY /y /t $(ProjectDir)$(OutDir)$(Configuration)\netstandard1.6\$(TargetFileName) $(SolutionDir)Nuget\lib\netcore\
-COPY /y $(ProjectDir)$(OutDir)$(Configuration)\netstandard1.6\$(ProjectName).dll "$(SolutionDir)Nuget\lib\netcore\"
-COPY /y $(ProjectDir)$(OutDir)$(Configuration)\netstandard1.6\$(ProjectName).xml "$(SolutionDir)Nuget\lib\netcore\"
-COPY /y $(ProjectDir)$(OutDir)$(Configuration)\netstandard1.6\$(ProjectName).pdb "$(SolutionDir)Nuget\lib\netcore\"</PostBuildEvent>
+    <PreBuildEvent>echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory $(ProjectDir)
+echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\CustomDelegates $(ProjectDir)CustomDelegates
+echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\Extensions $(ProjectDir)Extensions
+echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\Helper $(ProjectDir)Helper</PreBuildEvent>
   </PropertyGroup>
 </Project>

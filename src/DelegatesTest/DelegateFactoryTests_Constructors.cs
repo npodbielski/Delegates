@@ -7,7 +7,7 @@
 using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE
+#if NETCORE||STANDARD
 using Assert = DelegatesTest.CAssert;
 using TestMethodAttribute = Xunit.FactAttribute;
 #else
@@ -17,7 +17,7 @@ using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
-#if !NETCORE
+#if !(NETCORE||STANDARD)
     [TestClass]
 #endif
     public class DelegateFactoryTests_Constructors
@@ -191,7 +191,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Contructor(typeof(bool));
             Assert.IsNotNull(c);
-            var instance = c(new object[] {false});
+            var instance = c(new object[] { false });
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }
@@ -201,7 +201,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Contructor(typeof(int));
             Assert.IsNotNull(c);
-            var instance = c(new object[] {0});
+            var instance = c(new object[] { 0 });
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }
@@ -211,7 +211,7 @@ namespace DelegatesTest
         {
             var c = TestStructType.Contructor(typeof(int));
             Assert.IsNotNull(c);
-            var instance = c(new object[] {0});
+            var instance = c(new object[] { 0 });
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestStructType);
         }
@@ -231,7 +231,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Contructor(typeof(string));
             Assert.IsNotNull(c);
-            var instance = c(new object[] {"s"});
+            var instance = c(new object[] { "s" });
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }

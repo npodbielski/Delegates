@@ -1,5 +1,5 @@
 ﻿using System;
-#if NETCORE
+#if NETCORE||STANDARD
 using Assert = DelegatesTest.CAssert;
 #else
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;

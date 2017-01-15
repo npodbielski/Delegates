@@ -7,19 +7,18 @@
 using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE
+#if NETCORE||STANDARD
 using Assert = DelegatesTest.CAssert;
 using TestMethodAttribute = Xunit.FactAttribute;
 #else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-
 #endif
 
 namespace DelegatesTest
 {
 #if !NET35
-#if !NETCORE
+#if !(NETCORE||STANDARD)
     [TestClass]
 #endif
     public class DelegateFactoryTests_Fields_SetValue

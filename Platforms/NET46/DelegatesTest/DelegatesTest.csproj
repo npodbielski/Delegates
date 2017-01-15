@@ -53,9 +53,6 @@
     <Compile Include="..\..\..\src\DelegatesTest\AssertHelper.cs">
       <Link>AssertHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\CAssert.cs">
-      <Link>CAssert.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Constructors.cs">
       <Link>DelegateFactoryTests_Constructors.cs</Link>
     </Compile>
