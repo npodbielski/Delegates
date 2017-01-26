@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("npodbielski")]
-[assembly: AssemblyCopyright("Copyright © npodbielki 2017")]
+[assembly: AssemblyCopyright("Copyright © npodbielski 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 #if !PORTABLE
