@@ -810,5 +810,12 @@ namespace DelegatesTest
             var result = m(_interfaceImpl, new object[] { TestValue });
             Assert.AreEqual(TestValue, result);
         }
+
+        [TestMethod]
+        public void Incorrect_TDelegate_For_InstanceGenericMethod()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+                _testClassType.InstanceGenericMethod<Action>("PublicMethodVoid", null, new[] { typeof(string) }));
+        }
     }
 }

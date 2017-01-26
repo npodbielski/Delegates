@@ -2225,10 +2225,10 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void Incorrect_TDelegate_For_InstanceGenericMethod()
+        public void Incorrect_TDelegate_For_StaticcMethod()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.InstanceGenericMethod<Action>("StaticVoidPublic", null, new[] { typeof(string) }));
+                _testClassType.StaticMethod<Action>("StaticVoidPublic", null, new[] { typeof(string) }));
         }
     }
 }

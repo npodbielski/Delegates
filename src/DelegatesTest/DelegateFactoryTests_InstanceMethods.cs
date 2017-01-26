@@ -2790,13 +2790,6 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void Incorrect_TDelegate_For_InstanceGenericMethod()
-        {
-            AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.InstanceGenericMethod<Action>("PublicMethodVoid", null, new[] { typeof(string) }));
-        }
-
-        [TestMethod]
         public void CustomDelegate_ByTypes_Void_NoParams()
         {
             var m = DelegateFactory.InstanceMethod<CustomAction<TestClass>>("PublicMethodVoid");

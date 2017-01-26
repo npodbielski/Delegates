@@ -26,6 +26,7 @@ namespace DelegatesTest
         private static readonly Type TestClassType = typeof(TestClass);
         private static readonly Type TestStructType = typeof(TestStruct);
 
+        //TODO: tests for delegate return type. it cannot be void
         [TestMethod]
         public void ConstructorByDelegateWithType_BoolParam()
         {
