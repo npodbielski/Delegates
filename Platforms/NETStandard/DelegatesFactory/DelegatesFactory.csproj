@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;STANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -69,8 +69,56 @@
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetActionRef.cs">
       <Link>CustomDelegates\StructSetActionRef.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory.cs">
-      <Link>DelegateFactory.cs</Link>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_Constructor.cs">
+      <Link>DelegateFactory_Constructor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventAdd.cs">
+      <Link>DelegateFactory_EventAdd.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventRemove.cs">
+      <Link>DelegateFactory_EventRemove.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldGet.cs">
+      <Link>DelegateFactory_FieldGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldSet.cs">
+      <Link>DelegateFactory_FieldSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerGet.cs">
+      <Link>DelegateFactory_IndexerGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet.cs">
+      <Link>DelegateFactory_IndexerSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceGenericMethod.cs">
+      <Link>DelegateFactory_InstanceGenericMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceMethod.cs">
+      <Link>DelegateFactory_InstanceMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertyGet.cs">
+      <Link>DelegateFactory_PropertyGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet.cs">
+      <Link>DelegateFactory_PropertySet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs">
+      <Link>DelegateFactory_StaticFieldGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldSet.cs">
+      <Link>DelegateFactory_StaticFieldSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticGenericMethod.cs">
+      <Link>DelegateFactory_StaticGenericMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticMethod.cs">
+      <Link>DelegateFactory_StaticMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertyGet.cs">
+      <Link>DelegateFactory_StaticPropertyGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertySet.cs">
+      <Link>DelegateFactory_StaticPropertySet.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CEventInfo.cs">
       <Link>Extensions\CEventInfo.cs</Link>
@@ -92,6 +140,9 @@
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs">
       <Link>Helper\DelegateHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs">
+      <Link>Helper\EventsHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
