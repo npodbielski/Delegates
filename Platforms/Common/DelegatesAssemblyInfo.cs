@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Delegates")]
 [assembly: AssemblyProduct("Delegates")]
+[assembly: InternalsVisibleTo("DelegatesTest")]
