@@ -63,6 +63,19 @@ namespace Delegates
             return StaticMethod<Action<object[]>>(source, name, null, paramsTypes);
         }
 
+        /// <summary>
+        /// Creates delegate to generic static method with unspecified number of parameters passed as array 
+        /// of objects from instance as object. 
+        /// </summary>
+        /// <typeparam name="TDelegate">Either Action{object[]} or Function{object[],object}</typeparam>
+        /// <param name="source">Type with defined method</param>
+        /// <param name="name">Name of method</param>
+        /// <param name="paramsTypes">Types of parameters</param>
+        /// <param name="typeParams">Type parameters for generic instance method</param>
+        /// <returns>Delegate for void generic static method</returns>
+        /// <remarks>
+        /// Intended for internal use.
+        /// </remarks>
 #if !NETCORE
         internal
 #else

@@ -19,7 +19,7 @@ namespace DelegatesTest
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStructType = typeof(TestStruct);
-        private readonly TestStruct _testStructInstance;
+        private readonly TestStruct _testStructInstance = new TestStruct();
 
         [TestMethod]
         public void NoGenericMethod_ShouldNot_Return_NonGeneric_With_TheSame_Name()

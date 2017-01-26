@@ -12,6 +12,7 @@ using Delegates;
 using Delegates.Extensions;
 using DelegatesTest.TestObjects;
 
+#pragma warning disable CS0612 // Type or member is obsolete
 namespace DelegatesApp
 {
     internal class ConsoleApplication
@@ -1220,3 +1221,4 @@ namespace DelegatesApp
         }
     }
 }
+#pragma warning restore CS0612 // Type or member is obsolete

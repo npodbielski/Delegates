@@ -106,6 +106,7 @@ namespace Delegates.Extensions
         /// method.
         /// </summary>
         /// <param name="parameters">Collection of <see cref="ParameterExpression"/></param>
+        /// <param name="sourceParam">Source instance <see cref="ParameterExpression"/></param>
         /// <returns>Collection compatible with method
         /// <see cref="Expression.Lambda{TDelegate}(System.Linq.Expressions.Expression,System.Collections.Generic.IEnumerable{ParameterExpression})"/>
         /// second parameter.

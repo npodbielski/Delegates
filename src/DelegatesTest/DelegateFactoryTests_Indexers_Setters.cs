@@ -37,7 +37,6 @@ namespace DelegatesTest
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStrucType = typeof(TestStruct);
-        private string _secondStringIndex = "test2";
         private TestStruct _testStructInstance = new TestStruct(0);
         private readonly Type _interfaceType = typeof(IService);
         private readonly IService _interfaceImpl = new Service();
