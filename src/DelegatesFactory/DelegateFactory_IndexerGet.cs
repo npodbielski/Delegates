@@ -1,7 +1,7 @@
-using System;
-using System.Linq.Expressions;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
+using System;
+using System.Linq.Expressions;
 
 namespace Delegates
 {
@@ -25,20 +25,6 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for indexer get accessor at specified index from structure passed by reference
-        /// </summary>
-        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
-        /// <typeparam name="TReturn">Indexer return type</typeparam>
-        /// <typeparam name="TIndex">Index parameter type</typeparam>
-        /// <returns>Delegate for indexer get accessor at specified index</returns>
-        public static StructIndex1GetFunc<TSource, TIndex, TReturn> IndexerGetStruct<TSource, TReturn, TIndex>()
-            where TSource : struct
-        {
-            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex) });
-            return propertyInfo?.GetMethod?.CreateDelegate<StructIndex1GetFunc<TSource, TIndex, TReturn>>();
-        }
-
-        /// <summary>
         /// Creates delegate for indexer get accessor at specified index
         /// </summary>
         /// <typeparam name="TSource">Source type with defined indexer</typeparam>
@@ -51,22 +37,6 @@ namespace Delegates
         {
             var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TReturn>>();
-        }
-
-        /// <summary>
-        /// Creates delegate for indexer get accessor at specified two indexes from structure passed by reference
-        /// </summary>
-        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
-        /// <typeparam name="TReturn">Indexer return type</typeparam>
-        /// <typeparam name="TIndex">First index parameter type</typeparam>
-        /// <typeparam name="TIndex2">Second index parameter type</typeparam>
-        /// <returns>Delegate for indexer get accessor with two indexes</returns>
-        public static StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>
-            IndexerGetStruct<TSource, TReturn, TIndex, TIndex2>()
-            where TSource : struct
-        {
-            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
-            return propertyInfo?.GetMethod?.CreateDelegate<StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>>();
         }
 
         /// <summary>
@@ -84,24 +54,6 @@ namespace Delegates
             var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
                 new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
             return propertyInfo?.GetMethod?.CreateDelegate<Func<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
-        }
-
-        /// <summary>
-        /// Creates delegate for indexer get accessor at specified three indexes from structure passed by reference
-        /// </summary>
-        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
-        /// <typeparam name="TReturn">Indexer return type</typeparam>
-        /// <typeparam name="TIndex">First index parameter type</typeparam>
-        /// <typeparam name="TIndex2">Second index parameter type</typeparam>
-        /// <typeparam name="TIndex3">Third index parameter type</typeparam>
-        /// <returns>Delegate for indexer get accessor with two indexes</returns>
-        public static StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGetStruct
-            <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
-        {
-            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
-                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
-            return propertyInfo?.GetMethod?.CreateDelegate<
-                StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
 
         /// <summary>
@@ -161,8 +113,24 @@ namespace Delegates
         /// <param name="returnType">Return type of indexer</param>
         /// <param name="indexTypes">Collection of index parameters types</param>
         /// <returns>Delegate for indexer get accessor with array of indexes</returns>
+        /// <remarks>
+        /// Return type of <see cref="IndexerGet"/> is not necessary, but for compatibility new method was created.
+        /// It will be removed in next release.
+        /// </remarks>
+        [Obsolete("Use IndexerGetNew method instead")]
         public static Func<object, object[], object> IndexerGet(this Type source, Type returnType,
             params Type[] indexTypes)
+        {
+            return source.IndexerGetNew(indexTypes);
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer get accessor with unspecified number of indexes from instance as object
+        /// </summary>
+        /// <param name="source">Type with defined indexer</param>
+        /// <param name="indexTypes">Collection of index parameters types</param>
+        /// <returns>Delegate for indexer get accessor with array of indexes</returns>
+        public static Func<object, object[], object> IndexerGetNew(this Type source, params Type[] indexTypes)
         {
             var propertyInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (propertyInfo?.GetMethod == null)
@@ -186,6 +154,54 @@ namespace Delegates
             }
             return Expression.Lambda<Func<object, object[], object>>(
                 returnExpression, sourceObjectParam, indexesParam).Compile();
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer get accessor at specified index from structure passed by reference
+        /// </summary>
+        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
+        /// <typeparam name="TReturn">Indexer return type</typeparam>
+        /// <typeparam name="TIndex">Index parameter type</typeparam>
+        /// <returns>Delegate for indexer get accessor at specified index</returns>
+        public static StructIndex1GetFunc<TSource, TIndex, TReturn> IndexerGetStruct<TSource, TReturn, TIndex>()
+            where TSource : struct
+        {
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex) });
+            return propertyInfo?.GetMethod?.CreateDelegate<StructIndex1GetFunc<TSource, TIndex, TReturn>>();
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer get accessor at specified two indexes from structure passed by reference
+        /// </summary>
+        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
+        /// <typeparam name="TReturn">Indexer return type</typeparam>
+        /// <typeparam name="TIndex">First index parameter type</typeparam>
+        /// <typeparam name="TIndex2">Second index parameter type</typeparam>
+        /// <returns>Delegate for indexer get accessor with two indexes</returns>
+        public static StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>
+            IndexerGetStruct<TSource, TReturn, TIndex, TIndex2>()
+            where TSource : struct
+        {
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(new[] { typeof(TIndex), typeof(TIndex2) });
+            return propertyInfo?.GetMethod?.CreateDelegate<StructIndex2GetFunc<TSource, TIndex, TIndex2, TReturn>>();
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer get accessor at specified three indexes from structure passed by reference
+        /// </summary>
+        /// <typeparam name="TSource">Source type with defined indexer</typeparam>
+        /// <typeparam name="TReturn">Indexer return type</typeparam>
+        /// <typeparam name="TIndex">First index parameter type</typeparam>
+        /// <typeparam name="TIndex2">Second index parameter type</typeparam>
+        /// <typeparam name="TIndex3">Third index parameter type</typeparam>
+        /// <returns>Delegate for indexer get accessor with two indexes</returns>
+        public static StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn> IndexerGetStruct
+            <TSource, TReturn, TIndex, TIndex2, TIndex3>() where TSource : struct
+        {
+            var propertyInfo = typeof(TSource).GetIndexerPropertyInfo(
+                new[] { typeof(TIndex), typeof(TIndex2), typeof(TIndex3) });
+            return propertyInfo?.GetMethod?.CreateDelegate<
+                StructIndex3GetFunc<TSource, TIndex, TIndex2, TIndex2, TReturn>>();
         }
 
         /// <summary>

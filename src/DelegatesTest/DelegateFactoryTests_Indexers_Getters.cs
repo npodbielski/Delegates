@@ -114,7 +114,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Internal()
         {
-            var ig = _testClassType.IndexerGet(typeof(string), typeof(string));
+            var ig = _testClassType.IndexerGetNew(typeof(string));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstStringIndex, ig(_testClassInstance, new object[] { FirstStringIndex }));
         }
@@ -122,7 +122,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Internal_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(string), typeof(string));
+            var ig = _testStrucType.IndexerGetNew(typeof(string));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstStringIndex, ig(_testStructInstance, new object[] { FirstStringIndex }));
         }
@@ -130,21 +130,21 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_NonExisting()
         {
-            var ig = _testClassType.IndexerGet(typeof(ulong), typeof(ulong));
+            var ig = _testClassType.IndexerGetNew(typeof(ulong));
             Assert.IsNull(ig);
         }
 
         [TestMethod]
         public void IndexerGet_ByObjects_OnlyWrite()
         {
-            var ig = _testClassType.IndexerGet(typeof(string), typeof(string), typeof(string));
+            var ig = _testClassType.IndexerGetNew(typeof(string), typeof(string));
             Assert.IsNull(ig);
         }
 
         [TestMethod]
         public void IndexerGet_ByObjects_Private()
         {
-            var ig = _testClassType.IndexerGet(typeof(long), typeof(long));
+            var ig = _testClassType.IndexerGetNew(typeof(long));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstLongIndex, ig(_testClassInstance, new object[] { FirstLongIndex }));
         }
@@ -152,7 +152,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Private_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(long), typeof(long));
+            var ig = _testStrucType.IndexerGetNew(typeof(long));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstLongIndex, ig(_testStructInstance, new object[] { FirstLongIndex }));
         }
@@ -160,7 +160,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Protected()
         {
-            var ig = _testClassType.IndexerGet(typeof(byte), typeof(byte));
+            var ig = _testClassType.IndexerGetNew(typeof(byte));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstByteIndex, ig(_testClassInstance, new object[] { FirstByteIndex }));
         }
@@ -168,7 +168,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Public()
         {
-            var ig = _testClassType.IndexerGet(typeof(int), typeof(int));
+            var ig = _testClassType.IndexerGetNew(typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testClassInstance, new object[] { FirstIntIndex }));
         }
@@ -177,7 +177,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_Public_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(int), typeof(int));
+            var ig = _testStrucType.IndexerGetNew(typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testStructInstance, new object[] { FirstIntIndex }));
         }
@@ -352,7 +352,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_1Index()
         {
-            var ig = _testClassType.IndexerGet(typeof(int), typeof(int));
+            var ig = _testClassType.IndexerGetNew(typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testClassInstance, new object[] { FirstIntIndex }));
         }
@@ -360,7 +360,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_1Index_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(int), typeof(int));
+            var ig = _testStrucType.IndexerGetNew(typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testStructInstance, new object[] { FirstIntIndex }));
         }
@@ -368,7 +368,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_2Index()
         {
-            var ig = _testClassType.IndexerGet(typeof(int), typeof(int), typeof(int));
+            var ig = _testClassType.IndexerGetNew(typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }));
         }
@@ -376,7 +376,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_2Index_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(int), typeof(int), typeof(int));
+            var ig = _testStrucType.IndexerGetNew(typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testStructInstance, new object[] { FirstIntIndex, SecondIntIndex }));
         }
@@ -384,7 +384,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_3Index()
         {
-            var ig = _testClassType.IndexerGet(typeof(int), typeof(int), typeof(int), typeof(int));
+            var ig = _testClassType.IndexerGetNew(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }));
         }
@@ -392,7 +392,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_3Index_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(int), typeof(int), typeof(int), typeof(int));
+            var ig = _testStrucType.IndexerGetNew(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testStructInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }));
         }
@@ -400,7 +400,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_4Index()
         {
-            var ig = _testClassType.IndexerGet(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
+            var ig = _testClassType.IndexerGetNew(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }));
         }
@@ -408,7 +408,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_ByObjects_4Index_FromStruct()
         {
-            var ig = _testStrucType.IndexerGet(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
+            var ig = _testStrucType.IndexerGetNew(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(FirstIntIndex, ig(_testStructInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }));
         }
@@ -432,7 +432,7 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerGet_Interface_ByObjects()
         {
-            var ig = _interfaceType.IndexerGet(typeof(int), typeof(int));
+            var ig = _interfaceType.IndexerGetNew(typeof(int));
             Assert.IsNotNull(ig);
             Assert.AreEqual(_interfaceImpl[FirstIntIndex], ig(_interfaceImpl, new object[] { FirstIntIndex }));
         }
