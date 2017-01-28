@@ -112,6 +112,25 @@ namespace DelegatesTest
         }
 
         [TestMethod]
+        public void ConstructorByDelegateWithType_WithCustomDelegate_NoParams()
+        {
+            var cd = DelegateFactory.Contructor<CustomCtr>();
+            Assert.IsNotNull(cd);
+            Assert.IsNotNull(cd());
+            Assert.IsInstanceOfType(cd(), TestClassType);
+        }
+
+        [TestMethod]
+        public void ConstructorByDelegateWithType_WithCustomDelegate_SingleParam()
+        {
+            var cd = DelegateFactory.Contructor<CustomCtrSingleParam>();
+            Assert.IsNotNull(cd);
+            var instance = cd(0);
+            Assert.IsNotNull(instance);
+            Assert.IsInstanceOfType(instance, TestClassType);
+        }
+
+        [TestMethod]
         public void ConstructorByDelegateWithType_StringParam()
         {
             var c = DelegateFactory.Contructor<Func<string, TestClass>>();
