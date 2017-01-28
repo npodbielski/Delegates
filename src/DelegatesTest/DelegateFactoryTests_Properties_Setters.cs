@@ -207,7 +207,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_NonExisting()
         {
-            var ps = DelegateFactory.PropertySet<TestClass, string>("NonExisting");
+            var ps = _testStrucType.PropertySet("NonExisting");
             Assert.IsNull(ps);
         }
 
