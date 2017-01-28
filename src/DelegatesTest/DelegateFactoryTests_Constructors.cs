@@ -27,6 +27,10 @@ namespace DelegatesTest
         private static readonly Type TestStructType = typeof(TestStruct);
 
         //TODO: tests for delegate return type. it cannot be void
+        //TODO: tests for delegate with return type compatible with source type i.e. interface of a class
+        //TODO: tests custom delegate types
+        //TODO: tests more numbers of parameters than 3
+        //TODO: tests values and order of constructors parameters
         [TestMethod]
         public void ConstructorByDelegateWithType_BoolParam()
         {

@@ -27,6 +27,7 @@ namespace DelegatesTest
         private static readonly Type TestClassType = typeof(TestClass);
         private static readonly Type TestStructType = typeof(TestStruct);
 
+        //TODO: test with passed incorrect property type
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Internal()
         {

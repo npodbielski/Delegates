@@ -25,6 +25,9 @@ namespace DelegatesTest
         private static readonly Type TestClassType = typeof(TestClass);
         private static readonly Type TestStructType = typeof(TestStruct);
 
+        //TODO: test what happen if passed incorrect property type (maybe allow this?)
+        //TODO: test if interface or abstract class is passed as source
+        //TODO: test static properties in generic classes
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_NonExisting()
         {
