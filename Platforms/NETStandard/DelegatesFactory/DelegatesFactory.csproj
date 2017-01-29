@@ -147,10 +147,10 @@
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,17 +158,5 @@
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PostBuildEvent>XCOPY /y /t $(TargetPath) "$(SolutionDir)Nuget\lib\netstandard1.5\"
-COPY /y $(TargetDir)$(ProjectName).dll "$(SolutionDir)Nuget\lib\netstandard1.5\"
-COPY /y $(TargetDir)$(ProjectName).xml "$(SolutionDir)Nuget\lib\netstandard1.5\"</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />  
 </Project>

@@ -42,10 +42,10 @@
     <Compile Include="..\..\..\src\DelegatesApp\ConsoleApplication.cs">
       <Link>ConsoleApplication.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\DelegatesAppAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\DelegatesAppAssemblyInfo.cs">
       <Link>Properties\DelegatesAppAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,11 +64,4 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

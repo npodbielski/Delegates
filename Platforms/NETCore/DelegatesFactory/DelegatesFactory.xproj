@@ -14,18 +14,12 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Common\DelegatesAssemblyInfo.cs">
-      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
+  </PropertyGroup>  
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
-    <PreBuildEvent>echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory $(ProjectDir)
+    <PreBuildEvent>echo f | XCOPY /y $(SolutionDir)src\Common\DelegatesAssemblyInfo.cs $(ProjectDir)\Properties\DelegatesAssemblyInfo.cs
+echo f | XCOPY /y $(SolutionDir)src\Common\SolutionAssemblyInfo.cs $(ProjectDir)\Properties\SolutionAssemblyInfo.cs
+echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory $(ProjectDir)
 echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\CustomDelegates $(ProjectDir)CustomDelegates
 echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\Extensions $(ProjectDir)Extensions
 echo d | XCOPY /y $(SolutionDir)src\DelegatesFactory\Helper $(ProjectDir)Helper</PreBuildEvent>

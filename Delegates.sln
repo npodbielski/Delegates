@@ -33,10 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegatesTest", "Platforms\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DC8497EF-E6D9-425F-8923-479C3190AB00}"
 	ProjectSection(SolutionItems) = preProject
-		Common\DelegatesAppAssemblyInfo.cs = Common\DelegatesAppAssemblyInfo.cs
-		Common\DelegatesAssemblyInfo.cs = Common\DelegatesAssemblyInfo.cs
-		Common\DelegatesTestAssemblyInfo.cs = Common\DelegatesTestAssemblyInfo.cs
-		Common\SolutionAssemblyInfo.cs = Common\SolutionAssemblyInfo.cs
+		src\Common\DelegatesAppAssemblyInfo.cs = src\Common\DelegatesAppAssemblyInfo.cs
+		src\Common\DelegatesAssemblyInfo.cs = src\Common\DelegatesAssemblyInfo.cs
+		src\Common\DelegatesTestAssemblyInfo.cs = src\Common\DelegatesTestAssemblyInfo.cs
+		src\Common\SolutionAssemblyInfo.cs = src\Common\SolutionAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET4", "NET4", "{A7BEC3A2-F03A-49F6-B9BB-AE13CCD85CC8}"

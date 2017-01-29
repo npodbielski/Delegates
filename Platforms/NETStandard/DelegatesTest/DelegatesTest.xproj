@@ -19,10 +19,10 @@
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>

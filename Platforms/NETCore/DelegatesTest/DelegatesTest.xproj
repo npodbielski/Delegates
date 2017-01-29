@@ -17,21 +17,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
-      <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
+  </ItemGroup>  
   <ItemGroup>
     <ProjectReference Include="..\..\NETStandard\DelegatesFactory\DelegatesFactory.csproj" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
-    <PreBuildEvent>echo d | XCOPY /y $(SolutionDir)src\DelegatesTest $(ProjectDir)
+    <PreBuildEvent>echo f | XCOPY /y $(SolutionDir)src\Common\DelegatesTestAssemblyInfo.cs $(ProjectDir)\Properties\DelegatesTestAssemblyInfo.cs
+echo f | XCOPY /y $(SolutionDir)src\Common\SolutionAssemblyInfo.cs $(ProjectDir)\Properties\SolutionAssemblyInfo.cs
+echo d | XCOPY /y $(SolutionDir)src\DelegatesTest $(ProjectDir)
 echo d | XCOPY /y $(SolutionDir)src\DelegatesTest\TestObjects $(ProjectDir)TestObjects</PreBuildEvent>
   </PropertyGroup>
 </Project>

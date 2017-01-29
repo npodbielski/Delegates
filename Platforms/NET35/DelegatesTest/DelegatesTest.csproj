@@ -141,10 +141,10 @@
     <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestStruct.cs">
       <Link>TestObjects\TestStruct.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\SolutionAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Common\DelegatesTestAssemblyInfo.cs">
+    <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -175,11 +175,4 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
