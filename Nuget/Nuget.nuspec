@@ -16,7 +16,7 @@
       Easy way for creating delegates to access types members. Much faster than Reflection.
     </summary>
     <language>en-US</language>
-    <projectUrl>https://nuget.org/packages/DelegateFactory</projectUrl>
+    <projectUrl>https://github.com/npodbielski/Delegates</projectUrl>
     <iconUrl>http://internetexception.com/nuget/delegateFactoryIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
