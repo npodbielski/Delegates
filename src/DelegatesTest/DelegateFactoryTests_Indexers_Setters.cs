@@ -41,6 +41,7 @@ namespace DelegatesTest
         private readonly Type _interfaceType = typeof(IService);
         private readonly IService _interfaceImpl = new Service();
 
+        //TODO: test correctness of returnType parameter of DelegateIndexerSet method
         [TestMethod]
         public void IndexerSet_ByExtensionAndReturnType_NonExisting()
         {

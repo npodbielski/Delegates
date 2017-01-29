@@ -25,6 +25,8 @@ namespace DelegatesTest
         private readonly Type _interfaceType = typeof(IService);
         private readonly IService _interfaceImpl = new Service();
 
+        //TODO: test instance methods with out or ref modifiers
+        //TODO: test InstanceMethod extension method with interface that is implemented in source type but do not have method defined
         [TestMethod]
         public void Public_Method_ByTypes_Void_NoParameters()
         {

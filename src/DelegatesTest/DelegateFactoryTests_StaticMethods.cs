@@ -22,6 +22,7 @@ namespace DelegatesTest
         private readonly Type _testStructType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
 
+        //TODO: test static methods with out or ref modifiers
         [TestMethod]
         public void Public_Method_ByTypes_Void_NoParameters()
         {
