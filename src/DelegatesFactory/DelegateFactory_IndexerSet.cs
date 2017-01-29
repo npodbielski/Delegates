@@ -211,29 +211,61 @@ namespace Delegates
         /// Creates delegate for indexer set accessor with unspecified number of indexes from instance as object
         /// </summary>
         /// <param name="source">Type with defined indexer</param>
-        /// <param name="returnType">Type of value to set</param>
         /// <param name="indexTypes">Collection of index parameters types</param>
         /// <returns>Delegate for indexer set accessor with unspecified number of indexes</returns>
-        public static Action<object, object[], object> IndexerSet(this Type source, Type returnType,
-            params Type[] indexTypes)
+        public static Action<object, object[], object> IndexerSetNew(this Type source, params Type[] indexTypes)
         {
-            return source.IndexerSetObjectsImpl<Action<object, object[], object>>(returnType, indexTypes);
+            return source.IndexerSetObjectsImpl<Action<object, object[], object>>(indexTypes);
         }
 
         /// <summary>
         /// Creates delegate for indexer set accessor with unspecified number of indexes from instance as object
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="returnType"></param>
-        /// <param name="indexTypes"></param>
-        /// <returns></returns>
+        /// <param name="source">Type with defined indexer</param>
+        /// <param name="returnType">Type of value to set</param>
+        /// <param name="indexTypes">Collection of index parameters types</param>
+        /// <returns>Delegate for indexer set accessor with unspecified number of indexes</returns>
+        /// <remarks>
+        /// <paramref name="returnType"/> parameter is not necessary, but for compatibility new method was created.
+        /// This one will be removed in next release.
+        /// </remarks>
+        [Obsolete("Use IndexerSetNew instead")]
+        public static Action<object, object[], object> IndexerSet(this Type source, Type returnType,
+            params Type[] indexTypes)
+        {
+            return source.IndexerSetObjectsImpl<Action<object, object[], object>>(indexTypes);
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer set accessor with unspecified number of indexes from instance as object
+        /// </summary>
+        /// <param name="source">Type with defined indexer</param>
+        /// <param name="indexTypes">Collection of index parameters types</param>
+        /// <returns>Delegate for indexer set accessor with unspecified number of indexes</returns>
+        public static StructIndexesSetAction<object, object> IndexerSetStructNew(this Type source, 
+            params Type[] indexTypes)
+        {
+            return source.IndexerSetObjectsImpl<StructIndexesSetAction<object, object>>(indexTypes);
+        }
+
+        /// <summary>
+        /// Creates delegate for indexer set accessor with unspecified number of indexes from instance as object
+        /// </summary>/// <param name="source">Type with defined indexer</param>
+        /// <param name="returnType">Not used</param>
+        /// <param name="indexTypes">Collection of index parameters types</param>
+        /// <returns>Delegate for indexer set accessor with unspecified number of indexes</returns>
+        /// <remarks>
+        /// <paramref name="returnType"/> parameter is not necessary, but for compatibility new method was created.
+        /// This one will be removed in next release.
+        /// </remarks>
+        [Obsolete("Use IndexerSetStructNew instead")]
         public static StructIndexesSetAction<object, object> IndexerSetStruct(this Type source, Type returnType,
             params Type[] indexTypes)
         {
-            return source.IndexerSetObjectsImpl<StructIndexesSetAction<object, object>>(returnType, indexTypes);
+            return source.IndexerSetObjectsImpl<StructIndexesSetAction<object, object>>(indexTypes);
         }
 
-        private static TDelegate IndexerSetObjectsImpl<TDelegate>(this Type source, Type returnType,
+        private static TDelegate IndexerSetObjectsImpl<TDelegate>(this Type source,
             params Type[] indexTypes)
             where TDelegate : class
         {
@@ -260,7 +292,7 @@ namespace Delegates
                 paramsExpression[i] = Expression.Convert(Expression.ArrayIndex(indexesParam, Expression.Constant(i)),
                     indexType);
             }
-            paramsExpression[indexTypes.Length] = Expression.Convert(valueParam, returnType);
+            paramsExpression[indexTypes.Length] = Expression.Convert(valueParam, indexerInfo.PropertyType);
             Expression returnExpression;
             if (source.IsClassType())
             {
@@ -283,6 +315,7 @@ namespace Delegates
             params Type[] indexTypes)
             where TDelegate : class
         {
+            //TODO: check if returnType value is correct
             var indexerInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (indexerInfo?.SetMethod == null)
             {

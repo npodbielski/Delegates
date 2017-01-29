@@ -794,6 +794,7 @@ namespace DelegatesTest.TestObjects
         {
             return s;
         }
+
         public void GenericMethodVoid<T>(T s)
         {
             InstanceGenericMethodVoidParameter = s;

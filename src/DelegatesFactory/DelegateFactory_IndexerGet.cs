@@ -114,8 +114,8 @@ namespace Delegates
         /// <param name="indexTypes">Collection of index parameters types</param>
         /// <returns>Delegate for indexer get accessor with array of indexes</returns>
         /// <remarks>
-        /// Return type of <see cref="IndexerGet"/> is not necessary, but for compatibility new method was created.
-        /// It will be removed in next release.
+        /// <paramref name="returnType"/> parameter is not necessary, but for compatibility new method was created.
+        /// This one will be removed in next release.
         /// </remarks>
         [Obsolete("Use IndexerGetNew method instead")]
         public static Func<object, object[], object> IndexerGet(this Type source, Type returnType,
