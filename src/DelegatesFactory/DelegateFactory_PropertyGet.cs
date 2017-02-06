@@ -12,6 +12,8 @@ namespace Delegates
     /// </summary>
     public static partial class DelegateFactory
     {
+        //TODO: Consider PropertyGet(string path="Property1.NestedProperty.SecondNestedProperty")
+        //TODO: Consider NestedValueGet(string path="Property1._nestedfield.SecondNestedProperty._secondNestedField")
         /// <summary>
         /// Creates delegate to instance property getter from instance as object with return type of property type
         /// </summary>
