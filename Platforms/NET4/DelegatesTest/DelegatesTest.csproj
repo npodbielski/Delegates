@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5DB38D8B-7CDA-4F75-8955-E40503F50E68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DelegatesTest</RootNamespace>
+    <AssemblyName>DelegatesTest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\src\DelegatesTest\AssertHelper.cs">
+      <Link>AssertHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Constructors.cs">
+      <Link>DelegateFactoryTests_Constructors.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Add.cs">
+      <Link>DelegateFactoryTests_Events_Add.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
+      <Link>DelegateFactoryTests_Events_Remove.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs">
+      <Link>DelegateFactoryTests_Fields_GetValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_SetValue.cs">
+      <Link>DelegateFactoryTests_Fields_SetValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Indexers_Getters.cs">
+      <Link>DelegateFactoryTests_Indexers_Getters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Indexers_Setters.cs">
+      <Link>DelegateFactoryTests_Indexers_Setters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_InstanceMethods.cs">
+      <Link>DelegateFactoryTests_InstanceMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_InstanceMethods_Generic.cs">
+      <Link>DelegateFactoryTests_InstanceMethods_Generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Properties_Getters.cs">
+      <Link>DelegateFactoryTests_Properties_Getters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Properties_Setters.cs">
+      <Link>DelegateFactoryTests_Properties_Setters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_GetValue.cs">
+      <Link>DelegateFactoryTests_StaticField_GetValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_SetValue.cs">
+      <Link>DelegateFactoryTests_StaticField_SetValue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
+      <Link>DelegateFactoryTests_StaticMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticMethods_Generic.cs">
+      <Link>DelegateFactoryTests_StaticMethods_Generic.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticProperties_Getters.cs">
+      <Link>DelegateFactoryTests_StaticProperties_Getters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticProperties_Setters.cs">
+      <Link>DelegateFactoryTests_StaticProperties_Setters.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Action17.cs">
+      <Link>TestObjects\Action17.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Base.cs">
+      <Link>TestObjects\Base.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\CustomDelegates.cs">
+      <Link>TestObjects\CustomDelegates.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Derived.cs">
+      <Link>TestObjects\Derived.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Func17.cs">
+      <Link>TestObjects\Func17.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\GenericClass.cs">
+      <Link>TestObjects\GenericClass.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\IService.cs">
+      <Link>TestObjects\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\ITestInterface.cs">
+      <Link>TestObjects\ITestInterface.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Service.cs">
+      <Link>TestObjects\Service.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestClass.cs">
+      <Link>TestObjects\TestClass.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestClassNoDefaultCtor.cs">
+      <Link>TestObjects\TestClassNoDefaultCtor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestStruct.cs">
+      <Link>TestObjects\TestStruct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
+      <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
+      <Project>{7e81bdcc-0c53-42e2-b051-3664e4d5e007}</Project>
+      <Name>DelegatesFactory</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
