@@ -14,6 +14,7 @@ namespace Delegates
     {
         //TODO: Consider PropertyGet(string path="Property1.NestedProperty.SecondNestedProperty")
         //TODO: Consider NestedValueGet(string path="Property1._nestedfield.SecondNestedProperty._secondNestedField")
+        //TODO: Consider adding search in type base types for private and protected members
         /// <summary>
         /// Creates delegate to instance property getter from instance as object with return type of property type
         /// </summary>
