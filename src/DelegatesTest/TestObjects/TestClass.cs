@@ -12,26 +12,20 @@ namespace DelegatesTest.TestObjects
 {
     public class TestClass : ITestInterface
     {
-        public const string StaticPublicParameterlessReturnValue = "StaticPublic";
         public const string StaticInternalParameterlessReturnValue = "StaticInternal";
-        public const string StaticProtectedParameterlessReturnValue = "StaticProtected";
         public const string StaticPrivateParameterlessReturnValue = "StaticPrivate";
-
-        public string PublicParameterlessReturnValue = "PublicMethodVoid";
-        public string InternalParameterlessReturnValue = "InternalMethodVoid";
-        public string ProtectedParameterlessReturnValue = "ProtectedMethodVoid";
-        public string PrivateParameterlessReturnValue = "PrivateMethodVoid";
-
+        public const string StaticProtectedParameterlessReturnValue = "StaticProtected";
+        public const string StaticPublicParameterlessReturnValue = "StaticPublic";
         public static readonly string StaticPublicReadOnlyField = "StaticPublicReadOnlyField";
-
         public static object StaticGenericMethodVoidParameter;
         public static string StaticInternalField = "StaticInternalField";
         public static string StaticPrivateField = "StaticPrivateField";
         public static string StaticProtectedField = "StaticProtectedField";
         public static string StaticPublicField = "StaticPublicField";
         public static string StaticPublicMethodVoidParameter;
+        public static object[] StaticPublicParams;
+        public static Type[] StaticPublicTypeParams;
         public static int StaticPublicValueField = 0;
-
         public static bool StaticVoidInternalExecuted;
         public static string StaticVoidInternalParam;
         public static bool StaticVoidPrivateExecuted;
@@ -40,30 +34,36 @@ namespace DelegatesTest.TestObjects
         public static string StaticVoidProtectedParam;
         public static bool StaticVoidPublicExecuted;
         public static string StaticVoidPublicParam;
+        public static object[] StaticVoidPublicParams;
         public readonly List<int> IndexerBackend = new List<int>(new int[10]);
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
         public object InstanceGenericMethodVoidParameter;
         public double InternalIndexer;
+        public bool InternalMethodVoidExecuted;
+        public string InternalMethodVoidParameter;
+        public string InternalParameterlessReturnValue = "InternalMethodVoid";
         public int PrivateIndexer;
+        public bool PrivateMethodVoidExecuted;
+        public string PrivateMethodVoidParameter;
+        public string PrivateParameterlessReturnValue = "PrivateMethodVoid";
         public double ProtectedIndexer;
+        public bool ProtectedMethodVoidExecuted;
+        public string ProtectedMethodVoidParameter;
+        public string ProtectedParameterlessReturnValue = "ProtectedMethodVoid";
         public int Public3IndexIndexer;
         public int Public4IndexIndexer;
         public string PublicField;
         public int PublicFieldInt;
+        public bool PublicMethodVoidExecuted;
         public string PublicMethodVoidParameter;
-        public string InternalMethodVoidParameter;
-        public string ProtectedMethodVoidParameter;
-        public string PrivateMethodVoidParameter;
+        public string PublicParameterlessReturnValue = "PublicMethodVoid";
+        public object[] PublicParams;
         internal string InternalField;
         protected string ProtectedField;
         private static string _staticOnlySetPropertyBackend;
         private string _onlySetPropertyBackend;
         // ReSharper disable once FieldCanBeMadeReadOnly.Local
         private string _privateField;
-        public static object[] StaticVoidPublicParams;
-        public static object[] StaticPublicParams;
-        public object[] PublicParams;
-
         public TestClass()
         {
             PublicProperty = "PublicProperty";
@@ -79,6 +79,7 @@ namespace DelegatesTest.TestObjects
         internal TestClass(int p)
             : this()
         {
+            Action<object, EventArgs> a = (o, e) => { };
         }
 
         protected TestClass(bool p)
@@ -101,29 +102,11 @@ namespace DelegatesTest.TestObjects
 
         protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
 
+        public event EventCustomDelegate CusDelegEvent;
+
         private event EventHandler<InternalEventArgs> InternalEventBackend;
 
         private event EventHandler<PrivateEventArgs> PrivateEvent;
-
-        public void AddPublicEventHandler(EventHandler<PublicEventArgs> eventHandler)
-        {
-            PublicEvent += eventHandler;
-        }
-
-        internal void AddInternalEventHandler(EventHandler<InternalEventArgs> eventHandler)
-        {
-            InternalEvent += eventHandler;
-        }
-
-        internal void AddProtectedEventHandler(EventHandler<ProtectedEventArgs> eventHandler)
-        {
-            ProtectedEvent += eventHandler;
-        }
-
-        internal void AddPrivateEventHandler(EventHandler<PrivateEventArgs> eventHandler)
-        {
-            PrivateEvent += eventHandler;
-        }
 
         public static string StaticOnlyGetProperty { get; } = "StaticOnlyGetProperty";
 
@@ -137,13 +120,17 @@ namespace DelegatesTest.TestObjects
         public static int StaticPublicPropertyValue { get; set; } = 0;
 
         public string OnlyGetProperty => "OnlyGetProperty";
+
         public string OnlySetProperty
         {
             set { _onlySetPropertyBackend = value; }
         }
 
         public string PublicProperty { get; set; }
+
         public int PublicPropertyInt { get; set; }
+
+        public Type[] PublicTypeParams { get; set; }
 
         internal static string StaticInternalProperty { get; set; } = "StaticInternalProperty";
 
@@ -211,6 +198,7 @@ namespace DelegatesTest.TestObjects
             get { return i1; }
             set { PrivateIndexer = value; }
         }
+
         [IndexerName("TheItem")]
         // ReSharper disable once UnusedMember.Local
         private long this[long s] => s;
@@ -235,56 +223,6 @@ namespace DelegatesTest.TestObjects
             return StaticProtectedProperty;
         }
 
-        public static void PublicStaticGenericMethodVoid<T>()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-        }
-
-        public void PublicInstanceGenericMethodVoid<T>()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-        }
-
-        public Type[] PublicTypeParams { get; set; }
-
-        internal static void InternalStaticGenericMethodVoid<T>()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-        }
-
-        internal void InternalInstanceGenericMethodVoid<T>()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-        }
-
-        internal static void ProtectedStaticGenericMethodVoid<T>()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-        }
-
-        internal void ProtectedInstanceGenericMethodVoid<T>()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-        }
-
-        internal static void PrivateStaticGenericMethodVoid<T>()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-        }
-
-        internal void PrivateInstanceGenericMethodVoid<T>()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-        }
-
         public static T PublicStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
@@ -292,53 +230,10 @@ namespace DelegatesTest.TestObjects
             return new T();
         }
 
-        public T PublicInstanceGenericMethod<T>() where T : new()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        internal static T InternalStaticGenericMethod<T>() where T : new()
+        public static void PublicStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
             StaticPublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        internal T InternalInstanceGenericMethod<T>() where T : new()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        protected static T ProtectedStaticGenericMethod<T>() where T : new()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        protected T ProtectedInstanceGenericMethod<T>() where T : new()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        private static T PrivateStaticGenericMethod<T>() where T : new()
-        {
-            StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
-            return new T();
-        }
-
-        private T PrivateInstanceGenericMethod<T>() where T : new()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
-            return new T();
         }
 
         public static T StaticGenericMethod<T>(T param)
@@ -352,34 +247,6 @@ namespace DelegatesTest.TestObjects
         {
             StaticPublicParams = new object[] { param, i };
             StaticPublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public static T StaticGenericMethodWithType<T>(T param) where T : Base
-        {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public static T StaticGenericMethodWithClass<T>(T param) where T : class
-        {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public static T StaticGenericMethodWithStruc<T>(T param) where T : struct
-        {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public static T StaticGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
-        {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T), typeof(T2) };
             return param;
         }
 
@@ -404,111 +271,38 @@ namespace DelegatesTest.TestObjects
             return new T1();
         }
 
+        public static T StaticGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
+        {
+            StaticPublicParams = new object[] { param };
+            StaticPublicTypeParams = new[] { typeof(T), typeof(T2) };
+            return param;
+        }
+
         public static void StaticGenericMethodVoid<T>(T s) where T : class
         {
             StaticPublicParams = new object[] { s };
             StaticGenericMethodVoidParameter = s;
         }
 
-        public T InstanceGenericMethod<T>(T param)
+        public static T StaticGenericMethodWithClass<T>(T param) where T : class
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] { param };
+            StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
-        public T InstanceGenericMethod<T>(T param, int i) where T : ITestInterface
+        public static T StaticGenericMethodWithStruc<T>(T param) where T : struct
         {
-            PublicParams = new object[] { param, i };
-            PublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] { param };
+            StaticPublicTypeParams = new[] { typeof(T) };
             return param;
         }
 
-        public T InstanceGenericMethodWithType<T>(T param) where T : Base
+        public static T StaticGenericMethodWithType<T>(T param) where T : Base
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] { param };
+            StaticPublicTypeParams = new[] { typeof(T) };
             return param;
-        }
-
-        public T InstanceGenericMethodWithClass<T>(T param) where T : class
-        {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public T InstanceGenericMethodWithStruc<T>(T param) where T : struct
-        {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public T InstanceGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
-        {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T), typeof(T2) };
-            return param;
-        }
-
-        public T InstanceGenericMethod<T>(T param, int i, bool p) where T : struct
-        {
-            PublicParams = new object[] { param, i, p };
-            PublicTypeParams = new[] { typeof(T) };
-            return param;
-        }
-
-        public T1 InstanceGenericMethod<T1, T2>() where T1 : new()
-        {
-            PublicParams = null;
-            PublicTypeParams = new[] { typeof(T1), typeof(T2) };
-            return new T1();
-        }
-
-        public T1 InstanceGenericMethod<T1, T2, T3>(int i) where T1 : new()
-        {
-            PublicParams = new object[] { i };
-            PublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
-            return new T1();
-        }
-
-        public void InstanceGenericMethodVoid<T>(T s) where T : class
-        {
-            PublicParams = new object[] { s };
-            InstanceGenericMethodVoidParameter = s;
-        }
-
-        public static string StaticPublicMethod(string s)
-        {
-            return s;
-        }
-
-        public static string StaticPublicMethod(int i)
-        {
-            return i.ToString();
-        }
-
-        public static int StaticPublicMethodValue(int i)
-        {
-            return i;
-        }
-
-        public static void StaticPublicMethodVoid(string s)
-        {
-            StaticPublicMethodVoidParameter = s;
-        }
-
-        public static void StaticVoidPublic()
-        {
-            StaticVoidPublicExecuted = true;
-            return;
-        }
-
-        public static void StaticVoidPublic(string s)
-        {
-            StaticVoidPublicParam = s;
-            return;
         }
 
         public static string StaticPublic(string s)
@@ -624,46 +418,47 @@ namespace DelegatesTest.TestObjects
             return s;
         }
 
-        internal static string StaticInternal(string s)
-        {
-            return s;
-        }
-
-        protected static string StaticProtected(string s)
-        {
-            return s;
-        }
-
-        private static string StaticPrivate(string s)
-        {
-            return s;
-        }
-
         public static string StaticPublic()
         {
             return StaticPublicParameterlessReturnValue;
         }
 
-        public static Type[] StaticPublicTypeParams;
         public static string StaticPublic<T>()
         {
             StaticPublicTypeParams = new[] { typeof(T) };
             return StaticPublicParameterlessReturnValue;
         }
 
-        internal static string StaticInternal()
+        public static string StaticPublicMethod(string s)
         {
-            return StaticInternalParameterlessReturnValue;
+            return s;
         }
 
-        protected static string StaticProtected()
+        public static string StaticPublicMethod(int i)
         {
-            return StaticProtectedParameterlessReturnValue;
+            return i.ToString();
         }
 
-        private static string StaticPrivate()
+        public static int StaticPublicMethodValue(int i)
         {
-            return StaticPrivateParameterlessReturnValue;
+            return i;
+        }
+
+        public static void StaticPublicMethodVoid(string s)
+        {
+            StaticPublicMethodVoidParameter = s;
+        }
+
+        public static void StaticVoidPublic()
+        {
+            StaticVoidPublicExecuted = true;
+            return;
+        }
+
+        public static void StaticVoidPublic(string s)
+        {
+            StaticVoidPublicParam = s;
+            return;
         }
 
         public static void StaticVoidPublic(string s, string s1)
@@ -740,7 +535,6 @@ namespace DelegatesTest.TestObjects
             return;
         }
 
-
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
@@ -790,6 +584,11 @@ namespace DelegatesTest.TestObjects
             return;
         }
 
+        public void AddPublicEventHandler(EventHandler<PublicEventArgs> eventHandler)
+        {
+            PublicEvent += eventHandler;
+        }
+
         public T GenericMethod<T>(T s)
         {
             return s;
@@ -820,6 +619,90 @@ namespace DelegatesTest.TestObjects
             return ProtectedProperty;
         }
 
+        public T InstanceGenericMethod<T>(T param)
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethod<T>(T param, int i) where T : ITestInterface
+        {
+            PublicParams = new object[] { param, i };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethod<T>(T param, int i, bool p) where T : struct
+        {
+            PublicParams = new object[] { param, i, p };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T1 InstanceGenericMethod<T1, T2>() where T1 : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T1), typeof(T2) };
+            return new T1();
+        }
+
+        public T1 InstanceGenericMethod<T1, T2, T3>(int i) where T1 : new()
+        {
+            PublicParams = new object[] { i };
+            PublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
+            return new T1();
+        }
+
+        public T InstanceGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T), typeof(T2) };
+            return param;
+        }
+
+        public void InstanceGenericMethodVoid<T>(T s) where T : class
+        {
+            PublicParams = new object[] { s };
+            InstanceGenericMethodVoidParameter = s;
+        }
+
+        public T InstanceGenericMethodWithClass<T>(T param) where T : class
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodWithStruc<T>(T param) where T : struct
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public T InstanceGenericMethodWithType<T>(T param) where T : Base
+        {
+            PublicParams = new object[] { param };
+            PublicTypeParams = new[] { typeof(T) };
+            return param;
+        }
+
+        public string InternalMethod()
+        {
+            return InternalParameterlessReturnValue;
+        }
+
+        public void InternalMethodVoid()
+        {
+            InternalMethodVoidExecuted = true;
+        }
+
+        public void InternalMethodVoid(string s)
+        {
+            InternalMethodVoidParameter = s;
+        }
+
         public void InvokeInternalEvent()
         {
             InternalEventBackend?.Invoke(this, new InternalEventArgs());
@@ -830,6 +713,11 @@ namespace DelegatesTest.TestObjects
             PrivateEvent?.Invoke(this, new PrivateEventArgs());
         }
 
+        public void InvokeCusDelegEvent()
+        {
+            CusDelegEvent?.Invoke(this, new EventArgs());
+        }
+
         public void InvokeProtectedEvent()
         {
             ProtectedEvent?.Invoke(this, new ProtectedEventArgs());
@@ -838,6 +726,49 @@ namespace DelegatesTest.TestObjects
         public void InvokePublicEvent()
         {
             PublicEvent?.Invoke(this, new PublicEventArgs());
+        }
+
+        public string PrivateMethod()
+        {
+            return PrivateParameterlessReturnValue;
+        }
+
+        public void PrivateMethodVoid(string s)
+        {
+            PrivateMethodVoidParameter = s;
+        }
+
+        public void PrivateMethodVoid()
+        {
+            PrivateMethodVoidExecuted = true;
+        }
+
+        public string ProtectedMethod()
+        {
+            return ProtectedParameterlessReturnValue;
+        }
+
+        public void ProtectedMethodVoid()
+        {
+            ProtectedMethodVoidExecuted = true;
+        }
+
+        public void ProtectedMethodVoid(string s)
+        {
+            ProtectedMethodVoidParameter = s;
+        }
+
+        public T PublicInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        public void PublicInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
         }
 
         public string PublicMethod()
@@ -946,36 +877,6 @@ namespace DelegatesTest.TestObjects
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
-            return s;
-        }
-
-        public string InternalMethod()
-        {
-            return InternalParameterlessReturnValue;
-        }
-
-        internal string InternalMethod(string s)
-        {
-            return s;
-        }
-
-        public string ProtectedMethod()
-        {
-            return ProtectedParameterlessReturnValue;
-        }
-
-        protected string ProtectedMethod(string s)
-        {
-            return s;
-        }
-
-        public string PrivateMethod()
-        {
-            return PrivateParameterlessReturnValue;
-        }
-
-        private string PrivateMethod(string s)
-        {
             return s;
         }
 
@@ -1088,40 +989,40 @@ namespace DelegatesTest.TestObjects
             PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
         }
 
-        public void InternalMethodVoid()
+        internal static T InternalStaticGenericMethod<T>() where T : new()
         {
-            InternalMethodVoidExecuted = true;
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
+            return new T();
         }
 
-        public void InternalMethodVoid(string s)
+        internal static void InternalStaticGenericMethodVoid<T>()
         {
-            InternalMethodVoidParameter = s;
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
         }
 
-        public void ProtectedMethodVoid()
+        internal static void PrivateStaticGenericMethodVoid<T>()
         {
-            ProtectedMethodVoidExecuted = true;
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
         }
 
-        public void ProtectedMethodVoid(string s)
+        internal static void ProtectedStaticGenericMethodVoid<T>()
         {
-            ProtectedMethodVoidParameter = s;
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
         }
 
-        public void PrivateMethodVoid(string s)
+        internal static string StaticInternal(string s)
         {
-            PrivateMethodVoidParameter = s;
+            return s;
         }
 
-        public void PrivateMethodVoid()
+        internal static string StaticInternal()
         {
-            PrivateMethodVoidExecuted = true;
+            return StaticInternalParameterlessReturnValue;
         }
-
-        public bool PublicMethodVoidExecuted;
-        public bool InternalMethodVoidExecuted;
-        public bool ProtectedMethodVoidExecuted;
-        public bool PrivateMethodVoidExecuted;
 
         internal static string StaticInternalMethod(string s)
         {
@@ -1138,6 +1039,64 @@ namespace DelegatesTest.TestObjects
         {
             StaticVoidInternalParam = s;
             return;
+        }
+
+        internal void AddInternalEventHandler(EventHandler<InternalEventArgs> eventHandler)
+        {
+            InternalEvent += eventHandler;
+        }
+        internal void AddPrivateEventHandler(EventHandler<PrivateEventArgs> eventHandler)
+        {
+            PrivateEvent += eventHandler;
+        }
+
+        internal void AddProtectedEventHandler(EventHandler<ProtectedEventArgs> eventHandler)
+        {
+            ProtectedEvent += eventHandler;
+        }
+        internal T InternalInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        internal void InternalInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+        internal string InternalMethod(string s)
+        {
+            return s;
+        }
+
+        internal void PrivateInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+
+        internal void ProtectedInstanceGenericMethodVoid<T>()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+        }
+        protected static T ProtectedStaticGenericMethod<T>() where T : new()
+        {
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        protected static string StaticProtected(string s)
+        {
+            return s;
+        }
+
+        protected static string StaticProtected()
+        {
+            return StaticProtectedParameterlessReturnValue;
         }
 
         protected static string StaticProtectedMethod(string s)
@@ -1157,6 +1116,35 @@ namespace DelegatesTest.TestObjects
             return;
         }
 
+        protected T ProtectedInstanceGenericMethod<T>() where T : new()
+        {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        protected string ProtectedMethod(string s)
+        {
+            return s;
+        }
+
+        private static T PrivateStaticGenericMethod<T>() where T : new()
+        {
+            StaticPublicParams = null;
+            StaticPublicTypeParams = new[] { typeof(T) };
+            return new T();
+        }
+
+        private static string StaticPrivate(string s)
+        {
+            return s;
+        }
+
+        private static string StaticPrivate()
+        {
+            return StaticPrivateParameterlessReturnValue;
+        }
+
         private static string StaticPrivateMethod(string s)
         {
             return s;
@@ -1174,11 +1162,17 @@ namespace DelegatesTest.TestObjects
             return;
         }
 
-        public class PublicEventArgs : EventArgs
+        private T PrivateInstanceGenericMethod<T>() where T : new()
         {
+            PublicParams = null;
+            PublicTypeParams = new[] { typeof(T) };
+            return new T();
         }
-
-        internal class InternalEventArgs : EventArgs
+        private string PrivateMethod(string s)
+        {
+            return s;
+        }
+        public class PrivateEventArgs : EventArgs
         {
         }
 
@@ -1186,7 +1180,11 @@ namespace DelegatesTest.TestObjects
         {
         }
 
-        public class PrivateEventArgs : EventArgs
+        public class PublicEventArgs : EventArgs
+        {
+        }
+
+        internal class InternalEventArgs : EventArgs
         {
         }
     }

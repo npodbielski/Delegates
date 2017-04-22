@@ -130,6 +130,7 @@ namespace Delegates
             return methodInfo?.CreateDelegate<TDelegate>();
         }
 
+        //TODO: consider allowing to pass incorrect parameters types or not at all if there is only one method with given name
         /// <summary>
         /// Creates delegate to non-void generic static method with unspecified number of parameters passed as array 
         /// of objects

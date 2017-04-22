@@ -105,6 +105,9 @@
     <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Derived.cs">
       <Link>TestObjects\Derived.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\EventCustomDelegate.cs">
+      <Link>TestObjects\EventCustomDelegate.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Func17.cs">
       <Link>TestObjects\Func17.cs</Link>
     </Compile>

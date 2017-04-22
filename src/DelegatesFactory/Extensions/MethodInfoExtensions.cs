@@ -28,13 +28,21 @@ namespace Delegates.Extensions
 #endif
         }
 
+        public static void IsEventArgsTypeCorrect(this MethodInfo method, Type eventArgsType)
+        {
+            var argsType = method.GetParameters()[0].ParameterType.GetMethod("Invoke")
+                .GetParameters()[1].ParameterType;
+            if (argsType != eventArgsType)
+            {
+                throw new ArgumentException(
+                    $"Provided event args type \'{eventArgsType.Name}\' is not compatible with expected type " +
+                    $"\'{argsType.Name}\'");
+            }
+        }
+
         public static void IsEventArgsTypeCorrect<TEventArgs>(this MethodInfo method)
         {
-            var argsType = method.GetParameters()[0].ParameterType;
-            if (argsType != typeof(TEventArgs))
-            {
-                throw new ArgumentException("Provided event args type '" + typeof(TEventArgs).Name + "' is not compatible with expected type '" + argsType.Name + "'");
-            }
+            IsEventArgsTypeCorrect(method, typeof(TEventArgs));
         }
     }
 }

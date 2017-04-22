@@ -23,7 +23,23 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TSource, TEventArgs>(eventName, TypeExtensions.AddAccessor);
+            return EventAccessor<TSource, EventHandler<TEventArgs>>(eventName, TypeExtensions.AddAccessor);
+        }
+
+        /// <summary>
+        /// Creates delegate for adding event handler with source instance type and event method delegate type
+        /// </summary>
+        /// <typeparam name="TSource">Source type with event</typeparam>
+        /// <typeparam name="TDelegate">Event method delegate type. Can be either custom delegate or 
+        /// <see cref="EventHandler{TEventArgs}"/>, but for second case it is recommended to use 
+        /// <see cref="EventAdd{TSource, TEventArgs}"/> instead.
+        /// </typeparam>
+        /// <param name="eventName">Name of an event</param>
+        /// <returns>Delegate for event add accessor</returns>
+        public static Action<TSource, TDelegate> EventAddCustomDelegate<TSource, TDelegate>
+            (string eventName) where TDelegate : class
+        {
+            return EventAccessor<TSource, TDelegate>(eventName, TypeExtensions.AddAccessor);
         }
 
         /// <summary>
@@ -39,7 +55,23 @@ namespace Delegates
             where TEventArgs : EventArgs
 #endif
         {
-            return EventAccessor<TEventArgs>(source, eventName, TypeExtensions.AddAccessor);
+            return EventAccessor<EventHandler<TEventArgs>>(source, eventName, TypeExtensions.AddAccessor);
+        }
+
+        /// <summary>
+        /// Creates delegate for adding event handler with source instance as object and event method delegate type
+        /// </summary>
+        /// <typeparam name="TDelegate">Event method delegate type. Can be either custom delegate or 
+        /// <see cref="EventHandler{TEventArgs}"/>, but for second case it is recommended to use 
+        /// <see cref="DelegateFactory.EventAdd{TEventArgs}"/> instead.
+        /// </typeparam>
+        /// <param name="source">Source type with defined event</param>
+        /// <param name="eventName">Name of an event</param>
+        /// <returns>Delegate for event add accessor</returns>
+        public static Action<object, TDelegate> EventAddCustomDelegate<TDelegate>(
+            this Type source, string eventName) where TDelegate : class
+        {
+            return EventAccessor<TDelegate>(source, eventName, TypeExtensions.AddAccessor);
         }
 
         /// <summary>
@@ -72,19 +104,25 @@ namespace Delegates
         //            var eventInfo = source.GetEventInfo(eventName);
         //            return eventInfo?.AddMethod.CreateDelegate<Action<EventHandler<TEvent>>>();
         //        }
-        
-        private static Action<TSource, EventHandler<TEventArgs>> EventAccessor<TSource, TEventArgs>
-            (string eventName, string accessorName)
-#if NET35||NET4||PORTABLE
-            where TEventArgs : EventArgs
-#endif
+
+        private static Action<TSource, TDelegate> EventAccessor<TSource, TDelegate>
+            (string eventName, string accessorName) where TDelegate : class
         {
             var sourceType = typeof(TSource);
             var accessor = sourceType.GetEventAccessor(eventName, accessorName);
             if (accessor != null)
             {
-                accessor.IsEventArgsTypeCorrect<EventHandler<TEventArgs>>();
-                return accessor.CreateDelegate<Action<TSource, EventHandler<TEventArgs>>>();
+                var handlerType = accessor.GetParameters()[0].ParameterType;
+                DelegateHelper.IsCompatible<TDelegate>(handlerType);
+                if (typeof(TDelegate) == handlerType)
+                {
+                    var eventArgsType = typeof(TDelegate).GetDelegateSecondParameter();
+                    accessor.IsEventArgsTypeCorrect(eventArgsType);
+                    return accessor.CreateDelegate<Action<TSource, TDelegate>>();
+                }
+                DelegateHelper.CheckDelegate<TDelegate>();
+                DelegateHelper.IsCompatible<TDelegate>(accessor.GetParameters()[0].ParameterType);
+                return EventAccessorImpl<Action<TSource, TDelegate>>(typeof(TSource), eventName, accessorName);
             }
             return null;
         }
@@ -96,14 +134,17 @@ namespace Delegates
             if (eventInfo != null)
             {
                 var accessor = accessorName == TypeExtensions.AddAccessor ? eventInfo.AddMethod : eventInfo.RemoveMethod;
-                var eventArgsType = eventInfo.EventHandlerType.GenericTypeArguments()[0];
+                var eventDelegateType = eventInfo.EventHandlerType;
                 var instanceParameter = Expression.Parameter(typeof(object), "source");
-                var delegateTypeParameter = Expression.Parameter(typeof(object), "delegate");
-                var methodCallExpression =
-                    Expression.Call(EventsHelper.EventHandlerFactoryMethodInfo.MakeGenericMethod(eventArgsType, source),
-                        delegateTypeParameter, Expression.Constant(accessorName == TypeExtensions.RemoveAccessor));
-                var lambda = Expression.Lambda<TDelegate>(Expression.Call(Expression.Convert(instanceParameter, source),
-                        accessor, methodCallExpression),
+                var delegateTypeParameter = Expression.Parameter(typeof(TDelegate).GetDelegateSecondParameter(), "delegate");
+                var eventFactory = EventsHelper.EventHandlerFactoryMethodInfo.MakeGenericMethod(
+                    delegateTypeParameter.Type, eventDelegateType, eventDelegateType.GetDelegateSecondParameter(), 
+                    source);
+                var methodCallExpression = Expression.Call(eventFactory,
+                      delegateTypeParameter, Expression.Constant(accessorName == TypeExtensions.RemoveAccessor));
+                var callExpression = Expression.Call(Expression.Convert(instanceParameter, source),
+                    accessor, methodCallExpression);
+                var lambda = Expression.Lambda<TDelegate>(callExpression,
                     instanceParameter, delegateTypeParameter);
                 return lambda.Compile();
             }
@@ -116,21 +157,25 @@ namespace Delegates
             return EventAccessorImpl<TDelegate>(source, eventName, TypeExtensions.AddAccessor);
         }
 
-        private static Action<object, EventHandler<TEventArgs>> EventAccessor<TEventArgs>
-            (Type source, string eventName, string accessorName)
-#if NET35||NET4||PORTABLE
-            where TEventArgs : EventArgs
-#endif
+        private static Action<object, TDelegate> EventAccessor<TDelegate>
+            (Type source, string eventName, string accessorName) where TDelegate : class
         {
+            DelegateHelper.CheckDelegate<TDelegate>();
             var accessor = source.GetEventAccessor(eventName, accessorName);
             if (accessor != null)
             {
-                var instanceParameter = Expression.Parameter(typeof(object), "source");
-                var delegateTypeParameter = Expression.Parameter(typeof(EventHandler<TEventArgs>), "delegate");
-                var lambda = Expression.Lambda(Expression.Call(Expression.Convert(instanceParameter, source),
-                        accessor, delegateTypeParameter),
-                    instanceParameter, delegateTypeParameter);
-                return (Action<object, EventHandler<TEventArgs>>)lambda.Compile();
+                var handlerType = accessor.GetParameters()[0].ParameterType;
+                DelegateHelper.IsCompatible<TDelegate>(handlerType);
+                if (typeof(TDelegate) == handlerType)
+                {
+                    var instanceParameter = Expression.Parameter(typeof(object), "source");
+                    var delegateTypeParameter = Expression.Parameter(typeof(TDelegate), "delegate");
+                    var lambda = Expression.Lambda<Action<object, TDelegate>>(
+                        Expression.Call(Expression.Convert(instanceParameter, source), accessor, delegateTypeParameter),
+                        instanceParameter, delegateTypeParameter);
+                    return lambda.Compile();
+                }
+                return EventAccessorImpl<Action<object, TDelegate>>(source, eventName, accessorName);
             }
             return null;
         }

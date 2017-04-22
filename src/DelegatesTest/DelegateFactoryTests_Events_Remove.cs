@@ -324,5 +324,111 @@ namespace DelegatesTest
             _interfaceImpl.InvokeEvent();
             Assert.IsFalse(eventExecuted);
         }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_ByObjects()
+        {
+            var addAccessor = _testClassType.EventAdd("CusDelegEvent");
+            var removeAccessor = _testClassType.EventRemove("CusDelegEvent");
+            Assert.IsNotNull(removeAccessor);
+            var eventExecuted = false;
+            Action<object, object> eventAction = (sender, args) =>
+            {
+                eventExecuted = true;
+                Assert.IsInstanceOfType(args, typeof(EventArgs));
+            };
+            addAccessor(_testClassInstance, eventAction);
+            removeAccessor(_testClassInstance, eventAction);
+            _testClassInstance.InvokeCusDelegEvent();
+            Assert.IsFalse(eventExecuted);
+        }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_ByObjectAndType()
+        {
+            var addAccessor = _testClassType.EventAdd<EventArgs>("CusDelegEvent");
+            var removeAccessor = _testClassType.EventRemove<EventArgs>("CusDelegEvent");
+            Assert.IsNotNull(removeAccessor);
+            var eventExecuted = false;
+            EventHandler<EventArgs> eventAction = (sender, args) =>
+            {
+                eventExecuted = true;
+                Assert.IsInstanceOfType(args, typeof(EventArgs));
+            };
+            addAccessor(_testClassInstance, eventAction);
+            removeAccessor(_testClassInstance, eventAction);
+            _testClassInstance.InvokeCusDelegEvent();
+            Assert.IsFalse(eventExecuted);
+        }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_ByTypeAndObject()
+        {
+            var addAccessor = DelegateFactory.EventAdd<TestClass>("CusDelegEvent");
+            var removeAccessor = DelegateFactory.EventRemove<TestClass>("CusDelegEvent");
+            Assert.IsNotNull(removeAccessor);
+            var eventExecuted = false;
+            Action<TestClass, object> eventAction = (sender, args) =>
+            {
+                eventExecuted = true;
+                Assert.IsInstanceOfType(args, typeof(EventArgs));
+            };
+            addAccessor(_testClassInstance, eventAction);
+            removeAccessor(_testClassInstance, eventAction);
+            _testClassInstance.InvokeCusDelegEvent();
+            Assert.IsFalse(eventExecuted);
+        }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_ByTypesAndEventHandler()
+        {
+            var addAccessor = DelegateFactory.EventAdd<TestClass, EventArgs>("CusDelegEvent");
+            var removeAccessor = DelegateFactory.EventRemove<TestClass, EventArgs>("CusDelegEvent");
+            Assert.IsNotNull(removeAccessor);
+            var eventExecuted = false;
+            EventHandler<EventArgs> eventAction = (sender, args) =>
+            {
+                eventExecuted = true;
+                Assert.IsInstanceOfType(args, typeof(EventArgs));
+            };
+            addAccessor(_testClassInstance, eventAction);
+            removeAccessor(_testClassInstance, eventAction);
+            _testClassInstance.InvokeCusDelegEvent();
+            Assert.IsFalse(eventExecuted);
+        }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_ByTypes()
+        {
+            var addAccessor = DelegateFactory.EventAddCustomDelegate<TestClass, EventCustomDelegate>("CusDelegEvent");
+            var removeAccessor = DelegateFactory.EventRemoveCustomDelegate<TestClass, EventCustomDelegate>("CusDelegEvent");
+            Assert.IsNotNull(removeAccessor);
+            var eventExecuted = false;
+            EventCustomDelegate eventAction = (sender, args) =>
+            {
+                eventExecuted = true;
+                Assert.IsInstanceOfType(args, typeof(EventArgs));
+            };
+            addAccessor(_testClassInstance, eventAction);
+            removeAccessor(_testClassInstance, eventAction);
+            _testClassInstance.InvokeCusDelegEvent();
+            Assert.IsFalse(eventExecuted);
+        }
+
+        [TestMethod]
+        public void EventRemove_CustomDelegate_IncompatibleDelegate()
+        {
+            ArgumentException ae = null;
+            try
+            {
+                DelegateFactory.EventRemoveCustomDelegate<TestClass, EventHandler<AfterAssemblyCleanupEventArgs>>("CusDelegEvent");
+            }
+            catch (ArgumentException e)
+            {
+                ae = e;
+            }
+            Assert.IsNotNull(ae);
+            Assert.IsInstanceOfType(ae, typeof(ArgumentException));
+        }
     }
 }

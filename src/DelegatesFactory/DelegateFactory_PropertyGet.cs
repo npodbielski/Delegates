@@ -82,8 +82,7 @@ namespace Delegates
         {
             var source = typeof(TSource);
             var propertyInfo = source.GetPropertyInfo(propertyName, false);
-            return
-                propertyInfo?.GetMethod?.CreateDelegate<StructGetFunc<TSource, TProperty>>();
+            return propertyInfo?.GetMethod?.CreateDelegate<StructGetFunc<TSource, TProperty>>();
         }
 
         private static TDelegate PropertyGetImpl<TDelegate>(this Type source, string propertyName)
