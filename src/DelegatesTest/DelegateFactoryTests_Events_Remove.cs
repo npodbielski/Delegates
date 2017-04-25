@@ -421,7 +421,7 @@ namespace DelegatesTest
             ArgumentException ae = null;
             try
             {
-                DelegateFactory.EventRemoveCustomDelegate<TestClass, EventHandler<AfterAssemblyCleanupEventArgs>>("CusDelegEvent");
+                DelegateFactory.EventRemoveCustomDelegate<TestClass, EventHandler<ConsoleCancelEventArgs>>("CusDelegEvent");
             }
             catch (ArgumentException e)
             {

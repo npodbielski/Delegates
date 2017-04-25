@@ -1,7 +1,8 @@
 {
   "version": "1.0.0-*",
   "dependencies": {
-    "NETStandard.Library": "1.6.1"
+    "NETStandard.Library": "1.6.1",
+    "System.Reflection.Emit": "4.3.0"
   },
   "frameworks": {
     "netstandard1.6": {

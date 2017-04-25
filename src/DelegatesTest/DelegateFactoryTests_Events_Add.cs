@@ -380,7 +380,7 @@ namespace DelegatesTest
             ArgumentException ae = null;
             try
             {
-                DelegateFactory.EventAddCustomDelegate<TestClass, EventHandler<AfterAssemblyCleanupEventArgs>>("CusDelegEvent");
+                DelegateFactory.EventAddCustomDelegate<TestClass, EventHandler<ConsoleCancelEventArgs>>("CusDelegEvent");
             }
             catch (ArgumentException e)
             {
