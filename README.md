@@ -38,27 +38,27 @@ delegate for default constructor can be obtained with DelegateFactory in followi
 
 1. If you are have access to type in compile time:
 
- `var cd = DelegateFactory.DefaultContructor<TestClass>();`
+ `var cd = DelegateFactory.DefaultConstructor<TestClass>();`
 
  Created delegate in such case is `Func<TestClass>`
- The same delegate can be created with Contructor method:
+ The same delegate can be created with Constructor method:
 
- `var cd = DelegateFactory.Contructor<Func<TestClass>>();`
+ `var cd = DelegateFactory.Constructor<Func<TestClass>>();`
 
 2. If you do not have access to type in compile time (private type, dynamic or otherwise inaccessible)
 
- `var cd = TestClassType.DefaultContructor();`
+ `var cd = TestClassType.DefaultConstructor();`
 
  Created delegate in such case is `Func<object>`
- The same delegate can be created with Contructor method:
+ The same delegate can be created with Constructor method:
 
- `var cd = TestClassType.Contructor<Func<object>>();`
+ `var cd = TestClassType.Constructor<Func<object>>();`
 
  Return value is of object type, so we cannot access its members directly, without casting or if it is not possible, members can be accessed via delegates.
 
-3. If for some reason you want to create delegate to different constructor depending on some arbitrary, runtime conditions or you do not have access to parameter types in compile time, Contructor(params Type[]) method overload can be used:
+3. If for some reason you want to create delegate to different constructor depending on some arbitrary, runtime conditions or you do not have access to parameter types in compile time, Constructor(params Type[]) method overload can be used:
 
- `var cd = TestClassType.Contructor();`
+ `var cd = TestClassType.Constructor();`
 
  Created delegate in such case is `Func<object[]. object>`
  You can call it in following way:
@@ -80,7 +80,7 @@ delegate can be created in following ways:
 
 1. If you are have access to type in compile time:
 
- `var c = DelegateFactory.Contructor<Func<int, TestClass>>();`
+ `var c = DelegateFactory.Constructor<Func<int, TestClass>>();`
 
  Created delegate can be called as any other method that accepts single parameter of Int type:
 
@@ -88,7 +88,7 @@ delegate can be created in following ways:
 
 2. If you do not have access to type in compile time:
 
- `var c = TestClassType.Contructor<Func<int, object>>();`
+ `var c = TestClassType.Constructor<Func<int, object>>();`
 
  Created delegate can be called as any other method that accepts single parameter of Int type:
 
@@ -96,9 +96,9 @@ delegate can be created in following ways:
 
  Return value is type of object, so we cannot access its members directly, without casting or if it is not possible, members can be accessed via delegates.
 
-3. If for some reason you want to create delegate to different constructor depending on some arbitrary, runtime conditions or you do not have access to parameter types in compile time, Contructor(params Type[]) method overload can be used:
+3. If for some reason you want to create delegate to different constructor depending on some arbitrary, runtime conditions or you do not have access to parameter types in compile time, Constructor(params Type[]) method overload can be used:
 
- `var c = TestClassType.Contructor(typeof(int));`
+ `var c = TestClassType.Constructor(typeof(int));`
 
  Created delegate in such case is `Func<object[]. object>`
  You can call it in following way:
@@ -109,7 +109,7 @@ delegate can be created in following ways:
 
 Delegates can be created for any constructor (visibility do not matter) with any combination of parameters. There is no limitation for number of parameters of constructor. All of above methods works for both classes and structures.
 
-If you have access to all neccessary types and can create compatible delegate type, `Contructor<TDelegate>` method can be used. TDelegate type must follow these rules:
+If you have access to all neccessary types and can create compatible delegate type, `Constructor<TDelegate>` method can be used. TDelegate type must follow these rules:
 - parameters of delegate *must be* exactly of the same types and order as constructor
 - return type of delegate *must be* type with constructor
 
@@ -119,26 +119,26 @@ I.e. if you constructor have 3 parameters:
 
 TDelegate *must be* `Func<string,int,bool,TestClass>`. It is because collection of constructor parameters are taked from TDelegate definition and constructor is searched in return type of defined TDelegate.
 
-`var c = DelegateFactory.Contructor<Func<string, int, bool, TestClass>>();`
+`var c = DelegateFactory.Constructor<Func<string, int, bool, TestClass>>();`
 
 There is no limitation for type of delegate that can be accepted. For example, it can be `Func<>`, but do not have to. You can create your own delegate type, but it is must follow above restrictions.
 
 `public delegate TestClass CustomCtrSingleParam(int i);
-var cd = DelegateFactory.Contructor<CustomCtrSingleParam>();
+var cd = DelegateFactory.Constructor<CustomCtrSingleParam>();
 var instance = cd(0);`
 
 
-If you do not have access to type with constructor in compile time and still have access to constructor parameters types, `Contructor<TDelegate>(this Type)` extension method can be used. In this case return type of delegate can be any type that can be casted from source type (i.e. interface of TestClass, base type or object).
+If you do not have access to type with constructor in compile time and still have access to constructor parameters types, `Constructor<TDelegate>(this Type)` extension method can be used. In this case return type of delegate can be any type that can be casted from source type (i.e. interface of TestClass, base type or object).
 
-`var c = TestClassType.Contructor<Func<string, string, DateTime, object>>();`
+`var c = TestClassType.Constructor<Func<string, string, DateTime, object>>();`
 
 Restriction for parameters types and order still applies. 
 
 
-However if you do not have access to parameters types `Contructor(this Type, params Type[])` extension method ca be used. Array of parameters types must be *exactly the same* order and length as type of parameters of constructor. Overload do not require any delegate type. Instead have fixed delegate to `Func<object[], object>`. First parameter of created delegate is array of all constructor parameters values. It can be larger than required collection. Returned object is created instance. There is no limitation of number of parameters of constructor.
+However if you do not have access to parameters types `Constructor(this Type, params Type[])` extension method ca be used. Array of parameters types must be *exactly the same* order and length as type of parameters of constructor. Overload do not require any delegate type. Instead have fixed delegate to `Func<object[], object>`. First parameter of created delegate is array of all constructor parameters values. It can be larger than required collection. Returned object is created instance. There is no limitation of number of parameters of constructor.
 
-`var c = TestClassType.Contructor(typeof(bool));`
-`var c = TestClassType.Contructor(typeof(string), typeof(bool), typeof(IDisposable));`
+`var c = TestClassType.Constructor(typeof(bool));`
+`var c = TestClassType.Constructor(typeof(string), typeof(bool), typeof(IDisposable));`
 
 
 ###Static Properties

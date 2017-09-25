@@ -16,7 +16,7 @@ namespace Delegates
         /// <typeparam name="TDelegate">Constructor delegate type. It should have parameters of searched constructor 
         /// and return constructed type.</typeparam>
         /// <returns>Requested constructor delegate</returns>
-        public static TDelegate Contructor<TDelegate>() where TDelegate : class
+        public static TDelegate Constructor<TDelegate>() where TDelegate : class
         {
             var source = GetDelegateReturnType<TDelegate>();
             var ctrArgs = GetDelegateArguments<TDelegate>();
@@ -39,7 +39,7 @@ namespace Delegates
         /// <param name="source">Type to be constructed</param>
         /// <param name="ctrArgs">Array of types of constructor parameters</param>
         /// <returns>Constructor delegate</returns>
-        public static Func<object[], object> Contructor(this Type source, params Type[] ctrArgs)
+        public static Func<object[], object> Constructor(this Type source, params Type[] ctrArgs)
         {
             var constructorInfo = source.GetConstructorInfo(ctrArgs);
             if (constructorInfo == null)
@@ -69,7 +69,7 @@ namespace Delegates
         /// constructor and return constructed type.</typeparam>
         /// <param name="source">Type to be constructed</param>
         /// <returns>Constructor delegate</returns>
-        public static TDelegate Contructor<TDelegate>(this Type source)
+        public static TDelegate Constructor<TDelegate>(this Type source)
             where TDelegate : class
         {
             var ctrArgs = GetDelegateArguments<TDelegate>();
@@ -94,9 +94,9 @@ namespace Delegates
         /// </summary>
         /// <typeparam name="TSource">Type of instance to be created by delegate.</typeparam>
         /// <returns>Default constructor delegate</returns>
-        public static Func<TSource> DefaultContructor<TSource>()
+        public static Func<TSource> DefaultConstructor<TSource>()
         {
-            return Contructor<Func<TSource>>();
+            return Constructor<Func<TSource>>();
         }
 
         /// <summary>
@@ -104,9 +104,9 @@ namespace Delegates
         /// </summary>
         /// <param name="type">Type to be constructed</param>
         /// <returns>Default constructor delegate</returns>
-        public static Func<object> DefaultContructor(this Type type)
+        public static Func<object> DefaultConstructor(this Type type)
         {
-            return type.Contructor<Func<object>>();
+            return type.Constructor<Func<object>>();
         }
     }
 }

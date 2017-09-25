@@ -38,22 +38,22 @@ namespace DelegatesApp
 
         private static void TestConstructors()
         {
-            var cd = DelegateFactory.DefaultContructor<TestClass>();
-            var cd1 = Type.DefaultContructor();
-            var cd2 = Type.Contructor<Func<object>>();
+            var cd = DelegateFactory.DefaultConstructor<TestClass>();
+            var cd1 = Type.DefaultConstructor();
+            var cd2 = Type.Constructor<Func<object>>();
 
             var t_ = cd();
             var t1 = cd1();
             var t2 = cd2();
 
-            var c1 = DelegateFactory.Contructor<Func<TestClass>>();
-            var c2 = DelegateFactory.Contructor<Func<int, TestClass>>();
-            var c3 = DelegateFactory.Contructor<Func<bool, TestClass>>();
-            var c4 = DelegateFactory.Contructor<Func<string, TestClass>>();
-            var c5 = DelegateFactory.Contructor<Func<int, TestClass>>();
-            var c6 = Type.Contructor(typeof(int));
-            var c7 = typeof(TestStruct).Contructor<Func<int, object>>();
-            var c8 = typeof(TestStruct).Contructor(typeof(int));
+            var c1 = DelegateFactory.Constructor<Func<TestClass>>();
+            var c2 = DelegateFactory.Constructor<Func<int, TestClass>>();
+            var c3 = DelegateFactory.Constructor<Func<bool, TestClass>>();
+            var c4 = DelegateFactory.Constructor<Func<string, TestClass>>();
+            var c5 = DelegateFactory.Constructor<Func<int, TestClass>>();
+            var c6 = Type.Constructor(typeof(int));
+            var c7 = typeof(TestStruct).Constructor<Func<int, object>>();
+            var c8 = typeof(TestStruct).Constructor(typeof(int));
 
             var t3 = c1();
             var t4 = c2(0);
