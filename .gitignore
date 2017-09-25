@@ -33,3 +33,4 @@ Platforms/NETCore/DelegatesFactory/**/*.cs
 Platforms/NETCore/DelegatesTest/**/*.cs
 Platforms/NETStandard/DelegatesTest/**/*.cs
 **/project.fragment.lock.json
+**.nupkg
