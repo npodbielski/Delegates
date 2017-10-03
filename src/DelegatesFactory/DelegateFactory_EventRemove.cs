@@ -1,5 +1,6 @@
 using System;
 using Delegates.Extensions;
+using Delegates.Helper;
 
 namespace Delegates
 {
@@ -36,6 +37,7 @@ namespace Delegates
         public static Action<TSource, TDelegate> EventRemoveCustomDelegate<TSource, TDelegate>
             (string eventName) where TDelegate : class
         {
+            DelegateHelper.CheckDelegate<TDelegate>();
             return EventAccessor<TSource, TDelegate>(eventName, TypeExtensions.RemoveAccessor);
         }
 

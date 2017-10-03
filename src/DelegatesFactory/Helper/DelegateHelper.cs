@@ -1,8 +1,17 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateHelper.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2017 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Linq;
 using System.Reflection;
+using Delegates.Extensions;
+
 #if !(NETCORE || NET45)
 using Delegates.Extensions;
+
 #endif
 
 namespace Delegates.Helper
@@ -81,7 +90,8 @@ namespace Delegates.Helper
             {
                 return parameters.Skip(1).Take(1).First().ParameterType;
             }
-            throw new ArgumentException("TDelegate type do not have 2 parameters. Check if Delegate is defined correctly!");
+            throw new ArgumentException(
+                "TDelegate type do not have 2 parameters. Check if Delegate is defined correctly!");
         }
 
         private static MethodInfo CheckInvokeMethod(Type delegateType)
@@ -125,6 +135,17 @@ namespace Delegates.Helper
                                             $"{secondInvoke.ReturnType.FullName} of target delegate {@delegate.FullName}");
             }
             return parametersCorrect;
+        }
+
+        public static void IsEventArgsTypeCorrect(Type destinationArgs, Type sourceArgs, bool allowBase)
+        {
+            if (!allowBase && destinationArgs != sourceArgs
+                ||allowBase && !sourceArgs.CanBeAssignedFrom(destinationArgs))
+            {
+                throw new ArgumentException(
+                    $"Provided event args type \'{sourceArgs.Name}\' is not compatible with expected type " +
+                    $"\'{destinationArgs.Name}\'");
+            }
         }
     }
 }

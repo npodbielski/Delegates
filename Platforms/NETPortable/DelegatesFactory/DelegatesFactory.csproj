@@ -74,6 +74,9 @@
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventAdd.cs">
       <Link>DelegateFactory_EventAdd.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventInvoke.cs">
+      <Link>DelegateFactory_EventInvoke.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventRemove.cs">
       <Link>DelegateFactory_EventRemove.cs</Link>
     </Compile>
@@ -154,5 +157,5 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />  
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>

@@ -19,7 +19,8 @@ namespace Delegates
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="fieldName">Field name</param>
         /// <returns>Delegate for retrieving instance field value</returns>
-        public static Func<TSource, TField> FieldGet<TSource, TField>(string fieldName)
+        public static Func<TSource, TField> 
+            FieldGet<TSource, TField>(string fieldName)
         {
             return typeof(TSource).FieldGetImpl<Func<TSource, TField>>(fieldName);
         }

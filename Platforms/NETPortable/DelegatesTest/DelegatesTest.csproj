@@ -62,6 +62,9 @@
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Add.cs">
       <Link>DelegateFactoryTests_Events_Add.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Invoke.cs">
+      <Link>DelegateFactoryTests_Events_Invoke.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
       <Link>DelegateFactoryTests_Events_Remove.cs</Link>
     </Compile>

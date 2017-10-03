@@ -62,6 +62,9 @@
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
       <Link>DelegateFactoryTests_Events_Remove.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Invoke.cs">
+      <Link>DelegateFactoryTests_Events_Invoke.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs">
       <Link>DelegateFactoryTests_Fields_GetValue.cs</Link>
     </Compile>
@@ -152,6 +155,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\NET35\DelegatesTest\DelegatesTest.csproj">
+      <Project>{B26BA86D-3DC9-4D55-93DE-68152849518D}</Project>
+      <Name>DelegatesTest</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
       <Project>{195c742a-24d5-46f2-9d49-f69964951d14}</Project>
       <Name>DelegatesFactory</Name>

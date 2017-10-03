@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MethodInfoExtensions.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2017 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Reflection;
 using Delegates.Helper;
 
@@ -32,12 +38,7 @@ namespace Delegates.Extensions
         {
             var argsType = method.GetParameters()[0].ParameterType.GetMethod("Invoke")
                 .GetParameters()[1].ParameterType;
-            if (argsType != eventArgsType)
-            {
-                throw new ArgumentException(
-                    $"Provided event args type \'{eventArgsType.Name}\' is not compatible with expected type " +
-                    $"\'{argsType.Name}\'");
-            }
+            DelegateHelper.IsEventArgsTypeCorrect(argsType, eventArgsType, false);
         }
 
         public static void IsEventArgsTypeCorrect<TEventArgs>(this MethodInfo method)
