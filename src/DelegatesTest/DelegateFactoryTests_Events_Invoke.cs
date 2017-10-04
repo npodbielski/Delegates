@@ -27,7 +27,7 @@ namespace DelegatesTest
         private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
-        public void EventCall_ByTypes_Public()
+        public void EventInvoke_ByTypes_Public()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
@@ -43,7 +43,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Internal()
+        public void EventInvoke_ByTypes_Internal()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -59,7 +59,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Protected()
+        public void EventInvoke_ByTypes_Protected()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -75,7 +75,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Private()
+        public void EventInvoke_ByTypes_Private()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
@@ -91,7 +91,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_EventArgsAsObject()
+        public void EventInvoke_ByTypes_EventArgsAsObject()
         {
             var call = DelegateFactory.EventInvoke<TestClass, object>("PublicEvent");
             Assert.IsNotNull(call);
@@ -107,21 +107,21 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_NoEvent()
+        public void EventInvoke_ByTypes_NoEvent()
         {
             var call = DelegateFactory.EventInvoke<TestStruct, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_WrongName()
+        public void EventInvoke_ByTypes_WrongName()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("WrongName");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_IncorrectEventType()
+        public void EventInvoke_ByTypes_IncorrectEventType()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
@@ -133,7 +133,7 @@ namespace DelegatesTest
         /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
-        public void EventCall_ByTypes_Public_EventIsNull()
+        public void EventInvoke_ByTypes_Public_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
@@ -141,7 +141,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Internal_EventIsNull()
+        public void EventInvoke_ByTypes_Internal_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -149,7 +149,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Protected_EventIsNull()
+        public void EventInvoke_ByTypes_Protected_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -157,7 +157,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_Private_EventIsNull()
+        public void EventInvoke_ByTypes_Private_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
@@ -165,7 +165,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Public()
+        public void EventInvoke_ByObjectAndType_Public()
         {
             var call = _testClassType.EventInvoke<TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
@@ -181,7 +181,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Internal()
+        public void EventInvoke_ByObjectAndType_Internal()
         {
             var call = _testClassType.EventInvoke<TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -197,7 +197,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Protected()
+        public void EventInvoke_ByObjectAndType_Protected()
         {
             var call = _testClassType.EventInvoke<TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -213,7 +213,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Private()
+        public void EventInvoke_ByObjectAndType_Private()
         {
             var call = _testClassType.EventInvoke<TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
@@ -229,21 +229,21 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_NoEvent()
+        public void EventInvoke_ByObjectAndType_NoEvent()
         {
             var call = _testStructType.EventInvoke<TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_WrongName()
+        public void EventInvoke_ByObjectAndType_WrongName()
         {
             var call = _testClassType.EventInvoke<TestClass.PublicEventArgs>("WrongName");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_IncorrectEventType()
+        public void EventInvoke_ByObjectAndType_IncorrectEventType()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
@@ -252,7 +252,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_EventArgsAsObject()
+        public void EventInvoke_ByObjectAndType_EventArgsAsObject()
         {
             var call = _testClassType.EventInvoke<object>("PublicEvent");
             Assert.IsNotNull(call);
@@ -271,7 +271,7 @@ namespace DelegatesTest
         /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
-        public void EventCall_ByObjectAndType_Public_EventIsNull()
+        public void EventInvoke_ByObjectAndType_Public_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
@@ -279,7 +279,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Internal_EventIsNull()
+        public void EventInvoke_ByObjectAndType_Internal_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -287,7 +287,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Protected_EventIsNull()
+        public void EventInvoke_ByObjectAndType_Protected_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -295,7 +295,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndType_Private_EventIsNull()
+        public void EventInvoke_ByObjectAndType_Private_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
@@ -303,7 +303,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Public()
+        public void EventInvoke_ByObjects_Public()
         {
             var call = _testClassType.EventInvoke("PublicEvent");
             Assert.IsNotNull(call);
@@ -319,7 +319,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Internal()
+        public void EventInvoke_ByObjects_Internal()
         {
             var call = _testClassType.EventInvoke("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -335,7 +335,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Protected()
+        public void EventInvoke_ByObjects_Protected()
         {
             var call = _testClassType.EventInvoke("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -351,7 +351,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Private()
+        public void EventInvoke_ByObjects_Private()
         {
             var call = _testClassType.EventInvoke("PrivateEvent");
             Assert.IsNotNull(call);
@@ -367,21 +367,21 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_NoEvent()
+        public void EventInvoke_ByObjects_NoEvent()
         {
             var call = _testStructType.EventInvoke("PublicEvent");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_WrongName()
+        public void EventInvoke_ByObjects_WrongName()
         {
             var call = _testClassType.EventInvoke("WrongName");
             Assert.IsNull(call);
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_IncorrectEventType()
+        public void EventInvoke_ByObjects_IncorrectEventType()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
@@ -393,7 +393,7 @@ namespace DelegatesTest
         /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
-        public void EventCall_ByObjects_Public_EventIsNull()
+        public void EventInvoke_ByObjects_Public_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
@@ -401,7 +401,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Internal_EventIsNull()
+        public void EventInvoke_ByObjects_Internal_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
@@ -409,7 +409,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Protected_EventIsNull()
+        public void EventInvoke_ByObjects_Protected_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
@@ -417,7 +417,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjects_Private_EventIsNull()
+        public void EventInvoke_ByObjects_Private_EventIsNull()
         {
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
@@ -425,7 +425,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypes_CustomEventDelegate()
+        public void EventInvoke_ByTypes_CustomEventDelegate()
         {
             var call = DelegateFactory.EventInvoke<TestClass, EventArgs>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -441,7 +441,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypeAndCustomDelegate()
+        public void EventInvoke_ByTypeAndCustomDelegate()
         {
             var call = DelegateFactory.EventInvokeCustomDelegate<TestClass, EventCustomDelegate>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -457,7 +457,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypeAndCustomDelegate_IncorrectEventType()
+        public void EventInvoke_ByTypeAndCustomDelegate_IncorrectEventType()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
@@ -466,7 +466,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByTypeAndCustomDelegate_CompatibleDelegate()
+        public void EventInvoke_ByTypeAndCustomDelegate_CompatibleDelegate()
         {
             var call = DelegateFactory.EventInvokeCustomDelegate<TestClass, EventHandler<EventArgs>>
                 ("CusDelegEvent");
@@ -483,7 +483,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndCustomDelegate()
+        public void EventInvoke_ByObjectAndCustomDelegate()
         {
             var call = _testClassType.EventInvokeCustomDelegate<EventCustomDelegate>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -499,7 +499,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_ByObjectAndCustomDelegate_CompatibleDelegate()
+        public void EventInvoke_ByObjectAndCustomDelegate_CompatibleDelegate()
         {
             var call = _testClassType.EventInvokeCustomDelegate<EventHandler<EventArgs>>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -515,7 +515,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_CustomDelegate_ByTypes()
+        public void EventInvoke_CustomDelegate_ByTypes()
         {
             var call = DelegateFactory.EventInvoke<TestClass, EventArgs>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -531,7 +531,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_CustomDelegate_ByTypes_EventArgsAsObject()
+        public void EventInvoke_CustomDelegate_ByTypes_EventArgsAsObject()
         {
             var call = DelegateFactory.EventInvoke<TestClass, object>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -547,7 +547,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_CustomDelegate_ByObjectAndType_EventArgsAsObject()
+        public void EventInvoke_CustomDelegate_ByObjectAndType_EventArgsAsObject()
         {
             var call = _testClassType.EventInvoke<object>("CusDelegEvent");
             Assert.IsNotNull(call);
@@ -563,7 +563,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void EventCall_CustomDelegate_ByObjects()
+        public void EventInvoke_CustomDelegate_ByObjects()
         {
             var call = _testClassType.EventInvoke("CusDelegEvent");
             Assert.IsNotNull(call);
