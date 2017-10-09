@@ -9,11 +9,6 @@ using System.Linq;
 using System.Reflection;
 using Delegates.Extensions;
 
-#if !(NETCORE || NET45)
-using Delegates.Extensions;
-
-#endif
-
 namespace Delegates.Helper
 {
     internal static class DelegateHelper
@@ -140,7 +135,7 @@ namespace Delegates.Helper
         public static void IsEventArgsTypeCorrect(Type destinationArgs, Type sourceArgs, bool allowBase)
         {
             if (!allowBase && destinationArgs != sourceArgs
-                ||allowBase && !sourceArgs.CanBeAssignedFrom(destinationArgs))
+                || allowBase && !sourceArgs.CanBeAssignedFrom(destinationArgs))
             {
                 throw new ArgumentException(
                     $"Provided event args type \'{sourceArgs.Name}\' is not compatible with expected type " +

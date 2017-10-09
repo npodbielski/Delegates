@@ -10,7 +10,6 @@ namespace Delegates
     /// </summary>
     public static partial class DelegateFactory
     {
-        //TODO:Consider adding EventInvoke
         /// <summary>
         /// Creates delegate for adding event handler with source instance type and event argument type
         /// </summary>

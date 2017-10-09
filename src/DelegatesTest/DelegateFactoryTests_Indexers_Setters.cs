@@ -301,6 +301,33 @@ namespace DelegatesTest
             @is(_testClassInstance, FirstIntIndex, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
         }
+        
+        [TestMethod]
+        public void IndexerSet_ByTypes_IncorrectReturnType_Incompatible()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+            {
+                DelegateFactory.IndexerSet<TestClass, string, int>();
+            });
+        }
+
+        [TestMethod]
+        public void IndexerSet_ByTypes_IncorrectReturnType_Object()
+        {
+            var @is = DelegateFactory.IndexerSet<TestClass, object, int>();
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
+
+        [TestMethod]
+        public void IndexerSet_ByTypes_IncorrectReturnType_Compatible()
+        {
+            var @is = DelegateFactory.IndexerSet<TestClass, long, int>();
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
 
         [TestMethod]
         public void IndexerSet_ByTypes_1Index_FromStruct()
@@ -367,6 +394,35 @@ namespace DelegatesTest
             @is(ref objectStruct, FirstIntIndex, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
         }
+
+        [TestMethod]
+        public void IndexerSetStruct_ByExtensionAndReturnType_IncorrectReturnType_Incompatible()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+            {
+                _testStrucType.IndexerSetStruct<string, int>();
+            });
+        }
+
+        [TestMethod]
+        public void IndexerSetStruct_ByExtensionAndReturnType_IncorrectReturnType_Object()
+        {
+            var @is = _testStrucType.IndexerSetStruct<object, int>();
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
+        }
+
+        [TestMethod]
+        public void IndexerSetStruct_ByExtensionAndReturnType_IncorrectReturnType_Compatible()
+        {
+            var @is = _testStrucType.IndexerSetStruct<long, int>();
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
+        }
 #endif
 
         [TestMethod]
@@ -428,7 +484,7 @@ namespace DelegatesTest
             @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
         }
-
+        
         [TestMethod]
         public void IndexerSet_ByObjects_2Index()
         {
@@ -488,7 +544,7 @@ namespace DelegatesTest
 #endif
 
         [TestMethod]
-        public void IndexerGet_Interface_ByTypes()
+        public void IndexerSet_Interface_ByTypes()
         {
             var @is = DelegateFactory.IndexerSet<IService, int, int>();
             Assert.IsNotNull(@is);
@@ -497,7 +553,7 @@ namespace DelegatesTest
         }
 
         [TestMethod]
-        public void IndexerGet_Interface_ByObjectAndType()
+        public void IndexerSet_Interface_ByObjectAndType()
         {
             var @is = _interfaceType.IndexerSet<int, int>();
             Assert.IsNotNull(@is);
@@ -505,11 +561,47 @@ namespace DelegatesTest
             Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
         }
 
+        [TestMethod]
+        public void IndexerSet_ByExtensionAndReturnType_IncorrectReturnType_Incompatible()
+        {
+            AssertHelper.ThrowsException<ArgumentException>(() =>
+            {
+                _testClassType.IndexerSet<string, int>();
+            });
+        }
+
+        [TestMethod]
+        public void IndexerSet_ByExtensionAndReturnType_IncorrectReturnType_Object()
+        {
+            var @is = _testClassType.IndexerSet<object, int>();
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
+
+        [TestMethod]
+        public void IndexerSet_ByExtensionAndReturnType_IncorrectReturnType_Compatible()
+        {
+            var @is = _testClassType.IndexerSet<long, int>();
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, FirstIntIndex, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
+
 #if !NET35
         [TestMethod]
-        public void IndexerGet_Interface_ByObjects()
+        public void IndexerSet_Interface_ByObjects()
         {
             var @is = _interfaceType.IndexerSet(typeof(int), typeof(int));
+            Assert.IsNotNull(@is);
+            @is(_interfaceImpl, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
+        }
+
+        [TestMethod]
+        public void IndexerSet_Interface_ByObjects_New()
+        {
+            var @is = _interfaceType.IndexerSetNew(typeof(int));
             Assert.IsNotNull(@is);
             @is(_interfaceImpl, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
