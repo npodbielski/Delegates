@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2636C5AD-535C-400B-8DA3-AD9BE6B84FC0}</ProjectGuid>
+    <ProjectGuid>{C9EF87BC-1DA7-4887-A4E4-E27D2D259191}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesTest</RootNamespace>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,24 +38,9 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <Choose>
-    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
   <ItemGroup>
     <Compile Include="..\..\..\src\DelegatesTest\AssertHelper.cs">
       <Link>AssertHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\CAssert.cs">
-      <Link>CAssert.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Constructors.cs">
       <Link>DelegateFactoryTests_Constructors.cs</Link>
@@ -149,18 +135,32 @@
     <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestStruct.cs">
       <Link>TestObjects\TestStruct.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
-      <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
+      <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
-      <Project>{24b450b4-8c97-47c6-8cf8-9b4d761ab3fc}</Project>
-      <Name>DelegatesFactory</Name>
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNET45.csproj">
+      <Project>{112b137a-8f94-4e7b-a77b-685eff84ec07}</Project>
+      <Name>DelegatesFactoryNET45</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

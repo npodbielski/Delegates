@@ -167,7 +167,7 @@ namespace Delegates.Helper
                     {
                         return _assemblyBuilderType = Type.GetType("System.Reflection.Emit.AssemblyBuilder");
                     }
-                    catch (TypeLoadException e)
+                    catch (TypeLoadException)
                     {
                         throw new NotSupportedException(NotSupported);
                     }
@@ -189,7 +189,7 @@ namespace Delegates.Helper
                         _assemblyAccessType = Type.GetType("System.Reflection.Emit.AssemblyBuilderAccess");
                         return _assemblyAccessType;
                     }
-                    catch (TypeLoadException e)
+                    catch (TypeLoadException)
                     {
                         throw new NotSupportedException(NotSupported);
                     }
@@ -213,11 +213,7 @@ namespace Delegates.Helper
                         if (runAndCollect == null)
                         {
                             var run = values.FirstOrDefault(v => v.ToString() == "Run");
-                            if (run == null)
-                            {
-                                throw new NotSupportedException(NotSupported);
-                            }
-                            _assemblyAccess = run;
+                            _assemblyAccess = run ?? throw new NotSupportedException(NotSupported);
                         }
                         else
                         {
@@ -225,7 +221,7 @@ namespace Delegates.Helper
                         }
                         return _assemblyAccess;
                     }
-                    catch (TypeLoadException e)
+                    catch (TypeLoadException)
                     {
                         throw new NotSupportedException(NotSupported);
                     }
@@ -316,7 +312,7 @@ namespace Delegates.Helper
                         _opCodesType = Type.GetType("System.Reflection.Emit.OpCodes");
                         return _opCodesType;
                     }
-                    catch (TypeLoadException e)
+                    catch (TypeLoadException)
                     {
                         throw new NotSupportedException(NotSupported);
                     }
@@ -336,7 +332,7 @@ namespace Delegates.Helper
                         _opCodeType = Type.GetType("System.Reflection.Emit.OpCode");
                         return _opCodeType;
                     }
-                    catch (TypeLoadException e)
+                    catch (TypeLoadException)
                     {
                         throw new NotSupportedException(NotSupported);
                     }

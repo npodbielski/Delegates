@@ -7,19 +7,12 @@
 using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE||STANDARD
-using Assert = DelegatesTest.CAssert;
-using TestMethodAttribute = Xunit.FactAttribute;
-#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
 
 namespace DelegatesTest
 {
-#if !(NETCORE||STANDARD)
     [TestClass]
-#endif
     public class DelegateFactoryTests_Indexers_Setters
     {
         private const string FirstStringIndex = "index1";
@@ -137,7 +130,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_Internal()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(double), typeof(double));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstDoubleIndex }, NewDoubleValue);
+            Assert.AreEqual(NewDoubleValue, _testClassInstance.InternalIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Internal()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(double));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstDoubleIndex }, NewDoubleValue);
             Assert.AreEqual(NewDoubleValue, _testClassInstance.InternalIndexer);
@@ -146,7 +150,19 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_Internal_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(double), typeof(double));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstDoubleIndex }, NewDoubleValue);
+            Assert.AreEqual(NewDoubleValue, ((TestStruct)objectStruct).InternalIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Internal_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(double));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstDoubleIndex }, NewDoubleValue);
@@ -156,21 +172,50 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_NonExisting()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(ulong), typeof(ulong));
+#pragma warning restore 618
+            Assert.IsNull(@is);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_NonExisting()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(ulong));
             Assert.IsNull(@is);
         }
 
         [TestMethod]
         public void IndexerSet_ByObjects_OnlyRead()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(string), typeof(string));
+#pragma warning restore 618
+            Assert.IsNull(@is);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_OnlyRead()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(string));
             Assert.IsNull(@is);
         }
 
         [TestMethod]
         public void IndexerSet_ByObjects_Private()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Private()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
@@ -179,7 +224,19 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_Private_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Private_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
@@ -189,7 +246,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_Protected()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(byte), typeof(byte));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstByteIndex }, NewByteValue);
+            Assert.AreEqual(NewByteValue, _testClassInstance.ProtectedIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Protected()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(byte));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstByteIndex }, NewByteValue);
             Assert.AreEqual(NewByteValue, _testClassInstance.ProtectedIndexer);
@@ -198,17 +266,39 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_Public()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int));
+#pragma warning restore 618
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
         }
 
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Public()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int));
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
 
         [TestMethod]
         public void IndexerSet_ByObjects_Public_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_Public_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
@@ -469,7 +559,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_1Index()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_1Index()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.IndexerBackend[FirstIntIndex]);
@@ -478,17 +579,40 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_1Index_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int));
+#pragma warning restore 618
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
         }
-        
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_1Index_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int));
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).IndexerBackend[FirstIntIndex]);
+        }
+
         [TestMethod]
         public void IndexerSet_ByObjects_2Index()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_2Index()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.PrivateIndexer);
@@ -497,7 +621,19 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_2Index_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PrivateIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_2Index_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex }, NewIntValue);
@@ -507,7 +643,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_3Index()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.Public3IndexIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_3Index()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public3IndexIndexer);
@@ -516,7 +663,19 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_3Index_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public3IndexIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_3Index_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0 }, NewIntValue);
@@ -526,7 +685,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_4Index()
         {
+#pragma warning disable 618
             var @is = _testClassType.IndexerSet(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _testClassInstance.Public4IndexIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_4Index()
+        {
+            var @is = _testClassType.IndexerSetNew(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             @is(_testClassInstance, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.Public4IndexIndexer);
@@ -535,7 +705,19 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_ByObjects_4Index_FromStruct()
         {
+#pragma warning disable 618
             var @is = _testStrucType.IndexerSetStruct(typeof(int), typeof(int), typeof(int), typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            var objectStruct = (object)_testStructInstance;
+            @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).Public4IndexIndexer);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_ByObjects_4Index_FromStruct()
+        {
+            var @is = _testStrucType.IndexerSetStructNew(typeof(int), typeof(int), typeof(int), typeof(int));
             Assert.IsNotNull(@is);
             var objectStruct = (object)_testStructInstance;
             @is(ref objectStruct, new object[] { FirstIntIndex, SecondIntIndex, 0, 0 }, NewIntValue);
@@ -592,7 +774,18 @@ namespace DelegatesTest
         [TestMethod]
         public void IndexerSet_Interface_ByObjects()
         {
+#pragma warning disable 618
             var @is = _interfaceType.IndexerSet(typeof(int), typeof(int));
+#pragma warning restore 618
+            Assert.IsNotNull(@is);
+            @is(_interfaceImpl, new object[] { FirstIntIndex }, NewIntValue);
+            Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);
+        }
+
+        [TestMethod]
+        public void IndexerSetNew_Interface_ByObjects()
+        {
+            var @is = _interfaceType.IndexerSetNew(typeof(int));
             Assert.IsNotNull(@is);
             @is(_interfaceImpl, new object[] { FirstIntIndex }, NewIntValue);
             Assert.AreEqual(NewIntValue, _interfaceImpl.IndexerSetValue);

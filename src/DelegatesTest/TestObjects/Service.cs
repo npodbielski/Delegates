@@ -16,11 +16,8 @@ namespace DelegatesTest.TestObjects
 
         public int this[int index]
         {
-            get
-            {
-                return index;
-            }
-            set { IndexerSetValue = value; }
+            get => index;
+            set => IndexerSetValue = value;
         }
 
         public string Echo(string text)

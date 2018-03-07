@@ -4,14 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D8FE1D0-40D6-4603-AB35-2D8520390DB0}</ProjectGuid>
+    <ProjectGuid>{EC076A88-6BAC-41C3-9026-9B974939C856}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesApp</RootNamespace>
     <AssemblyName>DelegatesApp</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,7 +20,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45,NET46</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -58,13 +59,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DelegatesTest\DelegatesTest.csproj">
-      <Project>{2cdff5d2-85c3-4404-a17a-76c1b6d6d85c}</Project>
-      <Name>DelegatesTest</Name>
+    <ProjectReference Include="..\DelegatesTest\DelegatesTestNET45.csproj">
+      <Project>{c9ef87bc-1da7-4887-a4e4-e27d2d259191}</Project>
+      <Name>DelegatesTestNET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
-      <Project>{195c742a-24d5-46f2-9d49-f69964951d14}</Project>
-      <Name>DelegatesFactory</Name>
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNET45.csproj">
+      <Project>{112b137a-8f94-4e7b-a77b-685eff84ec07}</Project>
+      <Name>DelegatesFactoryNET45</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

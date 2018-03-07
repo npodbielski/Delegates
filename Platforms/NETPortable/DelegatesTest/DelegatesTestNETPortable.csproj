@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CDFF5D2-85C3-4404-A17A-76C1B6D6D85C}</ProjectGuid>
+    <ProjectGuid>{2636C5AD-535C-400B-8DA3-AD9BE6B84FC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DelegatesTest</RootNamespace>
     <AssemblyName>DelegatesTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45,NET46</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -59,11 +59,11 @@
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Add.cs">
       <Link>DelegateFactoryTests_Events_Add.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
-      <Link>DelegateFactoryTests_Events_Remove.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Invoke.cs">
       <Link>DelegateFactoryTests_Events_Invoke.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
+      <Link>DelegateFactoryTests_Events_Remove.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs">
       <Link>DelegateFactoryTests_Fields_GetValue.cs</Link>
@@ -146,22 +146,18 @@
     <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestStruct.cs">
       <Link>TestObjects\TestStruct.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
-      <Link>Properties\SolutionAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\Common\DelegatesTestAssemblyInfo.cs">
       <Link>Properties\DelegatesTestAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\NET35\DelegatesTest\DelegatesTest.csproj">
-      <Project>{B26BA86D-3DC9-4D55-93DE-68152849518D}</Project>
-      <Name>DelegatesTest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactory.csproj">
-      <Project>{195c742a-24d5-46f2-9d49-f69964951d14}</Project>
-      <Name>DelegatesFactory</Name>
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETPortable.csproj">
+      <Project>{24b450b4-8c97-47c6-8cf8-9b4d761ab3fc}</Project>
+      <Name>DelegatesFactoryNETPortable</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

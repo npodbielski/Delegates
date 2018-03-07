@@ -148,6 +148,7 @@ namespace DelegatesApp
             Console.WriteLine($"Private constructor proxy: {_stopWatch.ElapsedMilliseconds}");
         }
 
+#pragma warning disable CS0618 // Type or member is obsolete
         private static void TestIndexers()
         {
             var ig1 = DelegateFactory.IndexerGet<TestClass, int, int>();
@@ -293,6 +294,7 @@ namespace DelegatesApp
             TestInstance.InvokeProtectedEvent();
             TestInstance.InvokePrivateEvent();
         }
+#pragma warning restore CS0618 // Type or member is obsolete
 
         private static void HandlerWithoutSourceType(object o, TestClass.PublicEventArgs eventArgs)
         {

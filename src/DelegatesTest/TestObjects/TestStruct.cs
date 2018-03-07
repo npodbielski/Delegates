@@ -44,20 +44,20 @@ namespace DelegatesTest.TestObjects
 
         public int this[int i]
         {
-            get { return IndexerBackend[i]; }
-            set { IndexerBackend[i] = value; }
+            get => IndexerBackend[i];
+            set => IndexerBackend[i] = value;
         }
 
         public int this[int i1, int i2, int i3]
         {
-            get { return i1; }
-            set { Public3IndexIndexer = value; }
+            get => i1;
+            set => Public3IndexIndexer = value;
         }
 
         public int this[int i1, int i2, int i3, int i4]
         {
-            get { return i1; }
-            set { Public4IndexIndexer = value; }
+            get => i1;
+            set => Public4IndexIndexer = value;
         }
 
 
@@ -65,8 +65,8 @@ namespace DelegatesTest.TestObjects
 
         internal double this[double s]
         {
-            get { return s; }
-            set { InternalIndexer = value; }
+            get => s;
+            set => InternalIndexer = value;
         }
 
         public int Public3IndexIndexer;
@@ -81,7 +81,7 @@ namespace DelegatesTest.TestObjects
 
         public byte this[byte i]
         {
-            get { return i; }
+            get => i;
             set { }
         }
 
@@ -93,8 +93,8 @@ namespace DelegatesTest.TestObjects
         // ReSharper disable once UnusedParameter.Local
         private int this[int i1, int i2]
         {
-            get { return i1; }
-            set { PrivateIndexer = value; }
+            get => i1;
+            set => PrivateIndexer = value;
         }
 
         public TestStruct(int i)

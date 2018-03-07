@@ -53,10 +53,10 @@ namespace Delegates
         /// <remarks>
         /// Intended for internal use.
         /// </remarks>
-#if !NETCORE
-        internal
-#else
+#if NETCORE||STANDARD
         public
+#else
+        internal 
 #endif
             static TDelegate InstanceGenericMethod<TDelegate>(this Type source,
             string name, Type[] typeParams, Type[] paramsTypes)
