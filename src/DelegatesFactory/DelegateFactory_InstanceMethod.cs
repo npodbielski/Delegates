@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactory_InstanceMethod.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +15,28 @@ using static Delegates.Helper.DelegateHelper;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
+        //NOTE: custom delegates are not supported in delegates called by objects; only Action<object, object[]> and 
+        //...Func<object, object[], object> are supported
         /// <summary>
-        /// Creates delegate for non-void instance method with unspecified number of parameters passed as array of 
-        /// objects from instance as object
+        ///     Creates delegate for non-void instance method with unspecified number of parameters passed as array of
+        ///     objects from instance as object
         /// </summary>
         /// <param name="source">Type with defined method</param>
         /// <param name="name">Name of method</param>
         /// <param name="paramsTypes">Types of parameters</param>
         /// <returns>Delegate for non-void instance method</returns>
         public static Func<object, object[], object> InstanceMethod(this Type source,
-              string name, params Type[] paramsTypes)
+            string name, params Type[] paramsTypes)
         {
             return InstanceGenericMethod<Func<object, object[], object>>(source, name, null, paramsTypes);
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with single type parameter
+        ///     Creates delegate for generic instance method with single type parameter
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with instance method signature</typeparam>
         /// <typeparam name="TParam1">Instance method type parameter</typeparam>
@@ -41,7 +49,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with two type parameters
+        ///     Creates delegate for generic instance method with two type parameters
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with instance method signature</typeparam>
         /// <typeparam name="TParam1">First instance method type parameter</typeparam>
@@ -55,7 +63,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with three type parameters
+        ///     Creates delegate for generic instance method with three type parameters
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with instance method signature</typeparam>
         /// <typeparam name="TParam1">First instance method type parameter</typeparam>
@@ -70,7 +78,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for (generic) instance method
+        ///     Creates delegate for (generic) instance method
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with instance method signature</typeparam>
         /// <param name="name">Name of method</param>
@@ -83,19 +91,17 @@ namespace Delegates
             var paramsTypes = GetDelegateArguments<TDelegate>();
             var source = paramsTypes.First();
             if (source.GetTypeInfo().IsInterface && typeParameters != null && typeParameters.Length > 0)
-            {
                 return source.InstanceMethod<TDelegate>(name, typeParameters);
-            }
             paramsTypes = paramsTypes.Skip(1).ToArray();
             var methodInfo = source.GetMethodInfo(name, paramsTypes, typeParameters);
             return methodInfo?.CreateDelegate<TDelegate>();
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with single type parameter
+        ///     Creates delegate for generic instance method with single type parameter
         /// </summary>
         /// <typeparam name="TDelegate">
-        /// Delegate compatible with instance method signature or with object as source
+        ///     Delegate compatible with instance method signature or with object as source
         /// </typeparam>
         /// <typeparam name="TParam1">Type parameter of generic method</typeparam>
         /// <param name="source">Type with defined method</param>
@@ -104,14 +110,14 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate, TParam1>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1) });
+            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1)});
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with two type parameters
+        ///     Creates delegate for generic instance method with two type parameters
         /// </summary>
         /// <typeparam name="TDelegate">
-        /// Delegate compatible with instance method signature or with object as source
+        ///     Delegate compatible with instance method signature or with object as source
         /// </typeparam>
         /// <typeparam name="TParam1">First type parameter of generic method</typeparam>
         /// <typeparam name="TParam2">Second type parameter of generic method</typeparam>
@@ -121,14 +127,14 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2) });
+            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2)});
         }
 
         /// <summary>
-        /// Creates delegate for generic instance method with three type parameters
+        ///     Creates delegate for generic instance method with three type parameters
         /// </summary>
         /// <typeparam name="TDelegate">
-        /// Delegate compatible with instance method signature or with object as source
+        ///     Delegate compatible with instance method signature or with object as source
         /// </typeparam>
         /// <typeparam name="TParam1">First type parameter of generic method</typeparam>
         /// <typeparam name="TParam2">Second type parameter of generic method</typeparam>
@@ -139,14 +145,14 @@ namespace Delegates
         public static TDelegate InstanceMethod<TDelegate, TParam1, TParam2, TParam3>(this Type source, string name)
             where TDelegate : class
         {
-            return source.InstanceMethod<TDelegate>(name, new[] { typeof(TParam1), typeof(TParam2), typeof(TParam3) });
+            return source.InstanceMethod<TDelegate>(name, new[] {typeof(TParam1), typeof(TParam2), typeof(TParam3)});
         }
 
         /// <summary>
-        /// Creates delegate for (generic) instance method with three type parameters
+        ///     Creates delegate for (generic) instance method with three type parameters
         /// </summary>
         /// <typeparam name="TDelegate">
-        /// Delegate compatible with instance method signature or with object as source
+        ///     Delegate compatible with instance method signature or with object as source
         /// </typeparam>
         /// <param name="source">Type with defined method</param>
         /// <param name="name">Name of method</param>
@@ -159,14 +165,11 @@ namespace Delegates
             var instanceParam = delegateParams[0];
             delegateParams = delegateParams.Skip(1).ToArray();
             var methodInfo = source.GetMethodInfo(name, delegateParams, typeParams);
-            if (methodInfo == null)
-            {
-                return null;
-            }
+            if (methodInfo == null) return null;
             TDelegate deleg;
             if (instanceParam == source &&
                 //only if not generic interface method
-                (!instanceParam.GetTypeInfo().IsInterface || (typeParams == null || typeParams.Length == 0)))
+                (!instanceParam.GetTypeInfo().IsInterface || typeParams == null || typeParams.Length == 0))
             {
                 deleg = methodInfo.CreateDelegate<TDelegate>();
             }
@@ -177,23 +180,23 @@ namespace Delegates
                 Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                     methodInfo, expressions.GetCallExprParams());
                 if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
-                {
                     returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
-                }
                 var lamdaParams = expressions.GetLambdaExprParams(sourceParameter);
                 CheckDelegateReturnType<TDelegate>(methodInfo);
                 deleg = Expression.Lambda<TDelegate>(returnExpression, lamdaParams).Compile();
             }
             else
             {
-                throw new ArgumentException($"TDelegate type cannot have instance parameter of type {instanceParam.FullName}. This parameter type must be compatible with {source.FullName} type.");
+                throw new ArgumentException(
+                    $"TDelegate type cannot have instance parameter of type {instanceParam.FullName}. This parameter type must be compatible with {source.FullName} type.");
             }
+
             return deleg;
         }
 
 #if !NET35
         /// <summary>
-        /// Obsolete
+        ///     Obsolete
         /// </summary>
         /// <typeparam name="TDelegate"></typeparam>
         /// <param name="methodName"></param>
@@ -203,27 +206,25 @@ namespace Delegates
         {
             var source = typeof(TDelegate).GenericTypeArguments()[0];
             var param = Expression.Parameter(source, "source");
-            var parameters = new List<ParameterExpression> { param };
+            var parameters = new List<ParameterExpression> {param};
             var @params = GetDelegateArguments<TDelegate>().Skip(1);
             var index = 0;
-            foreach (var type in @params)
-            {
-                parameters.Add(Expression.Parameter(type, "p" + index++));
-            }
+            foreach (var type in @params) parameters.Add(Expression.Parameter(type, "p" + index++));
             var lambda = Expression.Lambda(Expression.Call(param, methodName, null,
                 parameters.Skip(1).Cast<Expression>().ToArray()), parameters);
             return lambda.Compile() as TDelegate;
         }
 #endif
         /// <summary>
-        /// Creates delegate for void instance method with unspecified number of parameters passed as array of 
-        /// objects from instance as object
+        ///     Creates delegate for void instance method with unspecified number of parameters passed as array of
+        ///     objects from instance as object
         /// </summary>
         /// <param name="source">Type with defined method</param>
         /// <param name="name">Name of method</param>
         /// <param name="paramsTypes">Types of parameters</param>
         /// <returns>Delegate for void instance method</returns>
-        public static Action<object, object[]> InstanceMethodVoid(this Type source, string name, params Type[] paramsTypes)
+        public static Action<object, object[]> InstanceMethodVoid(this Type source, string name,
+            params Type[] paramsTypes)
         {
             return InstanceGenericMethod<Action<object, object[]>>(source, name, null, paramsTypes);
         }

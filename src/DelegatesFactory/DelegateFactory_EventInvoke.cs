@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactory_EventInvoke.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Linq.Expressions;
 using Delegates.Extensions;
@@ -5,7 +11,6 @@ using Delegates.Helper;
 
 namespace Delegates
 {
-#if !NET35
     public static partial class DelegateFactory
     {
         public static Action<TSource, TEventArgs> EventInvoke<TSource, TEventArgs>(string eventName)
@@ -48,30 +53,27 @@ namespace Delegates
                 var eventArgs = fieldInfo.FieldType.GetDelegateSecondParameter();
                 var lambaSenderParam = Expression.Parameter(lambdaSender ?? sender, "source");
                 if (lambdaArgs != null)
-                {
                     DelegateHelper.IsEventArgsTypeCorrect(eventArgs, lambdaArgs, true);
-                }
                 else
-                {
                     lambdaArgs = eventArgs;
-                }
                 var lambdaArgsParam = Expression.Parameter(lambdaArgs, "args");
                 var eventArgsParam = Expression.Convert(lambdaArgsParam, eventArgs);
                 var invokeMethod = fieldInfo.FieldType.GetMethod("Invoke");
                 var fieldExpression = Expression.Field(Expression.Convert(lambaSenderParam, source), fieldInfo);
                 var conditionExpression = Expression.IsTrue(
                     Expression.NotEqual(fieldExpression, Expression.Constant(null)));
-                var callSenderExpr = lambdaSender != sender ?
-                    Expression.Convert(lambaSenderParam, sender) : (Expression)lambaSenderParam;
+                var callSenderExpr = lambdaSender != sender
+                    ? Expression.Convert(lambaSenderParam, sender)
+                    : (Expression)lambaSenderParam;
                 var callExpression = Expression.Call(fieldExpression, invokeMethod, callSenderExpr, eventArgsParam);
                 var ifExpress = Expression.IfThen(conditionExpression, callExpression);
                 var lambdaExpression = Expression.Lambda<TDelegate>(ifExpress, lambaSenderParam, lambdaArgsParam);
                 return lambdaExpression.Compile();
             }
+
             return null;
         }
-    } 
-#endif
+    }
 
     //internal class ChainDelegate
     //{

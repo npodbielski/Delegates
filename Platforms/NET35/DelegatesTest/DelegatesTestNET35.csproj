@@ -66,17 +66,11 @@
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Add.cs">
       <Link>DelegateFactoryTests_Events_Add.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Invoke.cs">
-      <Link>DelegateFactoryTests_Events_Invoke.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs">
       <Link>DelegateFactoryTests_Events_Remove.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs">
       <Link>DelegateFactoryTests_Fields_GetValue.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_SetValue.cs">
-      <Link>DelegateFactoryTests_Fields_SetValue.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Indexers_Getters.cs">
       <Link>DelegateFactoryTests_Indexers_Getters.cs</Link>
@@ -98,9 +92,6 @@
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_GetValue.cs">
       <Link>DelegateFactoryTests_StaticField_GetValue.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_SetValue.cs">
-      <Link>DelegateFactoryTests_StaticField_SetValue.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticMethods.cs">
       <Link>DelegateFactoryTests_StaticMethods.cs</Link>

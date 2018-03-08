@@ -1,24 +1,24 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactoryTests_Events_Add.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
     [TestClass]
     public class DelegateFactoryTests_Events_Add
     {
-        private const string TestValue = "test";
+        private readonly IService _interfaceImpl = new Service();
+        private readonly Type _interfaceType = typeof(IService);
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStructType = typeof(TestStruct);
-        private TestStruct _testStructInstance = new TestStruct(0);
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void EventAdd_ByTypes_Public()
@@ -245,12 +245,14 @@ namespace DelegatesTest
             var accessor = _interfaceType.EventAdd("Event");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            Action<object, object> eventAction = (sender, args) =>
+
+            void EventAction(object sender, object args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_interfaceImpl, eventAction);
+            }
+
+            accessor(_interfaceImpl, EventAction);
             _interfaceImpl.InvokeEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -261,12 +263,14 @@ namespace DelegatesTest
             var accessor = _interfaceType.EventAdd<EventArgs>("Event");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            EventHandler<EventArgs> eventAction = (sender, args) =>
+
+            void EventAction(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_interfaceImpl, eventAction);
+            }
+
+            accessor(_interfaceImpl, EventAction);
             _interfaceImpl.InvokeEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -277,12 +281,14 @@ namespace DelegatesTest
             var accessor = DelegateFactory.EventAdd<IService, EventArgs>("Event");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            EventHandler<EventArgs> eventAction = (sender, args) =>
+
+            void EventAction(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_interfaceImpl, eventAction);
+            }
+
+            accessor(_interfaceImpl, EventAction);
             _interfaceImpl.InvokeEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -293,12 +299,14 @@ namespace DelegatesTest
             var accessor = _testClassType.EventAdd("CusDelegEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            Action<object, object> eventAction = (sender, args) =>
+
+            void EventAction(object sender, object args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_testClassInstance, eventAction);
+            }
+
+            accessor(_testClassInstance, EventAction);
             _testClassInstance.InvokeCusDelegEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -309,12 +317,14 @@ namespace DelegatesTest
             var accessor = _testClassType.EventAdd<EventArgs>("CusDelegEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            EventHandler<EventArgs> eventAction = (sender, args) =>
+
+            void EventAction(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_testClassInstance, eventAction);
+            }
+
+            accessor(_testClassInstance, EventAction);
             _testClassInstance.InvokeCusDelegEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -325,12 +335,14 @@ namespace DelegatesTest
             var accessor = DelegateFactory.EventAdd<TestClass>("CusDelegEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            Action<TestClass, object> eventAction = (sender, args) =>
+
+            void EventAction(TestClass sender, object args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_testClassInstance, eventAction);
+            }
+
+            accessor(_testClassInstance, EventAction);
             _testClassInstance.InvokeCusDelegEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -341,12 +353,14 @@ namespace DelegatesTest
             var accessor = DelegateFactory.EventAdd<TestClass, EventArgs>("CusDelegEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            EventHandler<EventArgs> eventAction = (sender, args) =>
+
+            void EventAction(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_testClassInstance, eventAction);
+            }
+
+            accessor(_testClassInstance, EventAction);
             _testClassInstance.InvokeCusDelegEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -357,12 +371,14 @@ namespace DelegatesTest
             var accessor = DelegateFactory.EventAddCustomDelegate<TestClass, EventCustomDelegate>("CusDelegEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
-            EventCustomDelegate eventAction = (sender, args) =>
+
+            void EventAction(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            accessor(_testClassInstance, eventAction);
+            }
+
+            accessor(_testClassInstance, EventAction);
             _testClassInstance.InvokeCusDelegEvent();
             Assert.IsTrue(eventExecuted);
         }
@@ -373,12 +389,14 @@ namespace DelegatesTest
             ArgumentException ae = null;
             try
             {
-                DelegateFactory.EventAddCustomDelegate<TestClass, EventHandler<ConsoleCancelEventArgs>>("CusDelegEvent");
+                DelegateFactory
+                    .EventAddCustomDelegate<TestClass, EventHandler<ConsoleCancelEventArgs>>("CusDelegEvent");
             }
             catch (ArgumentException e)
             {
                 ae = e;
             }
+
             Assert.IsNotNull(ae);
             Assert.IsInstanceOfType(ae, typeof(ArgumentException));
         }

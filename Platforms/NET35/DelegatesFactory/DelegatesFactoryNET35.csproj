@@ -88,17 +88,11 @@
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventAdd.cs">
       <Link>DelegateFactory_EventAdd.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventInvoke.cs">
-      <Link>DelegateFactory_EventInvoke.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventRemove.cs">
       <Link>DelegateFactory_EventRemove.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldGet.cs">
       <Link>DelegateFactory_FieldGet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldSet.cs">
-      <Link>DelegateFactory_FieldSet.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerGet.cs">
       <Link>DelegateFactory_IndexerGet.cs</Link>
@@ -120,9 +114,6 @@
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs">
       <Link>DelegateFactory_StaticFieldGet.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldSet.cs">
-      <Link>DelegateFactory_StaticFieldSet.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticGenericMethod.cs">
       <Link>DelegateFactory_StaticGenericMethod.cs</Link>

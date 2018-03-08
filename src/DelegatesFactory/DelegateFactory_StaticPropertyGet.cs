@@ -5,12 +5,12 @@ using Delegates.Extensions;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
         /// <summary>
-        /// Creates delegate to static property getter with return type of property type
+        ///     Creates delegate to static property getter with return type of property type
         /// </summary>
         /// <typeparam name="TSource">Type with defined property</typeparam>
         /// <typeparam name="TProperty">Type of property</typeparam>
@@ -22,7 +22,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static property getter with return type of property type
+        ///     Creates delegate to static property getter with return type of property type
         /// </summary>
         /// <typeparam name="TProperty">Type of property</typeparam>
         /// <param name="source">Type with defined property</param>
@@ -35,7 +35,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static property getter with return type of object
+        ///     Creates delegate to static property getter with return type of object
         /// </summary>
         /// <param name="source">Type with defined property</param>
         /// <param name="propertyName">Name of property</param>
@@ -43,21 +43,16 @@ namespace Delegates
         public static Func<object> StaticPropertyGet(this Type source, string propertyName)
         {
             var propertyInfo = source.GetPropertyInfo(propertyName, true);
-            if (propertyInfo?.GetMethod == null)
-            {
-                return null;
-            }
+            if (propertyInfo?.GetMethod == null) return null;
             Expression returnExpression = Expression.Call(propertyInfo.GetMethod);
             if (!propertyInfo.PropertyType.IsClassType())
-            {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
-            }
             return Expression.Lambda<Func<object>>(returnExpression).Compile();
         }
 
 #if !NET35
         /// <summary>
-        /// Obsolete
+        ///     Obsolete
         /// </summary>
         /// <typeparam name="TProperty"></typeparam>
         /// <param name="source"></param>

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateFactoryTests_Properties_Setters.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,7 +8,6 @@ using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
@@ -17,12 +16,12 @@ namespace DelegatesTest
     {
         private const int NewIntValue = 0;
         private const string NewStringValue = "Test";
+        private readonly IService _interfaceImpl = new Service();
+        private readonly Type _interfaceType = typeof(IService);
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStrucType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Internal()
@@ -32,27 +31,6 @@ namespace DelegatesTest
             ps(_testClassInstance, NewStringValue);
             Assert.AreEqual(NewStringValue, _testClassInstance.InternalProperty);
         }
-
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Internal_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef<string>("InternalProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Internal_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct<string>("InternalProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
-        } 
-#endif
 
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_NonExisting()
@@ -77,27 +55,6 @@ namespace DelegatesTest
             Assert.AreEqual(NewStringValue, _testClassInstance.GetPrivateProperty());
         }
 
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Private_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef<string>("PrivateProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
-        }
-
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Private_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct<string>("PrivateProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
-        } 
-#endif
-
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Protected()
         {
@@ -116,27 +73,6 @@ namespace DelegatesTest
             Assert.AreEqual(NewStringValue, _testClassInstance.PublicProperty);
         }
 
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Public_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef<string>("PublicProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Public_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct<string>("PublicProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
-        } 
-#endif
-
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Public_Struct()
         {
@@ -146,27 +82,6 @@ namespace DelegatesTest
             Assert.AreEqual(NewIntValue, _testClassInstance.PublicPropertyInt);
         }
 
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Public_Struct_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef<int>("PublicPropertyInt");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewIntValue);
-            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByExtensionAndReturnType_Public_Struct_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct<int>("PublicPropertyInt");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewIntValue);
-            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
-        } 
-#endif
-
         [TestMethod]
         public void PropertySet_ByObjects_Internal()
         {
@@ -175,27 +90,6 @@ namespace DelegatesTest
             ps(_testClassInstance, NewStringValue);
             Assert.AreEqual(NewStringValue, _testClassInstance.InternalProperty);
         }
-
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByObjects_Internal_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef("InternalProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByObjects_Internal_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct("InternalProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
-        } 
-#endif
 
         [TestMethod]
         public void PropertySet_ByObjects_NonExisting()
@@ -220,27 +114,6 @@ namespace DelegatesTest
             Assert.AreEqual(NewStringValue, _testClassInstance.GetPrivateProperty());
         }
 
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByObjects_Private_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef("PrivateProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
-        }
-
-        [TestMethod]
-        public void PropertySet_ByObjects_Private_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct("PrivateProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
-        } 
-#endif
-
         [TestMethod]
         public void PropertySet_ByObjects_Protected()
         {
@@ -259,27 +132,6 @@ namespace DelegatesTest
             Assert.AreEqual(NewStringValue, _testClassInstance.PublicProperty);
         }
 
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByObjects_Public_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef("PublicProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByObjects_Public_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct("PublicProperty");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewStringValue);
-            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
-        } 
-#endif
-
         [TestMethod]
         public void PropertySet_ByObjects_Public_Struct()
         {
@@ -288,27 +140,6 @@ namespace DelegatesTest
             ps(_testClassInstance, NewIntValue);
             Assert.AreEqual(NewIntValue, _testClassInstance.PublicPropertyInt);
         }
-
-#if !NET35
-        [TestMethod]
-        public void PropertySet_ByObjects_Public_Struct_FromStruct()
-        {
-            var ps = _testStrucType.PropertySetStruct("PublicPropertyInt");
-            Assert.IsNotNull(ps);
-            var objectStruct = ps(_testStructInstance, NewIntValue);
-            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
-        }
-
-        [TestMethod]
-        public void PropertySet_ByObjects_Public_Struct_FromStructRef()
-        {
-            var ps = _testStrucType.PropertySetStructRef("PublicPropertyInt");
-            Assert.IsNotNull(ps);
-            var objectStruct = (object)_testStructInstance;
-            ps(ref objectStruct, NewIntValue);
-            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
-        } 
-#endif
 
         [TestMethod]
         public void PropertySet_ByTypes_Internal()
@@ -431,5 +262,173 @@ namespace DelegatesTest
             ps(_interfaceImpl, NewStringValue);
             Assert.AreEqual(NewStringValue, _interfaceImpl.Property);
         }
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Internal_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef<string>("InternalProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Internal_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct<string>("InternalProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Private_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef<string>("PrivateProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
+        }
+
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Private_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct<string>("PrivateProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Public_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef<string>("PublicProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Public_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct<string>("PublicProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Public_Struct_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef<int>("PublicPropertyInt");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByExtensionAndReturnType_Public_Struct_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct<int>("PublicPropertyInt");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByObjects_Internal_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef("InternalProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByObjects_Internal_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct("InternalProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).InternalProperty);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByObjects_Private_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef("PrivateProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
+        }
+
+        [TestMethod]
+        public void PropertySet_ByObjects_Private_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct("PrivateProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).GetPrivateProperty());
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByObjects_Public_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef("PublicProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByObjects_Public_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct("PublicProperty");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewStringValue);
+            Assert.AreEqual(NewStringValue, ((TestStruct)objectStruct).PublicProperty);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void PropertySet_ByObjects_Public_Struct_FromStruct()
+        {
+            var ps = _testStrucType.PropertySetStruct("PublicPropertyInt");
+            Assert.IsNotNull(ps);
+            var objectStruct = ps(_testStructInstance, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
+        }
+
+        [TestMethod]
+        public void PropertySet_ByObjects_Public_Struct_FromStructRef()
+        {
+            var ps = _testStrucType.PropertySetStructRef("PublicPropertyInt");
+            Assert.IsNotNull(ps);
+            var objectStruct = (object)_testStructInstance;
+            ps(ref objectStruct, NewIntValue);
+            Assert.AreEqual(NewIntValue, ((TestStruct)objectStruct).PublicPropertyInt);
+        }
+#endif
     }
 }

@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StructIndex1GetFunc.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Delegates.CustomDelegates
 {
     /// <summary>
-    /// Delegates for returning value of indexer with single index parameter from structure type by reference.
+    ///     Delegates for returning value of indexer with single index parameter from structure type by reference.
     /// </summary>
     /// <typeparam name="T">Structure type</typeparam>
     /// <typeparam name="TI1">Index parameter type</typeparam>

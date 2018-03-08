@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateFactoryTests_Constructors.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,7 +8,6 @@ using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
@@ -208,7 +207,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Constructor(typeof(bool));
             Assert.IsNotNull(c);
-            var instance = c(new object[] { false });
+            var instance = c(new object[] {false});
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }
@@ -218,7 +217,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Constructor(typeof(int));
             Assert.IsNotNull(c);
-            var instance = c(new object[] { 0 });
+            var instance = c(new object[] {0});
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }
@@ -228,7 +227,7 @@ namespace DelegatesTest
         {
             var c = TestStructType.Constructor(typeof(int));
             Assert.IsNotNull(c);
-            var instance = c(new object[] { 0 });
+            var instance = c(new object[] {0});
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestStructType);
         }
@@ -248,7 +247,7 @@ namespace DelegatesTest
         {
             var c = TestClassType.Constructor(typeof(string));
             Assert.IsNotNull(c);
-            var instance = c(new object[] { "s" });
+            var instance = c(new object[] {"s"});
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance, TestClassType);
         }

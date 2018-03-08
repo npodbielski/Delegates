@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StructSetActionRef.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Delegates
 {
     /// <summary>
-    /// Delegates for setting value of indexer with single index parameter in structure type by reference.
+    ///     Delegates for setting value of indexer with single index parameter in structure type by reference.
     /// </summary>
     /// <typeparam name="T">Structure type</typeparam>
     /// <typeparam name="TProp">Property type</typeparam>

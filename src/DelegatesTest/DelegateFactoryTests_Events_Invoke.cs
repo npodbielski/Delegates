@@ -1,23 +1,22 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactoryTests_Events_Invoke.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
-
-#if !NET35
     [TestClass]
     public class DelegateFactoryTests_Events_Invoke
     {
-        private const string TestValue = "test";
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStructType = typeof(TestStruct);
-        private TestStruct _testStructInstance = new TestStruct(0);
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly IService _interfaceImpl = new Service();
 
         [TestMethod]
         public void EventInvoke_ByTypes_Public()
@@ -25,12 +24,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PublicEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PublicEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
-            };
-            _testClassInstance.AddPublicEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPublicEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PublicEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -41,12 +42,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.InternalEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.InternalEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
-            };
-            _testClassInstance.AddInternalEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddInternalEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.InternalEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -57,12 +60,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.ProtectedEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.ProtectedEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
-            };
-            _testClassInstance.AddProtectedEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddProtectedEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.ProtectedEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -73,12 +78,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PrivateEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PrivateEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
-            };
-            _testClassInstance.AddPrivateEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPrivateEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PrivateEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -89,12 +96,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, object>("PublicEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PublicEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PublicEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
-            };
-            _testClassInstance.AddPublicEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPublicEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PublicEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -123,7 +132,7 @@ namespace DelegatesTest
         }
 
         /// <summary>
-        /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
+        ///     Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
         public void EventInvoke_ByTypes_Public_EventIsNull()
@@ -163,12 +172,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PublicEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PublicEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
-            };
-            _testClassInstance.AddPublicEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPublicEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PublicEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -179,12 +190,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<TestClass.InternalEventArgs>("InternalEventBackend");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.InternalEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.InternalEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
-            };
-            _testClassInstance.AddInternalEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddInternalEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.InternalEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -195,12 +208,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.ProtectedEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.ProtectedEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
-            };
-            _testClassInstance.AddProtectedEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddProtectedEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.ProtectedEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -211,12 +226,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PrivateEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PrivateEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
-            };
-            _testClassInstance.AddPrivateEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPrivateEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PrivateEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -250,18 +267,20 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<object>("PublicEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PublicEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PublicEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
-            };
-            _testClassInstance.AddPublicEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPublicEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PublicEventArgs());
             Assert.IsTrue(eventExecuted);
         }
 
         /// <summary>
-        /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
+        ///     Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
         public void EventInvoke_ByObjectAndType_Public_EventIsNull()
@@ -301,12 +320,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke("PublicEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PublicEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PublicEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
-            };
-            _testClassInstance.AddPublicEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPublicEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PublicEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -317,12 +338,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke("InternalEventBackend");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.InternalEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.InternalEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
-            };
-            _testClassInstance.AddInternalEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddInternalEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.InternalEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -333,12 +356,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke("ProtectedEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.ProtectedEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.ProtectedEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
-            };
-            _testClassInstance.AddProtectedEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddProtectedEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.ProtectedEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -349,12 +374,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke("PrivateEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventHandler<TestClass.PrivateEventArgs> eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, TestClass.PrivateEventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
-            };
-            _testClassInstance.AddPrivateEventHandler(eventHandler);
+            }
+
+            _testClassInstance.AddPrivateEventHandler(EventHandler);
             call(_testClassInstance, new TestClass.PrivateEventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -383,7 +410,7 @@ namespace DelegatesTest
         }
 
         /// <summary>
-        /// Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
+        ///     Tests null checking in EventInvoke delegate (cant call event if there is not handlers attached)
         /// </summary>
         [TestMethod]
         public void EventInvoke_ByObjects_Public_EventIsNull()
@@ -423,12 +450,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, EventArgs>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -439,12 +468,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvokeCustomDelegate<TestClass, EventCustomDelegate>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -465,12 +496,14 @@ namespace DelegatesTest
                 ("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -481,12 +514,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvokeCustomDelegate<EventCustomDelegate>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -497,12 +532,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvokeCustomDelegate<EventHandler<EventArgs>>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -513,12 +550,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, EventArgs>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -529,12 +568,14 @@ namespace DelegatesTest
             var call = DelegateFactory.EventInvoke<TestClass, object>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -545,12 +586,14 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke<object>("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
@@ -561,15 +604,16 @@ namespace DelegatesTest
             var call = _testClassType.EventInvoke("CusDelegEvent");
             Assert.IsNotNull(call);
             var eventExecuted = false;
-            EventCustomDelegate eventHandler = (sender, args) =>
+
+            void EventHandler(object sender, EventArgs args)
             {
                 eventExecuted = true;
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
-            };
-            _testClassInstance.CusDelegEvent += eventHandler;
+            }
+
+            _testClassInstance.CusDelegEvent += EventHandler;
             call(_testClassInstance, new EventArgs());
             Assert.IsTrue(eventExecuted);
         }
-    } 
-#endif
+    }
 }

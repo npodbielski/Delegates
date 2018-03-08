@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactory_EventAdd.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Linq.Expressions;
 using Delegates.Extensions;
@@ -6,12 +12,12 @@ using Delegates.Helper;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
         /// <summary>
-        /// Creates delegate for adding event handler with source instance type and event argument type
+        ///     Creates delegate for adding event handler with source instance type and event argument type
         /// </summary>
         /// <typeparam name="TSource">Source type with event</typeparam>
         /// <typeparam name="TEventArgs">Event argument type</typeparam>
@@ -26,12 +32,13 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for adding event handler with source instance type and event method delegate type
+        ///     Creates delegate for adding event handler with source instance type and event method delegate type
         /// </summary>
         /// <typeparam name="TSource">Source type with event</typeparam>
-        /// <typeparam name="TDelegate">Event method delegate type. Can be either custom delegate or 
-        /// <see cref="EventHandler{TEventArgs}"/>, but for second case it is recommended to use 
-        /// <see cref="EventAdd{TSource, TEventArgs}"/> instead.
+        /// <typeparam name="TDelegate">
+        ///     Event method delegate type. Can be either custom delegate or
+        ///     <see cref="EventHandler{TEventArgs}" />, but for second case it is recommended to use
+        ///     <see cref="EventAdd{TSource, TEventArgs}" /> instead.
         /// </typeparam>
         /// <param name="eventName">Name of an event</param>
         /// <returns>Delegate for event add accessor</returns>
@@ -43,7 +50,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for adding event handler with source instance as object and event argument type
+        ///     Creates delegate for adding event handler with source instance as object and event argument type
         /// </summary>
         /// <typeparam name="TEventArgs">Event argument type</typeparam>
         /// <param name="source">Source type with defined event</param>
@@ -59,11 +66,12 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for adding event handler with source instance as object and event method delegate type
+        ///     Creates delegate for adding event handler with source instance as object and event method delegate type
         /// </summary>
-        /// <typeparam name="TDelegate">Event method delegate type. Can be either custom delegate or 
-        /// <see cref="EventHandler{TEventArgs}"/>, but for second case it is recommended to use 
-        /// <see cref="DelegateFactory.EventAdd{TEventArgs}"/> instead.
+        /// <typeparam name="TDelegate">
+        ///     Event method delegate type. Can be either custom delegate or
+        ///     <see cref="EventHandler{TEventArgs}" />, but for second case it is recommended to use
+        ///     <see cref="DelegateFactory.EventAdd{TEventArgs}" /> instead.
         /// </typeparam>
         /// <param name="source">Source type with defined event</param>
         /// <param name="eventName">Name of an event</param>
@@ -75,7 +83,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for adding event handler with source instance type and event argument as object
+        ///     Creates delegate for adding event handler with source instance type and event argument as object
         /// </summary>
         /// <typeparam name="TSource">Source type with event</typeparam>
         /// <param name="eventName">Name of an event</param>
@@ -86,7 +94,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for adding event handler with source instance as object and event argument as object
+        ///     Creates delegate for adding event handler with source instance as object and event argument as object
         /// </summary>
         /// <param name="source">Source type with defined event</param>
         /// <param name="eventName">Name of an event</param>
@@ -119,9 +127,11 @@ namespace Delegates
                     accessor.IsEventArgsTypeCorrect(eventArgsType);
                     return accessor.CreateDelegate<Action<TSource, TDelegate>>();
                 }
+
                 DelegateHelper.IsCompatible<TDelegate>(handlerType);
                 return EventAccessorImpl<Action<TSource, TDelegate>>(typeof(TSource), eventName, accessorName);
             }
+
             return null;
         }
 
@@ -131,21 +141,25 @@ namespace Delegates
             var eventInfo = source.GetEventInfo(eventName);
             if (eventInfo != null)
             {
-                var accessor = accessorName == TypeExtensions.AddAccessor ? eventInfo.AddMethod : eventInfo.RemoveMethod;
+                var accessor = accessorName == TypeExtensions.AddAccessor
+                    ? eventInfo.AddMethod
+                    : eventInfo.RemoveMethod;
                 var eventDelegateType = eventInfo.EventHandlerType;
                 var instanceParameter = Expression.Parameter(typeof(object), "source");
-                var delegateTypeParameter = Expression.Parameter(typeof(TDelegate).GetDelegateSecondParameter(), "delegate");
+                var delegateTypeParameter =
+                    Expression.Parameter(typeof(TDelegate).GetDelegateSecondParameter(), "delegate");
                 var eventFactory = EventsHelper.EventHandlerFactoryMethodInfo.MakeGenericMethod(
-                    delegateTypeParameter.Type, eventDelegateType, eventDelegateType.GetDelegateSecondParameter(), 
+                    delegateTypeParameter.Type, eventDelegateType, eventDelegateType.GetDelegateSecondParameter(),
                     source);
                 var methodCallExpression = Expression.Call(eventFactory,
-                      delegateTypeParameter, Expression.Constant(accessorName == TypeExtensions.RemoveAccessor));
+                    delegateTypeParameter, Expression.Constant(accessorName == TypeExtensions.RemoveAccessor));
                 var callExpression = Expression.Call(Expression.Convert(instanceParameter, source),
                     accessor, methodCallExpression);
                 var lambda = Expression.Lambda<TDelegate>(callExpression,
                     instanceParameter, delegateTypeParameter);
                 return lambda.Compile();
             }
+
             return null;
         }
 
@@ -173,8 +187,10 @@ namespace Delegates
                         instanceParameter, delegateTypeParameter);
                     return lambda.Compile();
                 }
+
                 return EventAccessorImpl<Action<object, TDelegate>>(source, eventName, accessorName);
             }
+
             return null;
         }
     }

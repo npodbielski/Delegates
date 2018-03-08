@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MethodInfoExtensions.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2017 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ namespace Delegates.Extensions
 #if NET45 || NETCORE || NET4 || PORTABLE||STANDARD
             DelegateHelper.CheckDelegateReturnType<TDelegate>(method);
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
-#elif NET35      
+#elif NET35
             return Delegate.CreateDelegate(typeof(TDelegate), method, true) as TDelegate;
 #endif
         }

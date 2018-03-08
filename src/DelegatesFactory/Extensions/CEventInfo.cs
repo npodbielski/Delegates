@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CEventInfo.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ namespace Delegates.Extensions
         /// Event add accessor.
         /// </summary>
         public MethodInfo AddMethod => _event?.GetAddMethod() ??
-                                       _event?.GetAddMethod(true);
+            _event?.GetAddMethod(true);
 
         /// <summary>
         /// Proxy property of <see cref="EventInfo.EventHandlerType"/>
@@ -40,6 +40,6 @@ namespace Delegates.Extensions
         /// Event remove accessor.
         /// </summary>
         public MethodInfo RemoveMethod => _event?.GetRemoveMethod() ??
-                                          _event?.GetRemoveMethod(true);
+            _event?.GetRemoveMethod(true);
     }
 }

@@ -1,13 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TestStruct.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
+
 #if NET45
 using System.Diagnostics.Contracts;
+
 #endif
 
 namespace DelegatesTest.TestObjects
@@ -89,6 +91,7 @@ namespace DelegatesTest.TestObjects
         private long this[long s] => s;
 
         public int PrivateIndexer;
+
         // ReSharper disable once UnusedMember.Local
         // ReSharper disable once UnusedParameter.Local
         private int this[int i1, int i2]
@@ -157,7 +160,7 @@ namespace DelegatesTest.TestObjects
         public static void StaticGenericMethodVoid<T>()
         {
             StaticGenericMethodVoidExecuted = true;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
         }
 
         public static Type[] StaticPublicTypeParams;

@@ -5,12 +5,12 @@ using Delegates.Extensions;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
         /// <summary>
-        /// Creates delegate for retrieving static field value
+        ///     Creates delegate for retrieving static field value
         /// </summary>
         /// <typeparam name="TSource">Source type with defined field</typeparam>
         /// <typeparam name="TField">Type of field</typeparam>
@@ -23,7 +23,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for retrieving static field value
+        ///     Creates delegate for retrieving static field value
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source">Type with defined field</param>
@@ -37,11 +37,12 @@ namespace Delegates
                 var lambda = Expression.Lambda(Expression.Field(null, fieldInfo));
                 return (Func<TField>)lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for retrieving static field value as object
+        ///     Creates delegate for retrieving static field value as object
         /// </summary>
         /// <param name="source">Type with defined field</param>
         /// <param name="fieldName">Field name</param>
@@ -53,18 +54,17 @@ namespace Delegates
             {
                 Expression returnExpression = Expression.Field(null, fieldInfo);
                 if (!fieldInfo.FieldType.IsClassType())
-                {
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
-                }
                 var lambda = Expression.Lambda<Func<object>>(returnExpression);
                 return lambda.Compile();
             }
+
             return null;
         }
 
-#if  !NET35
+#if !NET35
         /// <summary>
-        /// Obsolete
+        ///     Obsolete
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TField"></typeparam>

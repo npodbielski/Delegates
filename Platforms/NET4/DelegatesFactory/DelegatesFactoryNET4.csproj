@@ -94,6 +94,9 @@
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet.cs">
       <Link>DelegateFactory_IndexerSet.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet_ByObjects.cs">
+      <Link>DelegateFactory_IndexerSet_ByObjects.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceGenericMethod.cs">
       <Link>DelegateFactory_InstanceGenericMethod.cs</Link>
     </Compile>
@@ -105,6 +108,9 @@
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet.cs">
       <Link>DelegateFactory_PropertySet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet_Struct.cs">
+      <Link>DelegateFactory_PropertySet_Struct.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs">
       <Link>DelegateFactory_StaticFieldGet.cs</Link>

@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="EventsHelper.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +13,11 @@ using System.Reflection.Emit;
 #endif
 #if NET35 || NET4 || NETCORE || PORTABLE || STANDARD
 using Delegates.Extensions;
+
 #endif
 #if NET45 || NETCORE || STANDARD
 using WeakReference = System.WeakReference<object>;
+
 #endif
 
 namespace Delegates.Helper
@@ -42,6 +50,7 @@ namespace Delegates.Helper
                     haveKey = true;
                     return true;
                 }
+
                 return false;
             });
             if (haveKey)
@@ -55,6 +64,7 @@ namespace Delegates.Helper
                     return newEventHandler as TEventDelegate;
                 }
             }
+
             if (!isRemove)
             {
                 var type = typeof(TEventDelegate);
@@ -76,9 +86,11 @@ namespace Delegates.Helper
                     newEventHandler = GetConverter<TSourceDelegate, TEventDelegate>()(handler as TSourceDelegate)
                         as Delegate;
                 }
+
                 EventsProxies[new WeakReference(handler)] = new WeakReference(newEventHandler);
                 return newEventHandler as TEventDelegate;
             }
+
             return null;
         }
 
@@ -91,6 +103,7 @@ namespace Delegates.Helper
             {
                 Converters[key] = CreateDelegateConverter<TSource, TDest>();
             }
+
             return (Func<TSource, TDest>)Converters[key];
         }
 
@@ -114,7 +127,8 @@ namespace Delegates.Helper
             var typeBuilder = module.DefineType(name, TypeAttributes.Class | TypeAttributes.Public);
             typeBuilder.DefineDefaultConstructor(MethodAttributes.Public);
             var methodBuilder = typeBuilder.DefineMethod(name, MethodAttributes.Static | MethodAttributes.Public |
-                MethodAttributes.Final, CallingConventions.Standard, typeof(TDest), new[] { typeof(TSource) });
+                MethodAttributes.Final, CallingConventions.Standard,
+                typeof(TDest), new[] {typeof(TSource)});
             var generator = methodBuilder.GetILGenerator();
             var con = typeof(TDest).GetTypeInfo().GetConstructors()[0];
             generator.Emit(OpCodes.Ldarg_0);
@@ -250,7 +264,8 @@ namespace Delegates.Helper
             {
                 if (_defineDynamicModuleDelegate == null)
                 {
-                    _defineDynamicModuleDelegate = AssemblyBuilderType.InstanceMethod("DefineDynamicModule", typeof(string));
+                    _defineDynamicModuleDelegate =
+ AssemblyBuilderType.InstanceMethod("DefineDynamicModule", typeof(string));
                 }
 
                 return _defineDynamicModuleDelegate(assemblyBuilder, new object[] { name });
@@ -368,7 +383,8 @@ namespace Delegates.Helper
             {
                 if (_emitDelegateConstr == null)
                 {
-                    _emitDelegateConstr = ilGenerator.GetType().InstanceMethodVoid("Emit", OpCodeType, typeof(ConstructorInfo));
+                    _emitDelegateConstr =
+ ilGenerator.GetType().InstanceMethodVoid("Emit", OpCodeType, typeof(ConstructorInfo));
                 }
                 _emitDelegateConstr(ilGenerator, new[] { opCode, conInfo });
             }
@@ -377,7 +393,8 @@ namespace Delegates.Helper
             {
                 if (_emitDelegateMethod == null)
                 {
-                    _emitDelegateMethod = ilGenerator.GetType().InstanceMethodVoid("Emit", OpCodeType, typeof(MethodInfo));
+                    _emitDelegateMethod =
+ ilGenerator.GetType().InstanceMethodVoid("Emit", OpCodeType, typeof(MethodInfo));
                 }
                 _emitDelegateMethod(ilGenerator, new[] { opCode, methodInfo });
             }

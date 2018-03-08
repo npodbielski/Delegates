@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeExtensions.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2017 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ namespace Delegates.Extensions
             var validValueTypeConstraint = IsValueConstraintValid(destination, source);
             var constraints = destination.GetTypeInfo().GetGenericParameterConstraints();
             return validNewConstraint && validReferenceConstraint && validValueTypeConstraint &&
-                   constraints.All(t1 => t1.CanBeAssignedFrom(source));
+                constraints.All(t1 => t1.CanBeAssignedFrom(source));
         }
 
         public static bool IsCrossConstraintInvalid(this Type source, Type[] allGenericArgs, Type[] typeParameters)
@@ -77,6 +77,7 @@ namespace Delegates.Extensions
                     }
                 }
             }
+
             return invalid;
         }
 
@@ -84,7 +85,7 @@ namespace Delegates.Extensions
         {
             //check new() constraint which is not included in GetGenericParameterConstraints
             var valid = destination.GetTypeInfo().GenericParameterAttributes ==
-                        GenericParameterAttributes.DefaultConstructorConstraint;
+                GenericParameterAttributes.DefaultConstructorConstraint;
             if (valid)
             {
                 valid &= source.GetTypeInfo().GetConstructor(new Type[0]) != null;
@@ -93,6 +94,7 @@ namespace Delegates.Extensions
             {
                 valid = true;
             }
+
             return valid;
         }
 
@@ -100,7 +102,7 @@ namespace Delegates.Extensions
         {
             //check class constraint which is not included in GetGenericParameterConstraints
             var valid = destination.GetTypeInfo().GenericParameterAttributes ==
-                        GenericParameterAttributes.ReferenceTypeConstraint;
+                GenericParameterAttributes.ReferenceTypeConstraint;
             if (valid)
             {
                 valid &= source.GetTypeInfo().IsClass;
@@ -109,6 +111,7 @@ namespace Delegates.Extensions
             {
                 valid = true;
             }
+
             return valid;
         }
 
@@ -116,7 +119,7 @@ namespace Delegates.Extensions
         {
             //check new() constraint which is not included in GetGenericParameterConstraints
             var valid = destination.GetTypeInfo().GenericParameterAttributes ==
-                        GenericParameterAttributes.NotNullableValueTypeConstraint;
+                GenericParameterAttributes.NotNullableValueTypeConstraint;
             if (valid)
             {
                 valid &= source.GetTypeInfo().IsValueType;
@@ -125,6 +128,7 @@ namespace Delegates.Extensions
             {
                 valid = true;
             }
+
             return valid;
         }
 
@@ -134,13 +138,14 @@ namespace Delegates.Extensions
             {
                 var interfaces = source.GetTypeInfo().GetInterfaces();
                 if (interfaces.Any(i => i == interfaceType
-                                        || i.ImplementsInterface(interfaceType)))
+                    || i.ImplementsInterface(interfaceType)))
                 {
                     return true;
                 }
 
                 source = source.GetTypeInfo().BaseType;
             }
+
             return false;
         }
 
@@ -180,13 +185,14 @@ namespace Delegates.Extensions
                     $"Provided return type \'{source.Name}\' is not compatible with expected type " +
                     $"\'{destination.Name}\'");
             }
+
             return true;
         }
 
         public static bool CanBeConvertedFrom(this Type destination, Type source)
         {
             return HasIdentityPrimitiveOrNullableConversionDeleg(destination, source)
-                   || HasReferenceConversionDeleg(destination, source);
+                || HasReferenceConversionDeleg(destination, source);
         }
 
         internal static Func<Type, Type, bool> HasReferenceConversionDeleg =>
@@ -194,7 +200,7 @@ namespace Delegates.Extensions
             (_hasReferenceConversionDeleg = TypeUtils.StaticMethod<Func<Type, Type, bool>>
             (
 #if !(NETCORE||STANDARD)
-                    "HasReferenceConversion" 
+                "HasReferenceConversion"
 #else
                     "HasReferenceConversionTo"
 #endif
@@ -208,17 +214,17 @@ namespace Delegates.Extensions
 #else
                 "HasIdentityPrimitiveOrNullableConversionTo"
 #endif
-                ));
+            ));
 
         internal static Type TypeUtils
         {
             get
             {
                 return _typeUtils ?? (_typeUtils =
-                    typeof(Expression)
+                            typeof(Expression)
 #if !NET35
-                    .GetTypeInfo()
-                    .Assembly.GetType("System.Dynamic.Utils.TypeUtils", true)
+                                .GetTypeInfo()
+                                .Assembly.GetType("System.Dynamic.Utils.TypeUtils", true)
 #endif
                     );
             }
@@ -274,6 +280,7 @@ namespace Delegates.Extensions
                     {
                         continue;
                     }
+
                     for (var index = 0; index < parameters.Length; index++)
                     {
                         var parameterInfo = parameters[index];
@@ -286,6 +293,7 @@ namespace Delegates.Extensions
                             break;
                         }
                     }
+
                     for (var index = 0; index < genericArguments.Length; index++)
                     {
                         var genericArgument = genericArguments[index];
@@ -298,6 +306,7 @@ namespace Delegates.Extensions
                             break;
                         }
                     }
+
                     if (parametersTypesValid)
                     {
                         methodInfo = m.MakeGenericMethod(typeParameters);
@@ -305,6 +314,7 @@ namespace Delegates.Extensions
                     }
                 }
             }
+
             return methodInfo;
         }
 
@@ -326,6 +336,7 @@ namespace Delegates.Extensions
                 {
                     continue;
                 }
+
                 for (var index = 0; index < parameters.Length; index++)
                 {
                     var parameterInfo = parameters[index];
@@ -336,12 +347,14 @@ namespace Delegates.Extensions
                         break;
                     }
                 }
+
                 if (parametersTypesValid)
                 {
                     methodInfo = method;
                     break;
                 }
             }
+
             return methodInfo;
         }
 
@@ -362,6 +375,7 @@ namespace Delegates.Extensions
                     //if more than one method it means there are also generic -> enumerate
                     enumerateMethods = true;
                 }
+
                 if (enumerateMethods)
                 {
                     methodInfo = GetMethodInfoByEnumerate(source, name, parametersTypes, isStatic);
@@ -375,6 +389,7 @@ namespace Delegates.Extensions
             {
                 methodInfo = GetGenericMethod(source, name, parametersTypes, typeParameters, isStatic);
             }
+
             return methodInfo;
         }
 
@@ -386,7 +401,8 @@ namespace Delegates.Extensions
             var typeInfo = source.GetTypeInfo();
             var methodInfo =
                 (typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
-                 typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes, null)) ??
+                    typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes,
+                        null)) ??
                 typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, parametersTypes, null);
             return methodInfo;
         }
@@ -403,8 +419,8 @@ namespace Delegates.Extensions
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
             var propertyInfo = typeInfo.GetProperty(propertyName, staticOrInstance) ??
-                               typeInfo.GetProperty(propertyName, staticOrInstance | PrivateOrProtectedBindingFlags) ??
-                               typeInfo.GetProperty(propertyName, staticOrInstance | InternalBindingFlags);
+                typeInfo.GetProperty(propertyName, staticOrInstance | PrivateOrProtectedBindingFlags) ??
+                typeInfo.GetProperty(propertyName, staticOrInstance | InternalBindingFlags);
 #if NET35 || NET4 || PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
@@ -417,8 +433,8 @@ namespace Delegates.Extensions
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
             var fieldInfo = (typeInfo.GetField(fieldName, staticOrInstance) ??
-                             typeInfo.GetField(fieldName, staticOrInstance | PrivateOrProtectedBindingFlags)) ??
-                            typeInfo.GetField(fieldName, staticOrInstance | InternalBindingFlags);
+                    typeInfo.GetField(fieldName, staticOrInstance | PrivateOrProtectedBindingFlags)) ??
+                typeInfo.GetField(fieldName, staticOrInstance | InternalBindingFlags);
             return fieldInfo;
         }
 
@@ -445,9 +461,11 @@ namespace Delegates.Extensions
                     indexerName = firstIndexerInfo.Name;
                 }
             }
+
             var indexerInfo = properties.FirstOrDefault(p => p.Name == indexerName
-                                                             &&
-                                                             IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
+                &&
+                IndexParametersEquals(p.GetIndexParameters(),
+                    indexesTypes));
             if (indexerInfo != null)
             {
 #if NET35 || NET4 || PORTABLE
@@ -456,6 +474,7 @@ namespace Delegates.Extensions
                 return indexerInfo;
 #endif
             }
+
             return null;
         }
 
@@ -502,9 +521,9 @@ namespace Delegates.Extensions
 #else
             return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
                     source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
-                   source.GetConstructor(
-                       InternalBindingFlags | BindingFlags.Instance, null,
-                       types, null);
+                source.GetConstructor(
+                    InternalBindingFlags | BindingFlags.Instance, null,
+                    types, null);
 #endif
         }
 
@@ -517,9 +536,9 @@ namespace Delegates.Extensions
             GetEventInfo(this Type sourceType, string eventName)
         {
             var eventInfo = (sourceType.GetTypeInfo().GetEvent(eventName)
-                             ?? sourceType.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
-                            ?? sourceType.GetTypeInfo().GetEvent(eventName,
-                                InternalBindingFlags | BindingFlags.Instance);
+                    ?? sourceType.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
+                ?? sourceType.GetTypeInfo().GetEvent(eventName,
+                    InternalBindingFlags | BindingFlags.Instance);
 #if NET35 || NET4 || PORTABLE
             return eventInfo != null ? new CEventInfo(eventInfo) : null;
 #else

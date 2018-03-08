@@ -30,10 +30,12 @@
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldSet.cs" Link="DelegateFactory_FieldSet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerGet.cs" Link="DelegateFactory_IndexerGet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet.cs" Link="DelegateFactory_IndexerSet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet_ByObjects.cs" Link="DelegateFactory_IndexerSet_ByObjects.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceGenericMethod.cs" Link="DelegateFactory_InstanceGenericMethod.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceMethod.cs" Link="DelegateFactory_InstanceMethod.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertyGet.cs" Link="DelegateFactory_PropertyGet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet.cs" Link="DelegateFactory_PropertySet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet_Struct.cs" Link="DelegateFactory_PropertySet_Struct.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs" Link="DelegateFactory_StaticFieldGet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldSet.cs" Link="DelegateFactory_StaticFieldSet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticGenericMethod.cs" Link="DelegateFactory_StaticGenericMethod.cs" />

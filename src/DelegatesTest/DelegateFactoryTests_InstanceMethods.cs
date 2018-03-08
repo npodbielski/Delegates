@@ -1,8 +1,13 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactoryTests_InstanceMethods.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 
 namespace DelegatesTest
 {
@@ -11,12 +16,12 @@ namespace DelegatesTest
     {
         //TODO: consider closed delegates for instance methods without instance parameters
         private const string TestValue = "test";
+        private readonly IService _interfaceImpl = new Service();
+        private readonly Type _interfaceType = typeof(IService);
         private readonly TestClass _testClassInstance = new TestClass();
         private readonly Type _testClassType = typeof(TestClass);
         private readonly Type _testStructType = typeof(TestStruct);
         private TestStruct _testStructInstance = new TestStruct(0);
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly IService _interfaceImpl = new Service();
 
         //TODO: test instance methods with out or ref modifiers
         //TODO: test InstanceMethod extension method with interface that is implemented in source type but do not have method defined
@@ -145,10 +150,7 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -159,239 +161,8 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
-
-#if !NET35
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_4Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_5Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_6Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string>>("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_7Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_8Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_9Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_10Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_11Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_12Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_13Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_14Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_15Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_NoVoid_16Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-#endif
 
         [TestMethod]
         public void Public_Method_ByTypes_Void_2Parameters()
@@ -401,10 +172,7 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -415,235 +183,8 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
-
-#if !NET35
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_4Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string>>("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_5Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_6Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_7Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_8Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_9Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_10Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_11Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_12Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_13Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_14Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_15Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByTypes_Void_16Parameters()
-        {
-            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-#endif
 
         [TestMethod]
         public void Internal_Method_ByTypes_Void_SingleParameter()
@@ -949,10 +490,7 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -963,10 +501,7 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -977,10 +512,7 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -991,462 +523,41 @@ namespace DelegatesTest
             var index = 0;
             var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
-
-#if !NET35
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_4Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string>>("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_4Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string>>("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_5Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_5Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_6Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_6Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_7Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_7Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_8Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_8Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_9Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_9Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_10Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_10Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_11Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_11Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_12Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_12Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_13Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_13Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_14Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_14Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_NoVoid_15Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_15Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
-                ("PublicMethod");
-            Assert.IsNotNull(m);
-            var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++);
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-#endif
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_16Parameters()
         {
             var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string, string>>
+                    string, string, string, string, string, string, string, string, string, string, string>>
                 ("PublicMethod");
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
                 TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
                 TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
                 TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_16Parameters()
         {
             var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string, string>>
+                    string, string, string, string, string, string, string, string, string, string, string>>
                 ("PublicMethod");
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
                 TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
                 TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
                 TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -1457,10 +568,7 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -1471,10 +579,7 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -1485,10 +590,7 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -1499,456 +601,45 @@ namespace DelegatesTest
             var index = 0;
             m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
-
-#if !NET35
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_4Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string>>("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_4Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string>>("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_5Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_5Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_6Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_6Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_7Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_7Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_8Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_8Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_9Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_9Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_10Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_10Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_11Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_11Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_12Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_12Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_13Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_13Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_14Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_14Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_Void_15Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-
-        [TestMethod]
-        public void Public_Method_ByObjectAndTypes_WithConversion_Void_15Parameters()
-        {
-            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string>>
-                ("PublicMethodVoid");
-            Assert.IsNotNull(m);
-            var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
-            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
-        }
-#endif
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_16Parameters()
         {
             var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
+                    string, string, string, string, string, string, string, string, string, string>>
                 ("PublicMethodVoid");
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
                 , TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_WithConversion_Void_16Parameters()
         {
             var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
-                string, string, string, string, string, string, string, string, string, string>>
+                    string, string, string, string, string, string, string, string, string, string>>
                 ("PublicMethodVoid");
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
                 , TestValue + index++);
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -2102,7 +793,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string));
             Assert.IsNotNull(m);
-            m(_testClassInstance, new[] { TestValue });
+            m(_testClassInstance, new[] {TestValue});
             Assert.AreEqual(TestValue, _testClassInstance.PublicMethodVoidParameter);
         }
 
@@ -2119,7 +810,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string));
             Assert.IsNotNull(m);
-            m(_testClassInstance, new[] { TestValue, TestValue + 1 });
+            m(_testClassInstance, new[] {TestValue, TestValue + 1});
             Assert.AreEqual(TestValue, _testClassInstance.PublicMethodVoidParameter);
         }
 
@@ -2136,7 +827,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string));
             Assert.IsNotNull(m);
-            AssertHelper.ThrowsException<InvalidCastException>(() => m(_testClassInstance, new object[] { 0 }));
+            AssertHelper.ThrowsException<InvalidCastException>(() => m(_testClassInstance, new object[] {0}));
         }
 
         [TestMethod]
@@ -2182,7 +873,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string));
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance, new[] { TestValue });
+            var result = m(_testClassInstance, new[] {TestValue});
             Assert.AreEqual(TestValue, result);
         }
 
@@ -2191,7 +882,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethod("InternalMethod", typeof(string));
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance, new[] { TestValue });
+            var result = m(_testClassInstance, new[] {TestValue});
             Assert.AreEqual(TestValue, result);
         }
 
@@ -2201,7 +892,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethod("ProtectedMethod", typeof(string));
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance, new[] { TestValue });
+            var result = m(_testClassInstance, new[] {TestValue});
             Assert.AreEqual(TestValue, result);
         }
 
@@ -2211,7 +902,7 @@ namespace DelegatesTest
         {
             var m = _testClassType.InstanceMethod("PrivateMethod", typeof(string));
             Assert.IsNotNull(m);
-            var result = m(_testClassInstance, new[] { TestValue });
+            var result = m(_testClassInstance, new[] {TestValue});
             Assert.AreEqual(TestValue, result);
         }
 
@@ -2221,12 +912,9 @@ namespace DelegatesTest
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++ });
+            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -2235,92 +923,94 @@ namespace DelegatesTest
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++ });
+            var result = m(_testClassInstance,
+                new object[] {TestValue + index++, TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_4Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++ });
+            var result = m(_testClassInstance,
+                new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_5Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_6Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_7Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_8Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string),
-              typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
+
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_9Parameters()
         {
@@ -2328,13 +1018,13 @@ namespace DelegatesTest
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
 
@@ -2346,124 +1036,126 @@ namespace DelegatesTest
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_11Parameters()
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
-               typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-               typeof(string), typeof(string));
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_12Parameters()
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
-               typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-               typeof(string), typeof(string), typeof(string));
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_13Parameters()
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
-             typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-             typeof(string), typeof(string), typeof(string), typeof(string));
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_14Parameters()
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_15Parameters()
         {
             var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_16Parameters()
         {
-            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-            typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethod("PublicMethod", typeof(string), typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            var result = m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
-                TestValue + index++, TestValue + index++});
-            Assert.AreEqual(TestValue + "0", result);
-            for (var i = 0; i < 1; i++)
+            var result = m(_testClassInstance, new object[]
             {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++
+            });
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -2472,247 +1164,271 @@ namespace DelegatesTest
             var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++ });
+            m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_3Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++ });
+            m(_testClassInstance, new object[] {TestValue + index++, TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_4Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++ });
+            m(_testClassInstance,
+                new object[] {TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_5Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++ });
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_6Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_7Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_8Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_9Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_10Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_11Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_12Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_13Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_14Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_15Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_16Parameters()
         {
-            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
-                    typeof(string));
+            var m = _testClassType.InstanceMethodVoid("PublicMethodVoid", typeof(string), typeof(string),
+                typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
+                typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
-            m(_testClassInstance, new object[] { TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
-                , TestValue + index++});
+            m(_testClassInstance,
+                new object[]
+                {
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                    TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++
+                });
             Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
-            for (var i = 0; i < 1; i++)
-            {
-                Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
-            }
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
         }
 
         [TestMethod]
@@ -2838,9 +1554,6 @@ namespace DelegatesTest
             Assert.AreEqual(result, _testClassInstance.PublicParameterlessReturnValue);
         }
 
-        //NOTE: custom delegates are not supported in delegates called by objects; only Action<object, object[]> and 
-        //...Func<object, object[], object> are supported
-        
         [TestMethod]
         public void InterfaceMethod_ByTypes()
         {
@@ -2873,8 +1586,1164 @@ namespace DelegatesTest
         {
             var m = _interfaceType.InstanceMethod("Echo", typeof(string));
             Assert.IsNotNull(m);
-            var result = m(_interfaceImpl, new object[] { TestValue });
+            var result = m(_interfaceImpl, new object[] {TestValue});
             Assert.AreEqual(TestValue, result);
         }
+
+#if !NET35
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_4Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_5Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_6Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                string>>("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_7Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_8Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_9Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_10Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_11Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_12Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_13Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_14Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_15Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_NoVoid_16Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_4Parameters()
+        {
+            var m =
+                DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_5Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_6Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_7Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_8Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_9Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_10Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_11Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_12Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_13Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_14Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_15Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByTypes_Void_16Parameters()
+        {
+            var m = DelegateFactory.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_4Parameters()
+        {
+            var m =
+                _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string>>("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_4Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string>>("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_5Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_5Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_6Parameters()
+        {
+            var m = _testClassType
+                .InstanceMethod<Func<TestClass, string, string, string, string, string, string, string>>
+                    ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_6Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_7Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_7Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_8Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_8Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_9Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_9Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_10Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_10Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_11Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_11Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_12Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_12Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_13Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_13Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_14Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_14Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_NoVoid_15Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_NoVoid_15Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Func<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string, string>>
+                ("PublicMethod");
+            Assert.IsNotNull(m);
+            var index = 0;
+            var result = m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", result);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+#endif
+
+#if !NET35
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_4Parameters()
+        {
+            var m = _testClassType
+                .InstanceMethod<Action<TestClass, string, string, string, string>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_4Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string>>("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_5Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_5Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_6Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_6Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_7Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_7Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_8Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_8Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_9Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_9Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_10Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_10Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_11Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_11Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_12Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_12Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_13Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_13Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_14Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_14Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_Void_15Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<TestClass, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+
+        [TestMethod]
+        public void Public_Method_ByObjectAndTypes_WithConversion_Void_15Parameters()
+        {
+            var m = _testClassType.InstanceMethod<Action<object, string, string, string, string, string, string,
+                    string, string, string, string, string, string, string, string, string>>
+                ("PublicMethodVoid");
+            Assert.IsNotNull(m);
+            var index = 0;
+            m(_testClassInstance, TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++
+                , TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++,
+                TestValue + index++);
+            Assert.AreEqual(TestValue + "0", _testClassInstance.PublicMethodVoidParameter);
+            for (var i = 0; i < 1; i++) Assert.AreEqual(TestValue + i, _testClassInstance.PublicParams[i]);
+        }
+#endif
     }
 }
