@@ -80,7 +80,7 @@ namespace Delegates.Helper
 
         private static MethodInfo CheckInvokeMethod(Type delegateType)
         {
-            var invokeMethod = delegateType.GetTypeInfo().GetMethod("Invoke");
+            var invokeMethod = delegateType.GetMethod("Invoke");
             if (invokeMethod == null)
                 throw new ArgumentException(
                     $"TDelegate type do not have Invoke method. Check if delegate base class is {typeof(Delegate).FullName}.");

@@ -152,14 +152,17 @@
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs">
       <Link>Helper\EventsHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
-      <Link>Helper\ParametersIndexes.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\src\Common\DelegatesAssemblyInfo.cs">
       <Link>Properties\DelegatesAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
+      <Link>Helper\ParametersIndexes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\PortableAssemblyBuilder.cs">
+      <Link>Helper\PortableAssemblyBuilder.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -52,7 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETStandard.csproj" />
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETStandard15.csproj" />
   </ItemGroup>
 
 </Project>

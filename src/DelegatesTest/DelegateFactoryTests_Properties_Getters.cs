@@ -304,5 +304,27 @@ namespace DelegatesTest
             Assert.IsNotNull(pg);
             Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
         }
+
+        [TestMethod]
+        public void PropertyGet_NonStaticByStaticName_ByObjects()
+        {
+            var pg = _testClassType.PropertyGet("StaticPublicProperty");
+            Assert.IsNull(pg);
+        }
+        
+        [TestMethod]
+        public void PropertyGet_NonStaticByStaticName_ByObjectAndType()
+        {
+            var pg = _testClassType.PropertyGet<string>("StaticPublicProperty");
+            Assert.IsNull(pg);
+        }
+
+
+        [TestMethod]
+        public void PropertyGet_NonStaticByStaticName_ByTypes()
+        {
+            var pg = DelegateFactory.PropertyGet<TestClass,string>("StaticPublicProperty");
+            Assert.IsNull(pg);
+        }
     }
 }

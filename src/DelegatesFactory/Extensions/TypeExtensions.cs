@@ -24,9 +24,11 @@ namespace Delegates.Extensions
 
         public const string RemoveAccessor = "remove";
 
+#if !NETSTANDARD1_1
         private const BindingFlags PrivateOrProtectedBindingFlags = BindingFlags.NonPublic;
 
-        private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
+        private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic; 
+#endif
 
         public static bool CanBeAssignedFrom(this Type destination, Type source)
         {
@@ -57,7 +59,7 @@ namespace Delegates.Extensions
             return validNewConstraint && validReferenceConstraint && validValueTypeConstraint &&
                 constraints.All(t1 => t1.CanBeAssignedFrom(source));
         }
-
+        
         public static bool IsCrossConstraintInvalid(this Type source, Type[] allGenericArgs, Type[] typeParameters)
         {
             var constraints = source.GetTypeInfo().GetGenericParameterConstraints();
@@ -81,6 +83,13 @@ namespace Delegates.Extensions
             return invalid;
         }
 
+#if NETSTANDARD1_1
+        private static ConstructorInfo GetConstructor(this Type source, Type[] types)
+        {
+            return source.GetConstructorInfo(types);
+        }
+#endif
+
         private static bool IsNewConstraintValid(Type destination, Type source)
         {
             //check new() constraint which is not included in GetGenericParameterConstraints
@@ -88,7 +97,7 @@ namespace Delegates.Extensions
                 GenericParameterAttributes.DefaultConstructorConstraint;
             if (valid)
             {
-                valid &= source.GetTypeInfo().GetConstructor(new Type[0]) != null;
+                valid &= source.GetConstructor(new Type[0]) != null;
             }
             else
             {
@@ -105,7 +114,7 @@ namespace Delegates.Extensions
                 GenericParameterAttributes.ReferenceTypeConstraint;
             if (valid)
             {
-                valid &= source.GetTypeInfo().IsClass;
+                valid &= source.IsClassType();
             }
             else
             {
@@ -122,7 +131,7 @@ namespace Delegates.Extensions
                 GenericParameterAttributes.NotNullableValueTypeConstraint;
             if (valid)
             {
-                valid &= source.GetTypeInfo().IsValueType;
+                valid &= source.IsValueType();
             }
             else
             {
@@ -132,11 +141,20 @@ namespace Delegates.Extensions
             return valid;
         }
 
+        private static Type[] GetInterfaces(this Type source)
+        {
+#if NETSTANDARD1_1
+            return source.GetTypeInfo().ImplementedInterfaces.ToArray();
+#else
+            return source.GetTypeInfo().GetInterfaces();
+#endif
+        }
+
         private static bool ImplementsInterface(this Type source, Type interfaceType)
         {
             while (source != null)
             {
-                var interfaces = source.GetTypeInfo().GetInterfaces();
+                var interfaces = source.GetInterfaces();
                 if (interfaces.Any(i => i == interfaceType
                     || i.ImplementsInterface(interfaceType)))
                 {
@@ -151,27 +169,27 @@ namespace Delegates.Extensions
 
         public static Type[] GenericTypeArguments(this Type source)
         {
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             return source.GetGenericArguments();
-#elif NET45||NETCORE||STANDARD
+#elif NET45 || NETCORE || STANDARD
             return source.GetTypeInfo().GenericTypeArguments;
 #endif
         }
 
         public static bool IsClassType(this Type source)
         {
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             return source.IsClass;
-#elif NET45||NETCORE||STANDARD
+#elif NET45 || NETCORE || STANDARD
             return source.GetTypeInfo().IsClass;
 #endif
         }
 
         public static bool IsValueType(this Type source)
         {
-#if NET35||NET4||PORTABLE
+#if NET35 || NET4 || PORTABLE
             return source.IsValueType;
-#elif NET45||NETCORE||STANDARD
+#elif NET45 || NETCORE || STANDARD
             return source.GetTypeInfo().IsValueType;
 #endif
         }
@@ -199,17 +217,17 @@ namespace Delegates.Extensions
             _hasReferenceConversionDeleg ??
             (_hasReferenceConversionDeleg = TypeUtils.StaticMethod<Func<Type, Type, bool>>
             (
-#if !(NETCORE||STANDARD)
+#if !(NETCORE || STANDARD)
                 "HasReferenceConversion"
 #else
-                    "HasReferenceConversionTo"
+                "HasReferenceConversionTo"
 #endif
             ));
 
         internal static Func<Type, Type, bool> HasIdentityPrimitiveOrNullableConversionDeleg =>
             _hasIdentityPrimitiveOrNullableConversionDeleg ??
             (_hasIdentityPrimitiveOrNullableConversionDeleg = TypeUtils.StaticMethod<Func<Type, Type, bool>>(
-#if !(NETCORE||STANDARD)
+#if !(NETCORE || STANDARD)
                 "HasIdentityPrimitiveOrNullableConversion"
 #else
                 "HasIdentityPrimitiveOrNullableConversionTo"
@@ -220,20 +238,38 @@ namespace Delegates.Extensions
         {
             get
             {
+                var t = Type.GetType("System.Dynamic.Utils.TypeUtils, System.Linq.Expressions");
                 return _typeUtils ?? (_typeUtils =
                             typeof(Expression)
 #if !NET35
                                 .GetTypeInfo()
-                                .Assembly.GetType("System.Dynamic.Utils.TypeUtils", true)
+                                .Assembly
+#if NETSTANDARD1_1
+                                .GetType("System.Dynamic.Utils.TypeUtils")
+#else
+                                .GetType("System.Dynamic.Utils.TypeUtils", true) 
+#endif
 #endif
                     );
             }
         }
 
-#if NET45 || NETCORE || STANDARD
+#if NET45 || NETCORE || NETSTANDARD1_5
         public static MethodInfo GetMethod(this Type source, string methodName)
         {
-            return source.GetTypeInfo().GetMethod(methodName);
+            var typeInfo = source.GetTypeInfo();
+#if !NETSTANDARD1_5
+            return typeInfo.GetMethod(methodName); 
+#else
+            return typeInfo.GetDeclaredMethod(methodName);
+#endif
+        }
+#endif
+
+#if NETSTANDARD1_1
+        public static MethodInfo GetMethods(this Type source, string methodName)
+        {
+            return source.GetTypeInfo().GetDeclaredMethod(methodName);
         }
 #endif
 
@@ -259,15 +295,25 @@ namespace Delegates.Extensions
             return parameters;
         }
 
+        private static IEnumerable<MethodInfo> GetAllMethods(this Type source, bool isStatic)
+        {
+#if NETSTANDARD1_1
+            return source.GetTypeInfo().DeclaredMethods;
+#else
+            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
+            var ms = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public)
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | PrivateOrProtectedBindingFlags))
+                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | InternalBindingFlags));
+            return ms;
+#endif
+        }
+
         public static MethodInfo GetGenericMethod(this Type source, string name, Type[] parametersTypes,
             Type[] typeParameters,
             bool isStatic)
         {
             MethodInfo methodInfo = null;
-            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            var ms = source.GetTypeInfo().GetMethods(staticOrInstance | BindingFlags.Public)
-                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | PrivateOrProtectedBindingFlags))
-                .Concat(source.GetTypeInfo().GetMethods(staticOrInstance | InternalBindingFlags));
+            var ms = source.GetAllMethods(isStatic);
             foreach (var m in ms)
             {
                 if (m.Name == name && m.IsGenericMethod)
@@ -322,13 +368,8 @@ namespace Delegates.Extensions
             bool isStatic)
         {
             MethodInfo methodInfo = null;
-            var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
-            var typeInfo = source.GetTypeInfo();
-            IEnumerable<MethodInfo> methods = typeInfo.GetMethods(staticOrInstance | BindingFlags.Public);
-            methods = methods.Concat(typeInfo.GetMethods(staticOrInstance | PrivateOrProtectedBindingFlags));
-            methods = methods.Concat(typeInfo.GetMethods(staticOrInstance | InternalBindingFlags));
-            var correctNameMethods = methods.Where(m => m.Name == name && !m.IsGenericMethod);
-            foreach (var method in correctNameMethods)
+            var methods = source.GetAllMethods(isStatic).Where(m => m.Name == name && !m.IsGenericMethod);
+            foreach (var method in methods)
             {
                 var parameters = method.GetParameters();
                 var parametersTypesValid = parameters.Length == parametersTypes.Length;
@@ -407,6 +448,13 @@ namespace Delegates.Extensions
             return methodInfo;
         }
 #endif
+#if NETSTANDARD1_1
+        private static bool IsPropertyStatic(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.GetMethod != null && propertyInfo.GetMethod.IsStatic
+                || propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsStatic;
+        } 
+#endif
 
         public static
 #if NET35 || NET4 || PORTABLE
@@ -414,13 +462,23 @@ namespace Delegates.Extensions
 #else
             PropertyInfo
 #endif
-            GetPropertyInfo(this Type source, string propertyName, bool isStatic)
+            GetPropertyInfo(this Type source, string name, bool isStatic)
         {
+#if NETSTANDARD1_1
+            var propertyInfo = source.GetTypeInfo().GetDeclaredProperty(name);
+            if (propertyInfo != null 
+                    &&(!isStatic && propertyInfo.IsPropertyStatic() || 
+                    isStatic && !propertyInfo.IsPropertyStatic()))
+            {
+                propertyInfo = null;
+            }
+#else
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
-            var propertyInfo = typeInfo.GetProperty(propertyName, staticOrInstance) ??
-                typeInfo.GetProperty(propertyName, staticOrInstance | PrivateOrProtectedBindingFlags) ??
-                typeInfo.GetProperty(propertyName, staticOrInstance | InternalBindingFlags);
+            var propertyInfo = typeInfo.GetProperty(name, staticOrInstance) ??
+                typeInfo.GetProperty(name, staticOrInstance | PrivateOrProtectedBindingFlags) ??
+                typeInfo.GetProperty(name, staticOrInstance | InternalBindingFlags);
+#endif
 #if NET35 || NET4 || PORTABLE
             return new CPropertyInfo(propertyInfo);
 #else
@@ -430,12 +488,29 @@ namespace Delegates.Extensions
 
         public static FieldInfo GetFieldInfo(this Type source, string fieldName, bool isStatic)
         {
+#if NETSTANDARD1_1
+            return source.GetTypeInfo().GetDeclaredField(fieldName);
+#else
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
             var fieldInfo = (typeInfo.GetField(fieldName, staticOrInstance) ??
                     typeInfo.GetField(fieldName, staticOrInstance | PrivateOrProtectedBindingFlags)) ??
                 typeInfo.GetField(fieldName, staticOrInstance | InternalBindingFlags);
-            return fieldInfo;
+            return fieldInfo; 
+#endif
+        }
+
+        private static IEnumerable<PropertyInfo> GetAllProperties(this Type source)
+        {
+#if NETSTANDARD1_1
+            return source.GetRuntimeProperties();
+#else
+            var properties = source.GetProperties().Concat(
+                    source.GetProperties(BindingFlags.NonPublic)).Concat(
+                    source.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+               .ToArray();
+            return properties;
+#endif
         }
 
         public static
@@ -448,11 +523,7 @@ namespace Delegates.Extensions
                 string indexerName = null)
         {
             indexerName = indexerName ?? Item;
-            var typeInfo = source.GetTypeInfo();
-            var properties = typeInfo.GetProperties().Concat(
-                    typeInfo.GetProperties(BindingFlags.NonPublic)).Concat(
-                    typeInfo.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
-                .ToArray();
+            var properties = source.GetAllProperties().ToArray();
             if (indexerName == Item)
             {
                 var firstIndexerInfo = properties.FirstOrDefault(p => p.GetIndexParameters().Length > 0);
@@ -463,9 +534,7 @@ namespace Delegates.Extensions
             }
 
             var indexerInfo = properties.FirstOrDefault(p => p.Name == indexerName
-                &&
-                IndexParametersEquals(p.GetIndexParameters(),
-                    indexesTypes));
+                && IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
             if (indexerInfo != null)
             {
 #if NET35 || NET4 || PORTABLE
@@ -478,21 +547,23 @@ namespace Delegates.Extensions
             return null;
         }
 
+        private static IEnumerable<ConstructorInfo> GetAllConstructors(this Type source)
+        {
+#if NETSTANDARD1_1
+            return source.GetTypeInfo().DeclaredConstructors.Where(c => !c.IsStatic);
+#else
+            var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public).Concat(
+                source.GetTypeInfo().GetConstructors(PrivateOrProtectedBindingFlags)).Concat(
+                source.GetTypeInfo().GetConstructors(InternalBindingFlags | BindingFlags.Instance));
+            return constructors;
+#endif
+        }
+
         public static ConstructorInfo GetConstructorInfo(this Type source, Type[] types)
         {
 #if NETCORE || PORTABLE || STANDARD
             ConstructorInfo constructor = null;
-            var constructors = source.GetTypeInfo().GetConstructors(BindingFlags.Public);
-            if (!constructors.Any())
-            {
-                constructors = source.GetTypeInfo().GetConstructors(PrivateOrProtectedBindingFlags);
-            }
-            if (!constructors.Any())
-            {
-                constructors =
-                    source.GetTypeInfo()
-                        .GetConstructors(InternalBindingFlags | BindingFlags.Instance);
-            }
+            var constructors = source.GetAllConstructors();
             foreach (var c in constructors)
             {
                 var parameters = c.GetParameters();
@@ -501,6 +572,7 @@ namespace Delegates.Extensions
                 {
                     continue;
                 }
+
                 for (var index = 0; index < parameters.Length; index++)
                 {
                     var parameterInfo = parameters[index];
@@ -511,12 +583,14 @@ namespace Delegates.Extensions
                         break;
                     }
                 }
+
                 if (parametersTypesValid)
                 {
                     constructor = c;
                     break;
                 }
             }
+
             return constructor;
 #else
             return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
@@ -524,6 +598,18 @@ namespace Delegates.Extensions
                 source.GetConstructor(
                     InternalBindingFlags | BindingFlags.Instance, null,
                     types, null);
+#endif
+        }
+
+        private static EventInfo GetEventByName(this Type source, string eventName)
+        {
+#if NETSTANDARD1_1
+            return source.GetTypeInfo().GetDeclaredEvent(eventName);
+#else
+            return (source.GetTypeInfo().GetEvent(eventName)
+                ?? source.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
+                ?? source.GetTypeInfo().GetEvent(eventName,
+                    InternalBindingFlags | BindingFlags.Instance);
 #endif
         }
 
@@ -535,10 +621,7 @@ namespace Delegates.Extensions
 #endif
             GetEventInfo(this Type sourceType, string eventName)
         {
-            var eventInfo = (sourceType.GetTypeInfo().GetEvent(eventName)
-                    ?? sourceType.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
-                ?? sourceType.GetTypeInfo().GetEvent(eventName,
-                    InternalBindingFlags | BindingFlags.Instance);
+            var eventInfo = sourceType.GetEventByName(eventName);
 #if NET35 || NET4 || PORTABLE
             return eventInfo != null ? new CEventInfo(eventInfo) : null;
 #else

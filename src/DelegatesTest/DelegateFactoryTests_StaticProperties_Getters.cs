@@ -270,5 +270,26 @@ namespace DelegatesTest
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicPropertyValue, spg());
         }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByTypes()
+        {
+            var pg = DelegateFactory.StaticPropertyGet<TestClass, string>("PublicProperty");
+            Assert.IsNull(pg);
+        }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByExtensionAndReturnType()
+        {
+            var pg = TestClassType.StaticPropertyGet<string>("PublicProperty");
+            Assert.IsNull(pg);
+        }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByObjects()
+        {
+            var pg = TestClassType.StaticPropertyGet("PublicProperty");
+            Assert.IsNull(pg);
+        }
     }
 }
