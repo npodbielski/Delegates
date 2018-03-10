@@ -14,7 +14,7 @@ using System.Reflection.Emit;
 #if NET35 || NET4 || NETCORE || PORTABLE || STANDARD
 using Delegates.Extensions;
 #endif
-#if NET45 || NETCORE || STANDARD
+#if NET45 || NET46 || NETCORE || STANDARD
 using WeakReference = System.WeakReference<object>;
 #endif
 

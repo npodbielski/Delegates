@@ -4,7 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !(NETSTANDARD1_1 || NETSTANDARD1_5)
 using System;
+#endif
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -13,7 +15,7 @@ namespace Delegates.Helper
     internal static partial class EventsHelper
     {
         private static
-#if !NETSTANDARD1_1
+#if !(NETSTANDARD1_1 || NETSTANDARD1_5)
             Type  
 #else
             TypeInfo
@@ -46,7 +48,7 @@ namespace Delegates.Helper
       private static AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
         {
             const AssemblyBuilderAccess assemblyAccess =
-#if NET4 
+#if NET4
                 AssemblyBuilderAccess.RunAndCollect;
 #elif NET35
             AssemblyBuilderAccess.Run;

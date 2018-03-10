@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TypeExtensions_NETStandard11.cs" company="Natan Podbielski">
+// <copyright file="TypeExtensions_NETStandard11_15.cs" company="Natan Podbielski">
 //   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Delegates.Extensions;
 
 internal static class TypeExtensions_NetStandard11_15
 {
@@ -23,5 +24,10 @@ internal static class TypeExtensions_NetStandard11_15
     public static MethodInfo[] GetMethods(this TypeInfo type)
     {
         return type.DeclaredMethods.ToArray();
+    }
+
+    public static ConstructorInfo GetConstructor(this Type source, Type[] types)
+    {
+        return source.GetConstructorInfo(types);
     }
 }

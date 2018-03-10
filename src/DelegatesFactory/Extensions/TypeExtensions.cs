@@ -83,13 +83,6 @@ namespace Delegates.Extensions
             return invalid;
         }
 
-#if NETSTANDARD1_1
-        private static ConstructorInfo GetConstructor(this Type source, Type[] types)
-        {
-            return source.GetConstructorInfo(types);
-        }
-#endif
-
         private static bool IsNewConstraintValid(Type destination, Type source)
         {
             //check new() constraint which is not included in GetGenericParameterConstraints
@@ -171,7 +164,7 @@ namespace Delegates.Extensions
         {
 #if NET35 || NET4 || PORTABLE
             return source.GetGenericArguments();
-#elif NET45 || NETCORE || STANDARD
+#elif NET45 || NET46 || NETCORE || STANDARD
             return source.GetTypeInfo().GenericTypeArguments;
 #endif
         }
@@ -180,7 +173,7 @@ namespace Delegates.Extensions
         {
 #if NET35 || NET4 || PORTABLE
             return source.IsClass;
-#elif NET45 || NETCORE || STANDARD
+#elif NET45 || NET46 || NETCORE || STANDARD
             return source.GetTypeInfo().IsClass;
 #endif
         }
@@ -189,7 +182,7 @@ namespace Delegates.Extensions
         {
 #if NET35 || NET4 || PORTABLE
             return source.IsValueType;
-#elif NET45 || NETCORE || STANDARD
+#elif NET45 || NET46 || NETCORE || STANDARD
             return source.GetTypeInfo().IsValueType;
 #endif
         }
@@ -288,7 +281,7 @@ namespace Delegates.Extensions
             var parameters = types
 #if NET35
                 .Select(a => Expression.Parameter(a, "p" + index++))
-#elif NET45 || NETCORE || NET4 || PORTABLE || STANDARD
+#elif NET45 || NET46 || NETCORE || NET4 || PORTABLE || STANDARD
                 .Select(Expression.Parameter)
 #endif
                 .ToList();
@@ -502,7 +495,7 @@ namespace Delegates.Extensions
 
         private static IEnumerable<PropertyInfo> GetAllProperties(this Type source)
         {
-#if NETSTANDARD1_1
+#if NETSTANDARD1_1 || NETSTANDARD1_5
             return source.GetRuntimeProperties();
 #else
             var properties = source.GetProperties().Concat(
