@@ -6,16 +6,33 @@
 
 using System;
 using Delegates;
+using DelegatesTest;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DelegatesTest
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+    DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCORE
+        DelegatesTestNETCORE
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
+#endif
 {
     [TestClass]
     public class DelegateFactoryTests_StaticMethods
     {
         private const string TestValue = "test";
-        private readonly Type _testClassType = typeof(TestClass);
 
         //TODO: test static methods with out or ref modifiers
         [TestMethod]
@@ -305,7 +322,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethod<Action>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action>("StaticVoidPublic");
             Assert.IsNotNull(m);
             m();
             Assert.AreEqual(true, TestClass.StaticVoidPublicExecuted);
@@ -314,7 +331,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjectAndTypes_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethod<Action>("StaticVoidInternal");
+            var m = typeof(TestClass).StaticMethod<Action>("StaticVoidInternal");
             Assert.IsNotNull(m);
             m();
             Assert.AreEqual(true, TestClass.StaticVoidInternalExecuted);
@@ -323,7 +340,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjectAndTypes_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethod<Action>("StaticVoidPrivate");
+            var m = typeof(TestClass).StaticMethod<Action>("StaticVoidPrivate");
             Assert.IsNotNull(m);
             m();
             Assert.AreEqual(true, TestClass.StaticVoidPrivateExecuted);
@@ -332,7 +349,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjectAndTypes_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethod<Action>("StaticVoidProtected");
+            var m = typeof(TestClass).StaticMethod<Action>("StaticVoidProtected");
             Assert.IsNotNull(m);
             m();
             Assert.AreEqual(true, TestClass.StaticVoidProtectedExecuted);
@@ -341,7 +358,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidPublic");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidPublicParam);
@@ -350,7 +367,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string>>("StaticPublic");
+            var m = typeof(TestClass).StaticMethod<Func<string>>("StaticPublic");
             Assert.IsNotNull(m);
             var result = m();
             Assert.AreEqual(TestClass.StaticPublicParameterlessReturnValue, result);
@@ -359,7 +376,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjectAndTypes_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string>>("StaticInternal");
+            var m = typeof(TestClass).StaticMethod<Func<string>>("StaticInternal");
             Assert.IsNotNull(m);
             var result = m();
             Assert.AreEqual(TestClass.StaticInternalParameterlessReturnValue, result);
@@ -369,7 +386,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjectAndTypes_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string>>("StaticProtected");
+            var m = typeof(TestClass).StaticMethod<Func<string>>("StaticProtected");
             Assert.IsNotNull(m);
             var result = m();
             Assert.AreEqual(TestClass.StaticProtectedParameterlessReturnValue, result);
@@ -379,7 +396,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjectAndTypes_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string>>("StaticPrivate");
+            var m = typeof(TestClass).StaticMethod<Func<string>>("StaticPrivate");
             Assert.IsNotNull(m);
             var result = m();
             Assert.AreEqual(TestClass.StaticPrivateParameterlessReturnValue, result);
@@ -388,7 +405,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string, string>>("StaticPublic");
+            var m = typeof(TestClass).StaticMethod<Func<string, string>>("StaticPublic");
             Assert.IsNotNull(m);
             var result = m(TestValue);
             Assert.AreEqual(TestValue, result);
@@ -397,7 +414,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjectAndTypes_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string, string>>("StaticInternal");
+            var m = typeof(TestClass).StaticMethod<Func<string, string>>("StaticInternal");
             Assert.IsNotNull(m);
             var result = m(TestValue);
             Assert.AreEqual(TestValue, result);
@@ -407,7 +424,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjectAndTypes_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string, string>>("StaticProtected");
+            var m = typeof(TestClass).StaticMethod<Func<string, string>>("StaticProtected");
             Assert.IsNotNull(m);
             var result = m(TestValue);
             Assert.AreEqual(TestValue, result);
@@ -417,7 +434,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjectAndTypes_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Func<string, string>>("StaticPrivate");
+            var m = typeof(TestClass).StaticMethod<Func<string, string>>("StaticPrivate");
             Assert.IsNotNull(m);
             var result = m(TestValue);
             Assert.AreEqual(TestValue, result);
@@ -426,7 +443,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_2Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string>>("StaticPublic");
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string>>("StaticPublic");
             Assert.IsNotNull(m);
             var index = 0;
             var result = m(TestValue + index++, TestValue + index++);
@@ -437,7 +454,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_3Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string>>("StaticPublic");
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string>>("StaticPublic");
             Assert.IsNotNull(m);
             var index = 0;
             var result = m(TestValue + index++, TestValue + index++, TestValue + index++);
@@ -448,7 +465,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_4Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string>>("StaticPublic");
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string>>("StaticPublic");
             Assert.IsNotNull(m);
             var index = 0;
             var result = m(TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
@@ -459,7 +476,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_17Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -475,7 +492,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_2Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<string, string>>("StaticVoidPublic");
             Assert.IsNotNull(m);
             var index = 0;
             m(TestValue + index++, TestValue + index++);
@@ -486,7 +503,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_3Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string>>("StaticVoidPublic");
             Assert.IsNotNull(m);
             var index = 0;
             m(TestValue + index++, TestValue + index++, TestValue + index++);
@@ -497,7 +514,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_4Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string>>("StaticVoidPublic");
             Assert.IsNotNull(m);
             var index = 0;
             m(TestValue + index++, TestValue + index++, TestValue + index++, TestValue + index++);
@@ -508,7 +525,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_17Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -526,7 +543,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjectAndTypes_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidInternal");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidInternal");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidInternalParam);
@@ -535,7 +552,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjectAndTypes_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidProtected");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidProtected");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidProtectedParam);
@@ -544,7 +561,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjectAndTypes_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidPrivate");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidPrivate");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidPrivateParam);
@@ -553,14 +570,14 @@ namespace DelegatesTest
         [TestMethod]
         public void Method_NonExisting_WrongName_ByObjectAndTypes()
         {
-            var m = _testClassType.StaticMethod<Action>("NonExisting");
+            var m = typeof(TestClass).StaticMethod<Action>("NonExisting");
             Assert.IsNull(m);
         }
 
         [TestMethod]
         public void Method_NonExisting_WrongParams_ByObjectAndTypes()
         {
-            var m = _testClassType.StaticMethod<Action<TestStruct>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<TestStruct>>("StaticVoidPublic");
             Assert.IsNull(m);
         }
 
@@ -568,27 +585,27 @@ namespace DelegatesTest
         public void Method_ByObjectAndTypes_Wrong_TDelegate_Type()
         {
             AssertHelper.ThrowsException<ArgumentException>(
-                () => _testClassType.StaticMethod<TestClass, string>("NonExisting"));
+                () => typeof(TestClass).StaticMethod<TestClass, string>("NonExisting"));
         }
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_VoidDelegate_For_NonVoidMethod()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.StaticMethod<Action<string>>("StaticPublic"));
+                typeof(TestClass).StaticMethod<Action<string>>("StaticPublic"));
         }
 
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoidDelegate_For_VoidMethod()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.StaticMethod<Func<string>>("StaticVoidPublic"));
+                typeof(TestClass).StaticMethod<Func<string>>("StaticVoidPublic"));
         }
 
         [TestMethod]
         public void Public_Method_ByObjecs_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic");
             Assert.IsNotNull(m);
             m(new object[] { });
             Assert.AreEqual(true, TestClass.StaticVoidPublicExecuted);
@@ -597,7 +614,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjecs_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidInternal");
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidInternal");
             Assert.IsNotNull(m);
             m(new object[] { });
             Assert.AreEqual(true, TestClass.StaticVoidInternalExecuted);
@@ -606,7 +623,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjecs_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPrivate");
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPrivate");
             Assert.IsNotNull(m);
             m(new object[] { });
             Assert.AreEqual(true, TestClass.StaticVoidPrivateExecuted);
@@ -615,7 +632,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjecs_Void_NoParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidProtected");
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidProtected");
             Assert.IsNotNull(m);
             m(new object[] { });
             Assert.AreEqual(true, TestClass.StaticVoidProtectedExecuted);
@@ -624,7 +641,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string));
             Assert.IsNotNull(m);
             m(new[] {TestValue});
             Assert.AreEqual(TestValue, TestClass.StaticVoidPublicParam);
@@ -633,7 +650,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_SingleParameter_PassedNoParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string));
             Assert.IsNotNull(m);
             AssertHelper.ThrowsException<IndexOutOfRangeException>(() => m(new object[] { }));
         }
@@ -641,7 +658,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_SingleParameter_PassedMoreParameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string));
             Assert.IsNotNull(m);
             m(new[] {TestValue, TestValue + 1});
             Assert.AreEqual(TestValue, TestClass.StaticVoidPublicParam);
@@ -650,7 +667,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_SingleParameter_PassedNull()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string));
             Assert.IsNotNull(m);
             AssertHelper.ThrowsException<NullReferenceException>(() => m(null));
         }
@@ -658,7 +675,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_WrongParameterType()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string));
             Assert.IsNotNull(m);
             AssertHelper.ThrowsException<InvalidCastException>(() => m(new object[] {0}));
         }
@@ -666,7 +683,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod("StaticPublic");
+            var m = typeof(TestClass).StaticMethod("StaticPublic");
             Assert.IsNotNull(m);
             var result = m(new object[0]);
             Assert.AreEqual(TestClass.StaticPublicParameterlessReturnValue, result);
@@ -675,7 +692,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjecs_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod("StaticInternal");
+            var m = typeof(TestClass).StaticMethod("StaticInternal");
             Assert.IsNotNull(m);
             var result = m(new object[0]);
             Assert.AreEqual(TestClass.StaticInternalParameterlessReturnValue, result);
@@ -685,7 +702,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjecs_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod("StaticProtected");
+            var m = typeof(TestClass).StaticMethod("StaticProtected");
             Assert.IsNotNull(m);
             var result = m(new object[0]);
             Assert.AreEqual(TestClass.StaticProtectedParameterlessReturnValue, result);
@@ -695,7 +712,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjecs_NoVoid_NoParameter()
         {
-            var m = _testClassType.StaticMethod("StaticPrivate");
+            var m = typeof(TestClass).StaticMethod("StaticPrivate");
             Assert.IsNotNull(m);
             var result = m(new object[0]);
             Assert.AreEqual(TestClass.StaticPrivateParameterlessReturnValue, result);
@@ -704,7 +721,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string));
             Assert.IsNotNull(m);
             var result = m(new[] {TestValue});
             Assert.AreEqual(TestValue, result);
@@ -713,7 +730,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjecs_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod("StaticInternal", typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticInternal", typeof(string));
             Assert.IsNotNull(m);
             var result = m(new[] {TestValue});
             Assert.AreEqual(TestValue, result);
@@ -723,7 +740,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjecs_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod("StaticProtected", typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticProtected", typeof(string));
             Assert.IsNotNull(m);
             var result = m(new[] {TestValue});
             Assert.AreEqual(TestValue, result);
@@ -733,7 +750,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjecs_NoVoid_SingleParameter()
         {
-            var m = _testClassType.StaticMethod("StaticPrivate", typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticPrivate", typeof(string));
             Assert.IsNotNull(m);
             var result = m(new[] {TestValue});
             Assert.AreEqual(TestValue, result);
@@ -742,7 +759,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_2Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
             var result = m(new object[] {TestValue + index++, TestValue + index++});
@@ -753,7 +770,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_3Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string));
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
             var result = m(new object[] {TestValue + index++, TestValue + index++, TestValue + index++});
@@ -764,7 +781,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_4Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -778,7 +795,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_5Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
@@ -795,7 +812,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_6Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -812,7 +829,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_7Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -829,7 +846,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_8Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -846,7 +863,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_9Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -863,7 +880,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_10Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
@@ -881,7 +898,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_11Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -899,7 +916,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_12Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -917,7 +934,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_13Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -935,7 +952,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_14Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -953,7 +970,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_15Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -972,7 +989,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_16Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string),
@@ -993,7 +1010,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_NoVoid_17Parameters()
         {
-            var m = _testClassType.StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethod("StaticPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string),
@@ -1014,7 +1031,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_2Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
             m(new object[] {TestValue + index++, TestValue + index++});
@@ -1025,7 +1042,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_3Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string));
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
             m(new object[] {TestValue + index++, TestValue + index++, TestValue + index++});
@@ -1036,7 +1053,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_4Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1048,7 +1065,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_5Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1063,7 +1080,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_6Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1079,7 +1096,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_7Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1095,7 +1112,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_8Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1111,7 +1128,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_9Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
             var index = 0;
@@ -1127,7 +1144,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_10Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string));
             Assert.IsNotNull(m);
@@ -1144,7 +1161,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_11Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -1162,7 +1179,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_12Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -1180,7 +1197,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_13Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -1198,7 +1215,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_14Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -1216,7 +1233,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_15Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string));
             Assert.IsNotNull(m);
@@ -1234,7 +1251,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_16Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string));
@@ -1254,7 +1271,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjecs_Void_17Parameters()
         {
-            var m = _testClassType.StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
+            var m = typeof(TestClass).StaticMethodVoid("StaticVoidPublic", typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string), typeof(string), typeof(string), typeof(string), typeof(string),
                 typeof(string), typeof(string));
@@ -1274,7 +1291,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Internal_Method_ByObjecs_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidInternal");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidInternal");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidInternalParam);
@@ -1283,7 +1300,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Protected_Method_ByObjecs_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidProtected");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidProtected");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidProtectedParam);
@@ -1292,7 +1309,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Private_Method_ByObjecs_Void_SingleParameter()
         {
-            var m = _testClassType.StaticMethod<Action<string>>("StaticVoidPrivate");
+            var m = typeof(TestClass).StaticMethod<Action<string>>("StaticVoidPrivate");
             Assert.IsNotNull(m);
             m(TestValue);
             Assert.AreEqual(TestValue, TestClass.StaticVoidPrivateParam);
@@ -1301,14 +1318,14 @@ namespace DelegatesTest
         [TestMethod]
         public void Method_NonExisting_WrongName_ByObjects()
         {
-            var m = _testClassType.StaticMethod<Action>("NonExisting");
+            var m = typeof(TestClass).StaticMethod<Action>("NonExisting");
             Assert.IsNull(m);
         }
 
         [TestMethod]
         public void Method_NonExisting_WrongParams_ByObjects()
         {
-            var m = _testClassType.StaticMethod<Action<TestStruct>>("StaticVoidPublic");
+            var m = typeof(TestClass).StaticMethod<Action<TestStruct>>("StaticVoidPublic");
             Assert.IsNull(m);
         }
 
@@ -1316,7 +1333,7 @@ namespace DelegatesTest
         public void Method_ByObjecs_Wrong_TDelegate_Type()
         {
             AssertHelper.ThrowsException<ArgumentException>(
-                () => _testClassType.StaticMethod<TestClass, string>("NonExisting"));
+                () => typeof(TestClass).StaticMethod<TestClass, string>("NonExisting"));
         }
 
         [TestMethod]
@@ -1324,7 +1341,7 @@ namespace DelegatesTest
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
-                _testClassType.StaticMethodVoid("StaticPublic", typeof(string));
+                typeof(TestClass).StaticMethodVoid("StaticPublic", typeof(string));
             });
         }
 
@@ -1332,14 +1349,14 @@ namespace DelegatesTest
         public void Public_Method_ByObjects_NoVoidDelegate_For_VoidMethod()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.StaticMethod("StaticVoidPublic", typeof(string)));
+                typeof(TestClass).StaticMethod("StaticVoidPublic", typeof(string)));
         }
 
         [TestMethod]
         public void Incorrect_TDelegate_For_StaticcMethod()
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
-                _testClassType.StaticMethod<Action>("StaticVoidPublic", null, new[] {typeof(string)}));
+                typeof(TestClass).StaticMethod<Action>("StaticVoidPublic", null, new[] {typeof(string)}));
         }
 
 #if !NET35
@@ -1710,7 +1727,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_5Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string>>
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
             var index = 0;
@@ -1723,7 +1740,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_6Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string, string>>
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
             var index = 0;
@@ -1736,7 +1753,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_7Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1750,7 +1767,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_8Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1764,7 +1781,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_9Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1780,7 +1797,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_10Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1795,7 +1812,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_11Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1810,7 +1827,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_12Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1825,7 +1842,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_13Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1840,7 +1857,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_14Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1856,7 +1873,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_15Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1872,7 +1889,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_NoVoid_16Parameters()
         {
-            var m = _testClassType.StaticMethod<Func<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Func<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string, string, string>>
                 ("StaticPublic");
             Assert.IsNotNull(m);
@@ -1890,7 +1907,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_5Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string>>
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
             var index = 0;
@@ -1902,7 +1919,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_6Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string>>
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
             var index = 0;
@@ -1915,7 +1932,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_7Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -1929,7 +1946,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_8Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -1943,7 +1960,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_9Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -1957,7 +1974,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_10Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -1972,7 +1989,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_11Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -1988,7 +2005,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_12Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -2004,7 +2021,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_13Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -2020,7 +2037,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_14Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -2036,7 +2053,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_15Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);
@@ -2053,7 +2070,7 @@ namespace DelegatesTest
         [TestMethod]
         public void Public_Method_ByObjectAndTypes_Void_16Parameters()
         {
-            var m = _testClassType.StaticMethod<Action<string, string, string, string, string, string,
+            var m = typeof(TestClass).StaticMethod<Action<string, string, string, string, string, string,
                     string, string, string, string, string, string, string, string, string, string>>
                 ("StaticVoidPublic");
             Assert.IsNotNull(m);

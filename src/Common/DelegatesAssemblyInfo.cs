@@ -9,4 +9,9 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Delegates")]
 [assembly: AssemblyProduct("Delegates")]
-[assembly: InternalsVisibleTo("DelegatesTest")]
+[assembly: InternalsVisibleTo("DelegatesTestNET35")]
+[assembly: InternalsVisibleTo("DelegatesTestNET4")]
+[assembly: InternalsVisibleTo("DelegatesTestNET45")]
+[assembly: InternalsVisibleTo("DelegatesTestNET46")]
+[assembly: InternalsVisibleTo("DelegatesTestNETCORE")]
+[assembly: InternalsVisibleTo("DelegatesTestNETPortable")]

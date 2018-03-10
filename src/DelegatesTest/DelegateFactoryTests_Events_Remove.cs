@@ -6,20 +6,32 @@
 
 using System;
 using Delegates;
+using DelegatesTest;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DelegatesTest
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+    DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCORE
+        DelegatesTestNETCORE
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
+#endif
 {
     [TestClass]
     public class DelegateFactoryTests_Events_Remove
     {
-        private readonly IService _interfaceImpl = new Service();
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly TestClass _testClassInstance = new TestClass();
-        private readonly Type _testClassType = typeof(TestClass);
-        private readonly Type _testStructType = typeof(TestStruct);
-
         [TestMethod]
         public void EventRemove_ByTypes_Public()
         {
@@ -33,9 +45,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
             }
 
-            _testClassInstance.AddPublicEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokePublicEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddPublicEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokePublicEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -52,9 +65,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
             }
 
-            _testClassInstance.AddInternalEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokeInternalEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddInternalEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokeInternalEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -71,9 +85,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
             }
 
-            _testClassInstance.AddProtectedEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokeProtectedEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddProtectedEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokeProtectedEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -90,9 +105,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
             }
 
-            _testClassInstance.AddPrivateEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokePrivateEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddPrivateEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokePrivateEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -115,7 +131,7 @@ namespace DelegatesTest
         [TestMethod]
         public void EventRemove_ByObjectAndType_Public()
         {
-            var accessor = _testClassType.EventRemove<TestClass.PublicEventArgs>("PublicEvent");
+            var accessor = typeof(TestClass).EventRemove<TestClass.PublicEventArgs>("PublicEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
 
@@ -125,16 +141,17 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
             }
 
-            _testClassInstance.AddPublicEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokePublicEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddPublicEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokePublicEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjectAndType_Internal()
         {
-            var accessor = _testClassType.EventRemove<TestClass.InternalEventArgs>("InternalEvent");
+            var accessor = typeof(TestClass).EventRemove<TestClass.InternalEventArgs>("InternalEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
 
@@ -144,16 +161,17 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
             }
 
-            _testClassInstance.AddInternalEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokeInternalEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddInternalEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokeInternalEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjectAndType_Protected()
         {
-            var accessor = _testClassType.EventRemove<TestClass.ProtectedEventArgs>("ProtectedEvent");
+            var accessor = typeof(TestClass).EventRemove<TestClass.ProtectedEventArgs>("ProtectedEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
 
@@ -163,16 +181,17 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
             }
 
-            _testClassInstance.AddProtectedEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokeProtectedEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddProtectedEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokeProtectedEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjectAndType_Private()
         {
-            var accessor = _testClassType.EventRemove<TestClass.PrivateEventArgs>("PrivateEvent");
+            var accessor = typeof(TestClass).EventRemove<TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNotNull(accessor);
             var eventExecuted = false;
 
@@ -182,16 +201,17 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
             }
 
-            _testClassInstance.AddPrivateEventHandler(EventHandler);
-            accessor(_testClassInstance, EventHandler);
-            _testClassInstance.InvokePrivateEvent();
+            var testClassInstance = new TestClass();
+            testClassInstance.AddPrivateEventHandler(EventHandler);
+            accessor(testClassInstance, EventHandler);
+            testClassInstance.InvokePrivateEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjectAndType_NotExistingEvent()
         {
-            var accessor = _testStructType.EventRemove<TestClass.PrivateEventArgs>("PrivateEvent");
+            var accessor = typeof(TestStruct).EventRemove<TestClass.PrivateEventArgs>("PrivateEvent");
             Assert.IsNull(accessor);
         }
 
@@ -200,15 +220,16 @@ namespace DelegatesTest
         {
             AssertHelper.ThrowsException<ArgumentException>(() =>
             {
-                _testClassType.EventRemove<TestClass.PublicEventArgs>("PrivateEvent");
+                typeof(TestClass).EventRemove<TestClass.PublicEventArgs>("PrivateEvent");
             });
         }
 
         [TestMethod]
         public void EventRemove_ByObjects_Public()
         {
-            var addAccessor = _testClassType.EventAdd("PublicEvent");
-            var removeAccessor = _testClassType.EventRemove("PublicEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd("PublicEvent");
+            var removeAccessor = testClassType.EventRemove("PublicEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -218,17 +239,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PublicEventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokePublicEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokePublicEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjects_Internal()
         {
-            var addAccessor = _testClassType.EventAdd("InternalEvent");
-            var removeAccessor = _testClassType.EventRemove("InternalEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd("InternalEvent");
+            var removeAccessor = testClassType.EventRemove("InternalEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -238,17 +261,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.InternalEventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeInternalEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeInternalEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjects_Protected()
         {
-            var addAccessor = _testClassType.EventAdd("ProtectedEvent");
-            var removeAccessor = _testClassType.EventRemove("ProtectedEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd("ProtectedEvent");
+            var removeAccessor = testClassType.EventRemove("ProtectedEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -258,17 +283,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.ProtectedEventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeProtectedEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeProtectedEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjects_Private()
         {
-            var addAccessor = _testClassType.EventAdd("PrivateEvent");
-            var removeAccessor = _testClassType.EventRemove("PrivateEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd("PrivateEvent");
+            var removeAccessor = testClassType.EventRemove("PrivateEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -278,24 +305,26 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(TestClass.PrivateEventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokePrivateEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokePrivateEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_ByObjects_NotExistingEvent()
         {
-            var accessor = _testStructType.EventRemove("PrivateEvent");
+            var accessor = typeof(TestStruct).EventRemove("PrivateEvent");
             Assert.IsNull(accessor);
         }
 
         [TestMethod]
         public void EventRemove_Interface_ByObjects()
         {
-            var addAccessor = _interfaceType.EventAdd("Event");
-            var removeAccessor = _interfaceType.EventRemove("Event");
+            var interfaceType = typeof(IService);
+            var addAccessor = interfaceType.EventAdd("Event");
+            var removeAccessor = interfaceType.EventRemove("Event");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -305,17 +334,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_interfaceImpl, EventAction);
-            removeAccessor(_interfaceImpl, EventAction);
-            _interfaceImpl.InvokeEvent();
+            var interfaceImpl = new Service();
+            addAccessor(interfaceImpl, EventAction);
+            removeAccessor(interfaceImpl, EventAction);
+            interfaceImpl.InvokeEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_Interface_ByObjectAndType()
         {
-            var addAccessor = _interfaceType.EventAdd<EventArgs>("Event");
-            var removeAccessor = _interfaceType.EventRemove<EventArgs>("Event");
+            var interfaceType = typeof(IService);
+            var addAccessor = interfaceType.EventAdd<EventArgs>("Event");
+            var removeAccessor = interfaceType.EventRemove<EventArgs>("Event");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -325,9 +356,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_interfaceImpl, EventAction);
-            removeAccessor(_interfaceImpl, EventAction);
-            _interfaceImpl.InvokeEvent();
+            var interfaceImpl = new Service();
+            addAccessor(interfaceImpl, EventAction);
+            removeAccessor(interfaceImpl, EventAction);
+            interfaceImpl.InvokeEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -345,17 +377,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_interfaceImpl, EventAction);
-            removeAccessor(_interfaceImpl, EventAction);
-            _interfaceImpl.InvokeEvent();
+            var interfaceImpl = new Service();
+            addAccessor(interfaceImpl, EventAction);
+            removeAccessor(interfaceImpl, EventAction);
+            interfaceImpl.InvokeEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_CustomDelegate_ByObjects()
         {
-            var addAccessor = _testClassType.EventAdd("CusDelegEvent");
-            var removeAccessor = _testClassType.EventRemove("CusDelegEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd("CusDelegEvent");
+            var removeAccessor = testClassType.EventRemove("CusDelegEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -365,17 +399,19 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeCusDelegEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeCusDelegEvent();
             Assert.IsFalse(eventExecuted);
         }
 
         [TestMethod]
         public void EventRemove_CustomDelegate_ByObjectAndType()
         {
-            var addAccessor = _testClassType.EventAdd<EventArgs>("CusDelegEvent");
-            var removeAccessor = _testClassType.EventRemove<EventArgs>("CusDelegEvent");
+            var testClassType = typeof(TestClass);
+            var addAccessor = testClassType.EventAdd<EventArgs>("CusDelegEvent");
+            var removeAccessor = testClassType.EventRemove<EventArgs>("CusDelegEvent");
             Assert.IsNotNull(removeAccessor);
             var eventExecuted = false;
 
@@ -385,9 +421,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeCusDelegEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeCusDelegEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -405,9 +442,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeCusDelegEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeCusDelegEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -425,9 +463,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeCusDelegEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeCusDelegEvent();
             Assert.IsFalse(eventExecuted);
         }
 
@@ -446,9 +485,10 @@ namespace DelegatesTest
                 Assert.IsInstanceOfType(args, typeof(EventArgs));
             }
 
-            addAccessor(_testClassInstance, EventAction);
-            removeAccessor(_testClassInstance, EventAction);
-            _testClassInstance.InvokeCusDelegEvent();
+            var testClassInstance = new TestClass();
+            addAccessor(testClassInstance, EventAction);
+            removeAccessor(testClassInstance, EventAction);
+            testClassInstance.InvokeCusDelegEvent();
             Assert.IsFalse(eventExecuted);
         }
 

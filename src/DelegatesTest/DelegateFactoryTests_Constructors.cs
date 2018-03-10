@@ -9,15 +9,28 @@ using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DelegatesTest
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+        DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCORE
+        DelegatesTestNETCORE
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
+#endif
 {
     [TestClass]
     public class DelegateFactoryTests_Constructors
     {
-        private static readonly Type TestClassNoDefaultCtorType = typeof(TestClassNoDefaultCtor);
-        private static readonly Type TestClassType = typeof(TestClass);
-        private static readonly Type TestStructType = typeof(TestStruct);
-
         //TODO: tests for delegate return type. it cannot be void
         //TODO: tests for delegate with return type compatible with source type i.e. interface of a class
         //TODO: tests custom delegate types
@@ -30,7 +43,7 @@ namespace DelegatesTest
             Assert.IsNotNull(c);
             var instance = c(false);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, typeof(TestClass));
         }
 
         [TestMethod]
@@ -40,7 +53,7 @@ namespace DelegatesTest
             Assert.IsNotNull(c);
             var instance = c(0);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, typeof(TestClass));
         }
 
         [TestMethod]
@@ -49,7 +62,7 @@ namespace DelegatesTest
             var c = DelegateFactory.Constructor<Func<int, TestStruct>>();
             Assert.IsNotNull(c);
             var instance = c(0);
-            Assert.IsInstanceOfType(instance, TestStructType);
+            Assert.IsInstanceOfType(instance, typeof(TestStruct));
         }
 
         [TestMethod]
@@ -100,7 +113,7 @@ namespace DelegatesTest
             var c = DelegateFactory.Constructor<Func<TestClass>>();
             Assert.IsNotNull(c);
             Assert.IsNotNull(c());
-            Assert.IsInstanceOfType(c(), TestClassType);
+            Assert.IsInstanceOfType(c(), typeof(TestClass));
         }
 
         [TestMethod]
@@ -109,7 +122,7 @@ namespace DelegatesTest
             var cd = DelegateFactory.Constructor<CustomCtr>();
             Assert.IsNotNull(cd);
             Assert.IsNotNull(cd());
-            Assert.IsInstanceOfType(cd(), TestClassType);
+            Assert.IsInstanceOfType(cd(), typeof(TestClass));
         }
 
         [TestMethod]
@@ -119,7 +132,7 @@ namespace DelegatesTest
             Assert.IsNotNull(cd);
             var instance = cd(0);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, typeof(TestClass));
         }
 
         [TestMethod]
@@ -129,181 +142,196 @@ namespace DelegatesTest
             Assert.IsNotNull(c);
             var instance = c("s");
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, typeof(TestClass));
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndObject_BoolParam()
         {
-            var c = TestClassType.Constructor<Func<bool, object>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<bool, object>>();
             Assert.IsNotNull(c);
             var instance = c(false);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndObject_IntParam()
         {
-            var c = TestClassType.Constructor<Func<int, object>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<int, object>>();
             Assert.IsNotNull(c);
             var instance = c(0);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndObject_IntParam_FromStruct()
         {
-            var c = TestStructType.Constructor<Func<int, object>>();
+            var testStructType = typeof(TestStruct);
+            var c = testStructType.Constructor<Func<int, object>>();
             Assert.IsNotNull(c);
             var instance = c(0);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestStructType);
+            Assert.IsInstanceOfType(instance, testStructType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndObject_StringParam()
         {
-            var c = TestClassType.Constructor<Func<string, object>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<string, object>>();
             Assert.IsNotNull(c);
             var instance = c("s");
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndType_BoolParam()
         {
-            var c = TestClassType.Constructor<Func<bool, TestClass>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<bool, TestClass>>();
             Assert.IsNotNull(c);
             var instance = c(false);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndType_IntParam()
         {
-            var c = TestClassType.Constructor<Func<int, TestClass>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<int, TestClass>>();
             Assert.IsNotNull(c);
             var instance = c(0);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByExtensionMethodAndType_StringParam()
         {
-            var c = TestClassType.Constructor<Func<string, TestClass>>();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor<Func<string, TestClass>>();
             Assert.IsNotNull(c);
             var instance = c("s");
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByObjects_BoolParam()
         {
-            var c = TestClassType.Constructor(typeof(bool));
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor(typeof(bool));
             Assert.IsNotNull(c);
             var instance = c(new object[] {false});
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByObjects_IntParam()
         {
-            var c = TestClassType.Constructor(typeof(int));
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor(typeof(int));
             Assert.IsNotNull(c);
             var instance = c(new object[] {0});
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByObjects_IntParam_FromStruct()
         {
-            var c = TestStructType.Constructor(typeof(int));
+            var testStructType = typeof(TestStruct);
+            var c = testStructType.Constructor(typeof(int));
             Assert.IsNotNull(c);
             var instance = c(new object[] {0});
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestStructType);
+            Assert.IsInstanceOfType(instance, testStructType);
         }
 
         [TestMethod]
         public void ConstructorByObjects_NoParam()
         {
-            var c = TestClassType.Constructor();
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor();
             Assert.IsNotNull(c);
             var instance = c(null);
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void ConstructorByObjects_StringParam()
         {
-            var c = TestClassType.Constructor(typeof(string));
+            var testClassType = typeof(TestClass);
+            var c = testClassType.Constructor(typeof(string));
             Assert.IsNotNull(c);
             var instance = c(new object[] {"s"});
             Assert.IsNotNull(instance);
-            Assert.IsInstanceOfType(instance, TestClassType);
+            Assert.IsInstanceOfType(instance, testClassType);
         }
 
         [TestMethod]
         public void DefaultConstructor_ByDelegate_WithoutType_ByDelegate()
         {
-            var cd = TestClassType.Constructor<Func<object>>();
+            var testClassType = typeof(TestClass);
+            var cd = testClassType.Constructor<Func<object>>();
             Assert.IsNotNull(cd);
             Assert.IsNotNull(cd());
-            Assert.IsInstanceOfType(cd(), TestClassType);
+            Assert.IsInstanceOfType(cd(), testClassType);
         }
 
         [TestMethod]
         public void DefaultConstructor_ByDelegate_WithType_ByDelegate()
         {
-            var cd = TestClassType.Constructor<Func<TestClass>>();
+            var testClassType = typeof(TestClass);
+            var cd = testClassType.Constructor<Func<TestClass>>();
             Assert.IsNotNull(cd);
             Assert.IsNotNull(cd());
-            Assert.IsInstanceOfType(cd(), TestClassType);
+            Assert.IsInstanceOfType(cd(), testClassType);
         }
 
         [TestMethod]
         public void DefaultConstructor_WithoutType()
         {
-            var cd = TestClassType.DefaultConstructor();
+            var testClassType = typeof(TestClass);
+            var cd = testClassType.DefaultConstructor();
             Assert.IsNotNull(cd);
             Assert.IsNotNull(cd());
-            Assert.IsInstanceOfType(cd(), TestClassType);
+            Assert.IsInstanceOfType(cd(), testClassType);
         }
 
         [TestMethod]
         public void DefaultConstructor_WithoutType_ByDelegate_NoDefault_FromStruct()
         {
-            var cd = TestStructType.Constructor<Func<object>>();
+            var cd = typeof(TestStruct).Constructor<Func<object>>();
             Assert.IsNull(cd);
         }
 
         [TestMethod]
         public void DefaultConstructor_WithoutType_ByDelegateWithType_NoDefault_Class()
         {
-            var cd = TestClassNoDefaultCtorType.Constructor<Func<TestClassNoDefaultCtor>>();
+            var cd = typeof(TestClassNoDefaultCtor).Constructor<Func<TestClassNoDefaultCtor>>();
             Assert.IsNull(cd);
         }
 
         [TestMethod]
         public void DefaultConstructor_WithoutType_ByDelegateWithType_NoDefault_FromStruct()
         {
-            var cd = TestStructType.Constructor<Func<TestStruct>>();
+            var cd = typeof(TestStruct).Constructor<Func<TestStruct>>();
             Assert.IsNull(cd);
         }
 
         [TestMethod]
         public void DefaultConstructor_WithoutType_NoDefault_Class()
         {
-            var cd = TestClassNoDefaultCtorType.DefaultConstructor();
+            var cd = typeof(TestClassNoDefaultCtor).DefaultConstructor();
             Assert.IsNull(cd);
         }
 
@@ -313,7 +341,7 @@ namespace DelegatesTest
             var cd = DelegateFactory.DefaultConstructor<TestClass>();
             Assert.IsNotNull(cd);
             Assert.IsNotNull(cd());
-            Assert.IsInstanceOfType(cd(), TestClassType);
+            Assert.IsInstanceOfType(cd(), typeof(TestClass));
         }
 
         [TestMethod]

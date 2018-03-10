@@ -27,7 +27,7 @@ namespace Delegates.Extensions
 #if !NETSTANDARD1_1
         private const BindingFlags PrivateOrProtectedBindingFlags = BindingFlags.NonPublic;
 
-        private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic; 
+        private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
 #endif
 
         public static bool CanBeAssignedFrom(this Type destination, Type source)
@@ -59,7 +59,7 @@ namespace Delegates.Extensions
             return validNewConstraint && validReferenceConstraint && validValueTypeConstraint &&
                 constraints.All(t1 => t1.CanBeAssignedFrom(source));
         }
-        
+
         public static bool IsCrossConstraintInvalid(this Type source, Type[] allGenericArgs, Type[] typeParameters)
         {
             var constraints = source.GetTypeInfo().GetGenericParameterConstraints();
@@ -234,13 +234,15 @@ namespace Delegates.Extensions
                 var t = Type.GetType("System.Dynamic.Utils.TypeUtils, System.Linq.Expressions");
                 return _typeUtils ?? (_typeUtils =
                             typeof(Expression)
-#if !NET35
                                 .GetTypeInfo()
+#if NET35
+                                .Assembly.ImageRuntimeVersion.StartsWith("v4")?typeof(Expression).Assembly.GetType("System.Dynamic.Utils.TypeUtils"):typeof(Expression)
+#else
                                 .Assembly
 #if NETSTANDARD1_1
                                 .GetType("System.Dynamic.Utils.TypeUtils")
 #else
-                                .GetType("System.Dynamic.Utils.TypeUtils", true) 
+                                .GetType("System.Dynamic.Utils.TypeUtils", true)
 #endif
 #endif
                     );
@@ -252,7 +254,7 @@ namespace Delegates.Extensions
         {
             var typeInfo = source.GetTypeInfo();
 #if !NETSTANDARD1_5
-            return typeInfo.GetMethod(methodName); 
+            return typeInfo.GetMethod(methodName);
 #else
             return typeInfo.GetDeclaredMethod(methodName);
 #endif
@@ -489,7 +491,7 @@ namespace Delegates.Extensions
             var fieldInfo = (typeInfo.GetField(fieldName, staticOrInstance) ??
                     typeInfo.GetField(fieldName, staticOrInstance | PrivateOrProtectedBindingFlags)) ??
                 typeInfo.GetField(fieldName, staticOrInstance | InternalBindingFlags);
-            return fieldInfo; 
+            return fieldInfo;
 #endif
         }
 

@@ -4,23 +4,32 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DelegatesTest
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+    DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCORE
+        DelegatesTestNETCORE
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
+#endif
 {
     [TestClass]
     public class DelegateFactoryTests_Properties_Getters
     {
-        private readonly IService _interfaceImpl = new Service();
-        private readonly Type _interfaceType = typeof(IService);
-        private readonly TestClass _testClassInstance = new TestClass();
-        private readonly Type _testClassType = typeof(TestClass);
-        private readonly Type _testStrucType = typeof(TestStruct);
-        private TestStruct _testStructInstance = new TestStruct(0);
-
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_NonExisting()
         {
@@ -31,96 +40,107 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_OnlyWrite()
         {
-            var pg = _testClassType.PropertyGet<string>("OnlySetProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("OnlySetProperty");
             Assert.IsNull(pg);
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Internal()
         {
-            var pg = _testClassType.PropertyGet<string>("InternalProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.InternalProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.InternalProperty, pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Internal_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet<string>("InternalProperty");
+            var pg = typeof(TestStruct).PropertyGet<string>("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.InternalProperty, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.InternalProperty, pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Private()
         {
-            var pg = _testClassType.PropertyGet<string>("PrivateProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetPrivateProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetPrivateProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Private_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet<string>("PrivateProperty");
+            var pg = typeof(TestStruct).PropertyGet<string>("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.GetPrivateProperty(), pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.GetPrivateProperty(), pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Protected()
         {
-            var pg = _testClassType.PropertyGet<string>("ProtectedProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("ProtectedProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetProtectedProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetProtectedProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public()
         {
-            var pg = _testClassType.PropertyGet<string>("PublicProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicProperty, pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet<string>("PublicProperty");
+            var pg = typeof(TestStruct).PropertyGet<string>("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicProperty, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicProperty, pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_Struct()
         {
-            var pg = _testClassType.PropertyGet<int>("PublicPropertyInt");
+            var pg = typeof(TestClass).PropertyGet<int>("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicPropertyInt, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicPropertyInt, pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_Struct_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet<int>("PublicPropertyInt");
+            var pg = typeof(TestStruct).PropertyGet<int>("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicPropertyInt, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicPropertyInt, pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Internal()
         {
-            var pg = _testClassType.PropertyGet("InternalProperty");
+            var pg = typeof(TestClass).PropertyGet("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.InternalProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.InternalProperty, pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Internal_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet("InternalProperty");
+            var pg = typeof(TestStruct).PropertyGet("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.InternalProperty, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.InternalProperty, pg(testStructInstance));
         }
 
         [TestMethod]
@@ -133,65 +153,72 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_OnlyWrite()
         {
-            var pg = _testClassType.PropertyGet("OnlySetProperty");
+            var pg = typeof(TestClass).PropertyGet("OnlySetProperty");
             Assert.IsNull(pg);
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Private()
         {
-            var pg = _testClassType.PropertyGet("PrivateProperty");
+            var pg = typeof(TestClass).PropertyGet("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetPrivateProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetPrivateProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Private_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet("PrivateProperty");
+            var pg = typeof(TestStruct).PropertyGet("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.GetPrivateProperty(), pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.GetPrivateProperty(), pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Protected()
         {
-            var pg = _testClassType.PropertyGet("ProtectedProperty");
+            var pg = typeof(TestClass).PropertyGet("ProtectedProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetProtectedProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetProtectedProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Public()
         {
-            var pg = _testClassType.PropertyGet("PublicProperty");
+            var pg = typeof(TestClass).PropertyGet("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicProperty, pg(testClassInstance));
         }
 
 
         [TestMethod]
         public void PropertyGet_ByObjects_Public_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet("PublicProperty");
+            var pg = typeof(TestStruct).PropertyGet("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicProperty, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicProperty, pg(testStructInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Public_Struct()
         {
-            var pg = _testClassType.PropertyGet("PublicPropertyInt");
+            var pg = typeof(TestClass).PropertyGet("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicPropertyInt, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicPropertyInt, pg(testClassInstance));
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Public_Struct_FromStruct()
         {
-            var pg = _testStrucType.PropertyGet("PublicPropertyInt");
+            var pg = typeof(TestStruct).PropertyGet("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicPropertyInt, pg(_testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicPropertyInt, pg(testStructInstance));
         }
 
         [TestMethod]
@@ -199,7 +226,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<TestClass, string>("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.InternalProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.InternalProperty, pg(testClassInstance));
         }
 
         [TestMethod]
@@ -207,7 +235,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGetStruct<TestStruct, string>("InternalProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.InternalProperty, pg(ref _testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.InternalProperty, pg(ref testStructInstance));
         }
 
         [TestMethod]
@@ -229,7 +258,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<TestClass, string>("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetPrivateProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetPrivateProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
@@ -237,7 +267,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGetStruct<TestStruct, string>("PrivateProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.GetPrivateProperty(), pg(ref _testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.GetPrivateProperty(), pg(ref testStructInstance));
         }
 
         [TestMethod]
@@ -245,7 +276,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<TestClass, string>("ProtectedProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.GetProtectedProperty(), pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.GetProtectedProperty(), pg(testClassInstance));
         }
 
         [TestMethod]
@@ -253,7 +285,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<TestClass, string>("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicProperty, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicProperty, pg(testClassInstance));
         }
 
         [TestMethod]
@@ -261,7 +294,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<TestClass, int>("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testClassInstance.PublicPropertyInt, pg(_testClassInstance));
+            var testClassInstance = new TestClass();
+            Assert.AreEqual(testClassInstance.PublicPropertyInt, pg(testClassInstance));
         }
 
 
@@ -270,7 +304,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGetStruct<TestStruct, string>("PublicProperty");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicProperty, pg(ref _testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicProperty, pg(ref testStructInstance));
         }
 
         [TestMethod]
@@ -278,7 +313,8 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGetStruct<TestStruct, int>("PublicPropertyInt");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_testStructInstance.PublicPropertyInt, pg(ref _testStructInstance));
+            var testStructInstance = new TestStruct(0);
+            Assert.AreEqual(testStructInstance.PublicPropertyInt, pg(ref testStructInstance));
         }
 
         [TestMethod]
@@ -286,36 +322,39 @@ namespace DelegatesTest
         {
             var pg = DelegateFactory.PropertyGet<IService, string>("Property");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
+            var interfaceImpl = new Service();
+            Assert.AreEqual(interfaceImpl.Property, pg(interfaceImpl));
         }
 
         [TestMethod]
         public void PropertyGet_Interface_ByObjectAndType()
         {
-            var pg = _interfaceType.PropertyGet<string>("Property");
+            var pg = typeof(IService).PropertyGet<string>("Property");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
+            var interfaceImpl = new Service();
+            Assert.AreEqual(interfaceImpl.Property, pg(interfaceImpl));
         }
 
         [TestMethod]
         public void PropertyGet_Interface_ByObjects()
         {
-            var pg = _interfaceType.PropertyGet("Property");
+            var pg = typeof(IService).PropertyGet("Property");
             Assert.IsNotNull(pg);
-            Assert.AreEqual(_interfaceImpl.Property, pg(_interfaceImpl));
+            var interfaceImpl = new Service();
+            Assert.AreEqual(interfaceImpl.Property, pg(interfaceImpl));
         }
 
         [TestMethod]
         public void PropertyGet_NonStaticByStaticName_ByObjects()
         {
-            var pg = _testClassType.PropertyGet("StaticPublicProperty");
+            var pg = typeof(TestClass).PropertyGet("StaticPublicProperty");
             Assert.IsNull(pg);
         }
         
         [TestMethod]
         public void PropertyGet_NonStaticByStaticName_ByObjectAndType()
         {
-            var pg = _testClassType.PropertyGet<string>("StaticPublicProperty");
+            var pg = typeof(TestClass).PropertyGet<string>("StaticPublicProperty");
             Assert.IsNull(pg);
         }
 

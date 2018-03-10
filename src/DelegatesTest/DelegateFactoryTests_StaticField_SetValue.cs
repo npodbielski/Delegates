@@ -4,20 +4,34 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using Delegates;
 using DelegatesTest.TestObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DelegatesTest
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+    DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCORE
+        DelegatesTestNETCORE
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
+#endif
 {
     [TestClass]
     public class DelegateFactoryTests_StaticField_SetValue
     {
         private const int NewIntValue = 0;
         private const string NewStringValue = "Test";
-        private static readonly Type TestClassType = typeof(TestClass);
-        private static readonly Type TestStructType = typeof(TestStruct);
 
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_NonExisting()
@@ -36,7 +50,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Internal()
         {
-            var sfs = TestClassType.StaticFieldSet<string>("StaticInternalField");
+            var sfs = typeof(TestClass).StaticFieldSet<string>("StaticInternalField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticInternalField);
@@ -45,7 +59,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Internal_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet<string>("StaticInternalField");
+            var sfs = typeof(TestStruct).StaticFieldSet<string>("StaticInternalField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticInternalField);
@@ -54,7 +68,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Private()
         {
-            var sfs = TestClassType.StaticFieldSet<string>("StaticPrivateField");
+            var sfs = typeof(TestClass).StaticFieldSet<string>("StaticPrivateField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticPrivateField());
@@ -63,7 +77,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Private_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet<string>("_staticPrivateField");
+            var sfs = typeof(TestStruct).StaticFieldSet<string>("_staticPrivateField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.GetStaticPrivateField());
@@ -72,7 +86,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Protected()
         {
-            var sfs = TestClassType.StaticFieldSet<string>("StaticProtectedField");
+            var sfs = typeof(TestClass).StaticFieldSet<string>("StaticProtectedField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticProtectedField());
@@ -81,7 +95,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Public_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet<string>("StaticPublicField");
+            var sfs = typeof(TestStruct).StaticFieldSet<string>("StaticPublicField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticPublicField);
@@ -90,7 +104,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Public()
         {
-            var sfs = TestClassType.StaticFieldSet<string>("StaticPublicField");
+            var sfs = typeof(TestClass).StaticFieldSet<string>("StaticPublicField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticPublicField);
@@ -99,7 +113,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Public_Struct()
         {
-            var sfs = TestClassType.StaticFieldSet<int>("StaticPublicValueField");
+            var sfs = typeof(TestClass).StaticFieldSet<int>("StaticPublicValueField");
             Assert.IsNotNull(sfs);
             sfs(NewIntValue);
             Assert.AreEqual(NewIntValue, TestClass.StaticPublicValueField);
@@ -108,7 +122,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByExtensionAndReturnType_Public_Struct_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet<int>("StaticPublicFieldInt");
+            var sfs = typeof(TestStruct).StaticFieldSet<int>("StaticPublicFieldInt");
             Assert.IsNotNull(sfs);
             sfs(NewIntValue);
             Assert.AreEqual(NewIntValue, TestStruct.StaticPublicFieldInt);
@@ -117,7 +131,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Internal()
         {
-            var sfs = TestClassType.StaticFieldSet("StaticInternalField");
+            var sfs = typeof(TestClass).StaticFieldSet("StaticInternalField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticInternalField);
@@ -126,7 +140,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Internal_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet("StaticInternalField");
+            var sfs = typeof(TestStruct).StaticFieldSet("StaticInternalField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticInternalField);
@@ -142,7 +156,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Private()
         {
-            var sfs = TestClassType.StaticFieldSet("StaticPrivateField");
+            var sfs = typeof(TestClass).StaticFieldSet("StaticPrivateField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticPrivateField());
@@ -151,7 +165,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Private_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet("_staticPrivateField");
+            var sfs = typeof(TestStruct).StaticFieldSet("_staticPrivateField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.GetStaticPrivateField());
@@ -160,7 +174,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Protected()
         {
-            var sfs = TestClassType.StaticFieldSet("StaticProtectedField");
+            var sfs = typeof(TestClass).StaticFieldSet("StaticProtectedField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticProtectedField());
@@ -169,7 +183,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Public()
         {
-            var sfs = TestClassType.StaticFieldSet("StaticPublicField");
+            var sfs = typeof(TestClass).StaticFieldSet("StaticPublicField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticPublicField);
@@ -178,7 +192,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Public_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet("StaticPublicField");
+            var sfs = typeof(TestStruct).StaticFieldSet("StaticPublicField");
             Assert.IsNotNull(sfs);
             sfs(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticPublicField);
@@ -187,7 +201,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldSet_ByObjects_Public_Struct_FromStruct()
         {
-            var sfs = TestStructType.StaticFieldSet("StaticPublicFieldInt");
+            var sfs = typeof(TestStruct).StaticFieldSet("StaticPublicFieldInt");
             Assert.IsNotNull(sfs);
             sfs(NewIntValue);
             Assert.AreEqual(NewIntValue, TestStruct.StaticPublicFieldInt);
