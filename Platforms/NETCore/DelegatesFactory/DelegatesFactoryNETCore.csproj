@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETCORE;NETCOREAPP2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETCORE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\Action.cs" Link="CustomDelegates\Action.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructGetFunc.cs" Link="CustomDelegates\StructGetFunc.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs" Link="CustomDelegates\StructIndex1GetFunc.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs" Link="CustomDelegates\StructIndex1SetAction.cs" />
