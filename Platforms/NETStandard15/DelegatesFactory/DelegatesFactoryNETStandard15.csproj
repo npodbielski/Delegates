@@ -8,6 +8,10 @@
     <DefineConstants>TRACE;DEBUG;STANDARD;NETSTANDARD1_5</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;STANDARD;RELEASE;NETSTANDARD1_5</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructGetFunc.cs" Link="CustomDelegates\StructGetFunc.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs" Link="CustomDelegates\StructIndex1GetFunc.cs" />

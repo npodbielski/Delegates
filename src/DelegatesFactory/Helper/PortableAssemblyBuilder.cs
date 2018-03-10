@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace Delegates.Helper
 {
-    public class PortableAssemblyBuilder
+    internal class PortableAssemblyBuilder
     {
         private const string NotSupported = "On this platform delegates types conversion is not supported!";
 

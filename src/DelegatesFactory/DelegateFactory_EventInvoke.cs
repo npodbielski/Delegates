@@ -6,7 +6,6 @@
 
 using System;
 using System.Linq.Expressions;
-using System.Reflection;
 using Delegates.Extensions;
 using Delegates.Helper;
 
@@ -14,6 +13,14 @@ namespace Delegates
 {
     public static partial class DelegateFactory
     {
+        /// <summary>
+        /// Creates delegates for invoking event with name <paramref name="eventName"/> on type
+        /// <typeparamref name="TSource" /> with event args type <typeparamref name="TEventArgs"/>
+        /// </summary>
+        /// <typeparam name="TSource">Type with event</typeparam>
+        /// <typeparam name="TEventArgs">Event args type</typeparam>
+        /// <param name="eventName">Name of event</param>
+        /// <returns></returns>
         public static Action<TSource, TEventArgs> EventInvoke<TSource, TEventArgs>(string eventName)
         {
             var sourceType = typeof(TSource);
@@ -21,22 +28,53 @@ namespace Delegates
                 typeof(TEventArgs));
         }
 
+        /// <summary>
+        /// Creates delegates for invoking event with name <paramref name="eventName"/> on type
+        /// <paramref name="source"/> with event args type <typeparamref name="TEventArgs"/>
+        /// </summary>
+        /// <typeparam name="TEventArgs">Event args type</typeparam>
+        /// <param name="source">Type with event</param>
+        /// <param name="eventName">Name of event</param>
+        /// <returns></returns>
         public static Action<object, TEventArgs> EventInvoke<TEventArgs>(this Type source, string eventName)
         {
             return EventInvokeImpl<Action<object, TEventArgs>>(source, eventName, typeof(object), typeof(TEventArgs));
         }
 
+        /// <summary>
+        /// Creates delegates for invoking event with name <paramref name="eventName"/> on type
+        /// <paramref name="source"/> with object as an event args
+        /// </summary>
+        /// <param name="source">Type with event</param>
+        /// <param name="eventName">Name of event</param>
+        /// <returns></returns>
         public static Action<object, object> EventInvoke(this Type source, string eventName)
         {
             return EventInvokeImpl<Action<object, object>>(source, eventName, typeof(object), typeof(object));
         }
 
+        /// <summary>
+        /// Creates delegates for invoking event with name <paramref name="eventName"/> on type
+        /// <typeparamref name="TSource"/> using custom delegate type <typeparamref name="TDelegate"/>
+        /// </summary>
+        /// <typeparam name="TSource">Type with event</typeparam>
+        /// <typeparam name="TDelegate">Event custom delegate type</typeparam>
+        /// <param name="eventName">Name of event</param>
+        /// <returns></returns>
         public static TDelegate EventInvokeCustomDelegate<TSource, TDelegate>(string eventName)
             where TDelegate : class
         {
             return EventInvokeImpl<TDelegate>(typeof(TSource), eventName);
         }
 
+        /// <summary> 
+        /// Creates delegates for invoking event with name <paramref name="eventName"/> on type
+        /// <paramref name="source"/> using custom delegate type <typeparamref name="TDelegate"/>
+        /// </summary>
+        /// <typeparam name="TDelegate">Event custom delegate type</typeparam>
+        /// <param name="source">Type with event</param>
+        /// <param name="eventName">Name of event</param>
+        /// <returns></returns>
         public static TDelegate EventInvokeCustomDelegate<TDelegate>(this Type source, string eventName)
             where TDelegate : class
         {

@@ -70,7 +70,7 @@ namespace Delegates
         /// <typeparam name="TDelegate">
         ///     Event method delegate type. Can be either custom delegate or
         ///     <see cref="EventHandler{TEventArgs}" />, but for second case it is recommended to use
-        ///     <see cref="DelegateFactory.EventRemove{TEventArgs}" /> instead.
+        ///     <see cref="DelegateFactory.EventRemove{TEventArgs}(Type,string)" /> instead.
         /// </typeparam>
         /// <param name="source">Source type with defined event</param>
         /// <param name="eventName">Name of an event</param>
