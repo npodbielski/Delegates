@@ -28,7 +28,7 @@ namespace Delegates.Helper
         private static readonly Dictionary<WeakReference, WeakReference> EventsProxies =
             new Dictionary<WeakReference, WeakReference>();
 
-        //TODO: optimize by creating more methods that suppose to do least work its possible - heave duty should be done in Reflection during creation of delegate in EventAdd/Remove
+        //TODO: optimize by creating more methods that suppose to do least work its possible - heavy duty should be done in Reflection during creation of delegate in EventAdd/Remove
         public static TEventDelegate EventHandlerFactory<TSourceDelegate, TEventDelegate, TEventArgs, TSource>(
             Delegate handler, bool isRemove)
             where TSourceDelegate : class

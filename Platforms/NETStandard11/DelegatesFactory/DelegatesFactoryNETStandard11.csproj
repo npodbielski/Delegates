@@ -43,7 +43,6 @@
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\MethodInfoExtensions.cs" Link="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions.cs" Link="Extensions\TypeExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions_NETStandard11_15.cs" Link="Extensions\TypeExtensions_NETStandard11_15.cs" />
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\WeakReferenceExtensions.cs" Link="Extensions\WeakReferenceExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs" Link="Helper\DelegateHelper.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs" Link="Helper\EventsHelper.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_NonPortable.cs" Link="Helper\EventsHelper_NonPortable.cs" />
