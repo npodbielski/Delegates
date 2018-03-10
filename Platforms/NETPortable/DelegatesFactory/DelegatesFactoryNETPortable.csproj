@@ -158,6 +158,9 @@
     <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
       <Link>Properties\SolutionAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_Portable.cs">
+      <Link>Helper\EventsHelper_Portable.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>

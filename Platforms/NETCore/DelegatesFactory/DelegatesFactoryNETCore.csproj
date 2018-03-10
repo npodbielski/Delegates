@@ -50,6 +50,7 @@
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\WeakReferenceExtensions.cs" Link="Extensions\WeakReferenceExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs" Link="Helper\DelegateHelper.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs" Link="Helper\EventsHelper.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_NonPortable.cs" Link="Helper\EventsHelper_NonPortable.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs" Link="Helper\ParametersIndexes.cs" />
   </ItemGroup>
 

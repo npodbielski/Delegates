@@ -154,6 +154,9 @@
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs">
       <Link>Helper\EventsHelper.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_NonPortable.cs">
+      <Link>Helper\EventsHelper_NonPortable.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
       <Link>Helper\ParametersIndexes.cs</Link>
     </Compile>
