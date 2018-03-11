@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+  <Import Project="..\..\..\src\Common\Common.props" />
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>DelegatesFactory</AssemblyName>
-    <RootNamespace>DelegatesFactory</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

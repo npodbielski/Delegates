@@ -7,13 +7,12 @@
 using System.Reflection;
 #if !PORTABLE
 using System.Runtime.InteropServices;
-
 #endif
 
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Easy way for creating delegates to access types members. Much faster than Reflection.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("npodbielski")]
-[assembly: AssemblyCopyright("Copyright © npodbielski 2017")]
+[assembly: AssemblyCopyright("Copyright © npodbielski 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 #if !PORTABLE

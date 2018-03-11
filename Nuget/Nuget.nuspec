@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DelegatesFactory</id>
-    <version>1.1.0</version>
+    <version>1.1.0.0</version>
     <title>DelegatesFactory</title>
     <authors>npodbielski</authors>
     <owners>npodbielski</owners>
@@ -17,10 +17,10 @@
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/npodbielski/Delegates</projectUrl>
-    <iconUrl>http://internetexception.com/nuget/delegateFactoryIcon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/npodbielski/Delegates/master/Nuget/delegateFactoryIcon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>http://opensource.org/licenses/Apache-2.0</licenseUrl>
-    <copyright>Copyright npodbielski 2017</copyright>
+    <copyright>Copyright npodbielski 2018</copyright>
     <tags>reflection, delegates</tags>
   </metadata>
   <files>
@@ -28,23 +28,26 @@
     <file src="..\Platforms\NET35\DelegatesFactory\bin\Release\**.pdb" target="lib\NET35" />
     <file src="..\Platforms\NET35\DelegatesFactory\bin\Release\**.xml" target="lib\NET35" />
     <file src="..\Platforms\NET4\DelegatesFactory\bin\Release\**.dll" target="lib\NET4" />
-	<file src="..\Platforms\NET4\DelegatesFactory\bin\Release\**.pdb" target="lib\NET4" />
+    <file src="..\Platforms\NET4\DelegatesFactory\bin\Release\**.pdb" target="lib\NET4" />
     <file src="..\Platforms\NET4\DelegatesFactory\bin\Release\**.xml" target="lib\NET4" />
     <file src="..\Platforms\NET45\DelegatesFactory\bin\Release\**.dll" target="lib\NET45" />
-	<file src="..\Platforms\NET45\DelegatesFactory\bin\Release\**.pdb" target="lib\NET45" />
+    <file src="..\Platforms\NET45\DelegatesFactory\bin\Release\**.pdb" target="lib\NET45" />
     <file src="..\Platforms\NET45\DelegatesFactory\bin\Release\**.xml" target="lib\NET45" />
     <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.dll" target="lib\NET46" />
-	<file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.pdb" target="lib\NET46" />
+    <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.pdb" target="lib\NET46" />
     <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.xml" target="lib\NET46" />
     <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.dll" target="lib\NETCore" />
-	<file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.pdb" target="lib\NETCore" />
+    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.pdb" target="lib\NETCore" />
     <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.xml" target="lib\NETCore" />
     <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.dll" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
-	<file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.pdb" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
+    <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.pdb" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
     <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.xml" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
-    <file src="..\Platforms\NETStandard\DelegatesFactory\bin\Release\**.dll" target="lib\netstandard1.5" />
-	<file src="..\Platforms\NETStandard\DelegatesFactory\bin\Release\**.pdb" target="lib\netstandard1.5" />
-    <file src="..\Platforms\NETStandard\DelegatesFactory\bin\Release\**.xml" target="lib\netstandard1.5" />
+    <file src="..\Platforms\NETStandard11\DelegatesFactory\bin\Release\**.dll" target="lib\netstandard11" />
+    <file src="..\Platforms\NETStandard11\DelegatesFactory\bin\Release\**.pdb" target="lib\netstandard11" />
+    <file src="..\Platforms\NETStandard11\DelegatesFactory\bin\Release\**.xml" target="lib\netstandard11" />
+    <file src="..\Platforms\NETStandard15\DelegatesFactory\bin\Release\**.dll" target="lib\netstandard15" />
+    <file src="..\Platforms\NETStandard15\DelegatesFactory\bin\Release\**.pdb" target="lib\netstandard15" />
+    <file src="..\Platforms\NETStandard15\DelegatesFactory\bin\Release\**.xml" target="lib\netstandard15" />
     <file src="..\src\DelegatesFactory\CustomDelegates\**\*.cs" target="src\CustomDelegates" />
     <file src="..\src\DelegatesFactory\Extensions\**\*.cs" target="src\Extensions" />
     <file src="..\src\DelegatesFactory\Helper\**\*.cs" target="src\Helper" />
