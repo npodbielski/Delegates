@@ -36,9 +36,9 @@
     <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.dll" target="lib\NET46" />
     <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.pdb" target="lib\NET46" />
     <file src="..\Platforms\NET46\DelegatesFactory\bin\Release\**.xml" target="lib\NET46" />
-    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.dll" target="lib\NETCore" />
-    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.pdb" target="lib\NETCore" />
-    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netstandard1.6\**.xml" target="lib\NETCore" />
+    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netcoreapp2.0\**.dll" target="lib\NETCore" />
+    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netcoreapp2.0\**.pdb" target="lib\NETCore" />
+    <file src="..\Platforms\NETCore\DelegatesFactory\bin\Release\netcoreapp2.0\**.xml" target="lib\NETCore" />
     <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.dll" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
     <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.pdb" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
     <file src="..\Platforms\NETPortable\DelegatesFactory\bin\Release\**.xml" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
