@@ -191,7 +191,7 @@ namespace Delegates.Extensions
         public static bool IsValueType(this Type source)
         {
 #if NET35 || NET4 || PORTABLE
-            return source.IsValueType();
+            return source.IsValueType;
 #elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
             return source.GetTypeInfo().IsValueType;
 #endif

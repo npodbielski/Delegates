@@ -55,7 +55,7 @@ namespace Delegates.Helper
         private static AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
         {
 #if NET35 || NET4
-            return AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, assemblyAccess);
+            return AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, ConververAssemblyAccess);
 #else
             return AssemblyBuilder.DefineDynamicAssembly(assemblyName, ConververAssemblyAccess);
 #endif
