@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.Extensions;
 
 namespace Delegates
@@ -45,7 +46,7 @@ namespace Delegates
             var propertyInfo = source.GetPropertyInfo(propertyName, true);
             if (propertyInfo?.GetMethod == null) return null;
             Expression returnExpression = Expression.Call(propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsClassType())
+            if (!propertyInfo.PropertyType.GetTypeInfo().IsClass)
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             return Expression.Lambda<Func<object>>(returnExpression).Compile();
         }

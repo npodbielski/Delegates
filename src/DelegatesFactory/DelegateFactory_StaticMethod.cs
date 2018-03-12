@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.Extensions;
 using static Delegates.Helper.DelegateHelper;
 
@@ -112,7 +113,7 @@ namespace Delegates
             }
 
             Expression returnExpression = Expression.Call(methodInfo, paramsExpression);
-            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
+            if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.GetTypeInfo().IsClass)
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
 
             CheckDelegateReturnType<TDelegate>(methodInfo);

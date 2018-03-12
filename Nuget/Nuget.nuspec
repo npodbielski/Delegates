@@ -29,6 +29,7 @@
     <file src="..\Platforms\NET45\$id$\bin\$Configuration$\**" target="lib\NET45" />
     <file src="..\Platforms\NET46\$id$\bin\$Configuration$\**" target="lib\NET46" />
     <file src="..\Platforms\NETCore10\$id$\bin\$Configuration$\**" target="lib" />
+    <file src="..\Platforms\NETCore11\$id$\bin\$Configuration$\**" target="lib" />
     <file src="..\Platforms\NETCore20\$id$\bin\$Configuration$\**" target="lib" />
     <file src="..\Platforms\NETPortable\$id$\bin\$Configuration$\**" target="lib\portable-net45+sl50+netcore45+wpa81+wp8" />
     <file src="..\Platforms\NETStandard11\$id$\bin\$Configuration$\**" target="lib" />

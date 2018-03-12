@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\..\src\Common\Common.props" />
   <PropertyGroup>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;STANDARD;NETSTANDARD1_1</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETCORE;NETCOREAPP1_1</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;STANDARD;RELEASE;NETSTANDARD1_1</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NETCORE;RELEASE;NETCOREAPP1_1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,11 +43,11 @@
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticMethod.cs" Link="DelegateFactory_StaticMethod.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertyGet.cs" Link="DelegateFactory_StaticPropertyGet.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertySet.cs" Link="DelegateFactory_StaticPropertySet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CEventInfo.cs" Link="Extensions\CEventInfo.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CPropertyInfo.cs" Link="Extensions\CPropertyInfo.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\ExpressionsExtensions.cs" Link="Extensions\ExpressionsExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\MethodInfoExtensions.cs" Link="Extensions\MethodInfoExtensions.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions.cs" Link="Extensions\TypeExtensions.cs" />
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions_NETStandard11.cs" Link="Extensions\TypeExtensions_NETStandard11.cs" />
-    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions_NETStandard11_15.cs" Link="Extensions\TypeExtensions_NETStandard11_15.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs" Link="Helper\DelegateHelper.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs" Link="Helper\EventsHelper.cs" />
     <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_NonPortable.cs" Link="Helper\EventsHelper_NonPortable.cs" />
@@ -61,7 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
   </ItemGroup>
+
 </Project>

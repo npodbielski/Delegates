@@ -179,7 +179,7 @@ namespace Delegates
                 var expressions = delegateParams.GetParamsExprFromTypes();
                 Expression returnExpression = Expression.Call(Expression.Convert(sourceParameter, source),
                     methodInfo, expressions.GetCallExprParams());
-                if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.IsClassType())
+                if (methodInfo.ReturnType != typeof(void) && !methodInfo.ReturnType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
                 var lamdaParams = expressions.GetLambdaExprParams(sourceParameter);
                 CheckDelegateReturnType<TDelegate>(methodInfo);
@@ -204,7 +204,7 @@ namespace Delegates
         [Obsolete]
         public static TDelegate InstanceMethodExpr<TDelegate>(string methodName) where TDelegate : class
         {
-            var source = typeof(TDelegate).GenericTypeArguments()[0];
+            var source = typeof(TDelegate).GetGenericTypeArguments()[0];
             var param = Expression.Parameter(source, "source");
             var parameters = new List<ParameterExpression> {param};
             var @params = GetDelegateArguments<TDelegate>().Skip(1);

@@ -217,7 +217,7 @@ namespace Delegates
             var indexerInfo = source.GetIndexerPropertyInfo(indexTypes);
             if (indexerInfo?.SetMethod == null) return null;
             ParameterExpression sourceObjectParam;
-            if (source.IsClassType() || source.GetTypeInfo().IsInterface)
+            if (source.GetTypeInfo().IsClass || source.GetTypeInfo().IsInterface)
                 sourceObjectParam = Expression.Parameter(typeof(object), "source");
             else
                 sourceObjectParam = Expression.Parameter(typeof(object).MakeByRefType(), "source");
@@ -238,7 +238,7 @@ namespace Delegates
             var paramsExpressions = new[] {sourceObjectParam}.Concat(indexExpressions)
                 .Concat(new[] {valueParam});
             Expression blockExpr;
-            if (!(source.IsClassType() || source.GetTypeInfo().IsInterface))
+            if (!(source.GetTypeInfo().IsClass || source.GetTypeInfo().IsInterface))
             {
 #if !NET35
                 var structVariable = Expression.Variable(source, "struct");

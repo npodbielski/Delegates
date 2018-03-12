@@ -20,9 +20,11 @@ namespace
         DelegatesTestNET46
 #elif PORTABLE
         DelegatesTestNETPortable
-#elif NETCOREAPP1_0
-    DelegatesTestNETCORE10
-#elif NETCOREAPP2_0
+#elif NETCOREAPP10
+        DelegatesTestNETCORE10
+#elif NETCOREAPP11
+    DelegatesTestNETCORE11
+#elif NETCOREAPP20
         DelegatesTestNETCORE20
 #elif NETSTANDARD1_1
         DelegatesTestNETStandard11

@@ -99,7 +99,7 @@ namespace Delegates
             var sourceObjectParam = Expression.Parameter(typeof(object), "source");
             Expression returnExpression =
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsClassType())
+            if (!propertyInfo.PropertyType.GetTypeInfo().IsClass)
                 returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
             return Expression.Lambda<TDelegate>(returnExpression, sourceObjectParam).Compile();
         }

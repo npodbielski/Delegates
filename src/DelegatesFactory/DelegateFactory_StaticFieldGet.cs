@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.Extensions;
 
 namespace Delegates
@@ -53,7 +54,7 @@ namespace Delegates
             if (fieldInfo != null)
             {
                 Expression returnExpression = Expression.Field(null, fieldInfo);
-                if (!fieldInfo.FieldType.IsClassType())
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 var lambda = Expression.Lambda<Func<object>>(returnExpression);
                 return lambda.Compile();

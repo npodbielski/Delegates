@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.Extensions;
 using static Delegates.Helper.DelegateHelper;
 
@@ -66,7 +67,7 @@ namespace Delegates
             }
 
             Expression returnExpression = Expression.New(constructorInfo, paramsExpression);
-            if (!source.IsClassType())
+            if (!source.GetTypeInfo().IsClass)
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }
@@ -96,7 +97,7 @@ namespace Delegates
             var parameters = ctrArgs.GetParamsExprFromTypes();
             var ctorParams = parameters.GetNewExprParams();
             Expression returnExpression = Expression.New(constructorInfo, ctorParams);
-            if (!source.IsClassType())
+            if (!source.GetTypeInfo().IsClass)
             {
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             }

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
+#if NETCOREAPP1_0 || NETCOREAPP1_1 || NETCOREAPP2_0 || STANDARD
 #define TaskUtilMethodsWith_TO_Suffix
 #endif
 #if !NETSTANDARD1_1
@@ -12,6 +12,19 @@
 #endif
 #if NET45 || NET46 || NETCORE || STANDARD
 #define Supports_GenericTypeArguments_Property
+#endif
+#if NETCOREAPP1_0 || NETCOREAPP1_1
+#define Supports_GetMethod_OnlyWithNameAndBindingFlags
+#endif
+#if NET35 || NET4 || PORTABLE
+#define Supports_EventAndProperty_AccessorsViaMethods
+#define NotSupports_TypeInfo
+#endif
+#if !(PORTABLE || STANDARD)
+#define NotSupports_GetMethod_WithNameBindingFlagsAndTypes
+#endif
+#if NETCORE || PORTABLE || STANDARD
+#define NotSupports_GetConstructor_ByBindingFlagsAndParameterTypes
 #endif
 
 using System;
@@ -117,7 +130,7 @@ namespace Delegates.Extensions
                 GenericParameterAttributes.ReferenceTypeConstraint;
             if (valid)
             {
-                valid &= source.IsClassType();
+                valid &= source.GetTypeInfo().IsClass;
             }
             else
             {
@@ -134,7 +147,7 @@ namespace Delegates.Extensions
                 GenericParameterAttributes.NotNullableValueTypeConstraint;
             if (valid)
             {
-                valid &= source.IsValueType();
+                valid &= source.GetTypeInfo().IsValueType;
             }
             else
             {
@@ -170,7 +183,7 @@ namespace Delegates.Extensions
             return false;
         }
 
-        public static Type[] GenericTypeArguments(this Type source)
+        public static Type[] GetGenericTypeArguments(this Type source)
         {
 #if NET35 || NET4 || PORTABLE || NETCOREAPP1_0
             return source.GetGenericArguments();
@@ -178,25 +191,7 @@ namespace Delegates.Extensions
             return source.GetTypeInfo().GenericTypeArguments;
 #endif
         }
-
-        public static bool IsClassType(this Type source)
-        {
-#if NET35 || NET4 || PORTABLE
-            return source.IsClass;
-#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
-            return source.GetTypeInfo().IsClass;
-#endif
-        }
-
-        public static bool IsValueType(this Type source)
-        {
-#if NET35 || NET4 || PORTABLE
-            return source.IsValueType;
-#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
-            return source.GetTypeInfo().IsValueType;
-#endif
-        }
-
+        
         public static bool IsValidReturnType(this Type destination, Type source)
         {
             if (!source.CanBeAssignedFrom(destination)
@@ -271,14 +266,7 @@ namespace Delegates.Extensions
         }
 #endif
 
-#if NETSTANDARD1_1
-        public static MethodInfo GetMethods(this Type source, string methodName)
-        {
-            return source.GetTypeInfo().GetDeclaredMethod(methodName);
-        }
-#endif
-
-#if NET35 || NET4 || PORTABLE
+#if NotSupports_TypeInfo
         public static Type GetTypeInfo(this Type source)
         {
             return source;
@@ -293,7 +281,7 @@ namespace Delegates.Extensions
             var parameters = types
 #if NET35
                 .Select(a => Expression.Parameter(a, "p" + index++))
-#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || NET4 || PORTABLE || STANDARD
+#elif NET45 || NET46 || NETCORE || NET4 || PORTABLE || STANDARD
                 .Select(Expression.Parameter)
 #endif
                 .ToList();
@@ -421,7 +409,7 @@ namespace Delegates.Extensions
             MethodInfo methodInfo = null;
             if (typeParameters == null || typeParameters.Length == 0)
             {
-#if !(PORTABLE || STANDARD)
+#if NotSupports_GetMethod_WithNameBindingFlagsAndTypes
                 var enumerateMethods = false;
                 try
                 {
@@ -433,8 +421,8 @@ namespace Delegates.Extensions
                     enumerateMethods = true;
                 }
 
-#if NETCOREAPP1_0
-                if (methodInfo==null)
+#if Supports_GetMethod_OnlyWithNameAndBindingFlags
+                if (methodInfo == null)
                 {
                     enumerateMethods = true;
                 }
@@ -458,14 +446,14 @@ namespace Delegates.Extensions
         }
 
 
-#if !(PORTABLE || STANDARD)
-        public static MethodInfo GetNonGenericMethod(this Type source, string name, Type[] parametersTypes, bool isStatic)
+#if NotSupports_GetMethod_WithNameBindingFlagsAndTypes
+        public static MethodInfo GetNonGenericMethod(this Type source, string name, Type[] parametersTypes,
+            bool isStatic)
         {
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
-#if !(NETCOREAPP1_0 || NETCOREAPP2_0)
-            var methodInfo =
-                    (typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
+#if !(NETCORE)
+            var methodInfo = (typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
                      typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes, null)) ??
                      typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, parametersTypes, null); 
 #endif
@@ -473,7 +461,7 @@ namespace Delegates.Extensions
             var methodInfo = typeInfo.GetMethod(name, staticOrInstance, null, CallingConventions.Any, parametersTypes, null)??
                 typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, CallingConventions.Any, parametersTypes, null)??
                 typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, CallingConventions.Any, parametersTypes, null);
-#elif NETCOREAPP1_0
+#elif Supports_GetMethod_OnlyWithNameAndBindingFlags
             var methodInfo = typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public) ??
                 typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags) ??
                 typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags);
@@ -483,7 +471,7 @@ namespace Delegates.Extensions
             {
                 methodInfo = null;
             }
-#if NETCOREAPP1_0
+#if Supports_GetMethod_OnlyWithNameAndBindingFlags
             if (methodInfo != null)
             {
                 methodInfo = CheckMethodInfoParameters(parametersTypes, methodInfo);
@@ -493,43 +481,27 @@ namespace Delegates.Extensions
         }
 #endif
 
-#if NETSTANDARD1_1
-        private static bool IsPropertyStatic(this PropertyInfo propertyInfo)
-        {
-            return propertyInfo.GetMethod != null && propertyInfo.GetMethod.IsStatic
-                || propertyInfo.SetMethod != null && propertyInfo.SetMethod.IsStatic;
-        } 
-#endif
-
+#if !NETSTANDARD1_1
         public static
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
             CPropertyInfo
 #else
             PropertyInfo
 #endif
             GetPropertyInfo(this Type source, string name, bool isStatic)
         {
-#if NETSTANDARD1_1
-            var propertyInfo = source.GetTypeInfo().GetDeclaredProperty(name);
-            if (propertyInfo != null 
-                    &&(!isStatic && propertyInfo.IsPropertyStatic() || 
-                    isStatic && !propertyInfo.IsPropertyStatic()))
-            {
-                propertyInfo = null;
-            }
-#else
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
             var propertyInfo = typeInfo.GetProperty(name, staticOrInstance) ??
                 typeInfo.GetProperty(name, staticOrInstance | PrivateOrProtectedBindingFlags) ??
                 typeInfo.GetProperty(name, staticOrInstance | InternalBindingFlags);
-#endif
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
             return new CPropertyInfo(propertyInfo);
 #else
             return propertyInfo;
 #endif
         }
+#endif
 
         public static FieldInfo GetFieldInfo(this Type source, string fieldName, bool isStatic)
         {
@@ -553,13 +525,13 @@ namespace Delegates.Extensions
             var properties = source.GetProperties().Concat(
                     source.GetProperties(BindingFlags.NonPublic)).Concat(
                     source.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
-               .ToArray();
+                .ToArray();
             return properties;
 #endif
         }
 
         public static
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
             CPropertyInfo
 #else
             PropertyInfo
@@ -582,7 +554,7 @@ namespace Delegates.Extensions
                 && IndexParametersEquals(p.GetIndexParameters(), indexesTypes));
             if (indexerInfo != null)
             {
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
                 return new CPropertyInfo(indexerInfo);
 #else
                 return indexerInfo;
@@ -592,6 +564,7 @@ namespace Delegates.Extensions
             return null;
         }
 
+#if NotSupports_GetConstructor_ByBindingFlagsAndParameterTypes
         private static IEnumerable<ConstructorInfo> GetAllConstructors(this Type source)
         {
 #if NETSTANDARD1_1
@@ -603,10 +576,11 @@ namespace Delegates.Extensions
             return constructors;
 #endif
         }
+#endif
 
         public static ConstructorInfo GetConstructorInfo(this Type source, Type[] types)
         {
-#if NETCOREAPP1_0 || NETCOREAPP2_0 || PORTABLE || STANDARD
+#if NotSupports_GetConstructor_ByBindingFlagsAndParameterTypes
             ConstructorInfo constructor = null;
             var constructors = source.GetAllConstructors();
             foreach (var c in constructors)
@@ -635,13 +609,11 @@ namespace Delegates.Extensions
                     break;
                 }
             }
-
             return constructor;
 #else
             return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
                         source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
                         source.GetConstructor(InternalBindingFlags | BindingFlags.Instance, null, types, null);
-            
 #endif
         }
 
@@ -651,14 +623,14 @@ namespace Delegates.Extensions
             return source.GetTypeInfo().GetDeclaredEvent(eventName);
 #else
             return (source.GetTypeInfo().GetEvent(eventName)
-                ?? source.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
+                    ?? source.GetTypeInfo().GetEvent(eventName, PrivateOrProtectedBindingFlags))
                 ?? source.GetTypeInfo().GetEvent(eventName,
                     InternalBindingFlags | BindingFlags.Instance);
 #endif
         }
 
         public static
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
             CEventInfo
 #else
             EventInfo
@@ -666,7 +638,7 @@ namespace Delegates.Extensions
             GetEventInfo(this Type sourceType, string eventName)
         {
             var eventInfo = sourceType.GetEventByName(eventName);
-#if NET35 || NET4 || PORTABLE
+#if Supports_EventAndProperty_AccessorsViaMethods
             return eventInfo != null ? new CEventInfo(eventInfo) : null;
 #else
             return eventInfo;

@@ -6,10 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-
 #if NET45
 using System.Diagnostics.Contracts;
-
 #endif
 
 namespace DelegatesTest.TestObjects

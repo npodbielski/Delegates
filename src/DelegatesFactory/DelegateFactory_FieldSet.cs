@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
 
@@ -205,7 +206,7 @@ namespace Delegates
                 Expression returnExpression =
                     Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo),
                         convertedValueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 var lambda = Expression.Lambda<Action<object, object>>(returnExpression, sourceParam, valueParam);
                 return lambda.Compile();
@@ -234,7 +235,7 @@ namespace Delegates
                     valueExpr = valueParam;
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 var body = Expression.Block(typeof(void), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
@@ -269,7 +270,7 @@ namespace Delegates
                     valueExpr = valueParam;
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
                 var body = Expression.Block(typeof(object), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),

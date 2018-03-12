@@ -21,9 +21,11 @@ namespace
         DelegatesTestNET46
 #elif PORTABLE
         DelegatesTestNETPortable
-#elif NETCOREAPP1_0
-    DelegatesTestNETCORE10
-#elif NETCOREAPP2_0
+#elif NETCOREAPP10
+        DelegatesTestNETCORE10
+#elif NETCOREAPP11
+    DelegatesTestNETCORE11
+#elif NETCOREAPP20
         DelegatesTestNETCORE20
 #elif NETSTANDARD1_1
         DelegatesTestNETStandard11
@@ -31,7 +33,7 @@ namespace
         DelegatesTestNETStandard15
 #endif
 {
-[TestClass]
+    [TestClass]
     public class DelegateFactoryTests_InstanceMethods
     {
         //TODO: consider support for creating delegates from derived type (method defined in base)

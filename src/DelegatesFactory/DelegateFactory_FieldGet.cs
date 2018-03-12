@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
 using static Delegates.Helper.DelegateHelper;
@@ -111,7 +112,7 @@ namespace Delegates
                 }
                 else
                 {
-                    if (byRef && source.IsValueType())
+                    if (byRef && source.GetTypeInfo().IsValueType)
                     {
                         sourceParam = Expression.Parameter(source.MakeByRefType(), "source");
                         instanceExpression = sourceParam;
@@ -124,7 +125,7 @@ namespace Delegates
                 }
 
                 Expression returnExpression = Expression.Field(instanceExpression, fieldInfo);
-                if (!fieldInfo.FieldType.IsClassType())
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
                 var lambda = Expression.Lambda<TDelegate>(returnExpression, sourceParam);
                 var fieldGetImpl = lambda.Compile();

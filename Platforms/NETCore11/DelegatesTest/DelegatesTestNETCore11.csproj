@@ -6,14 +6,17 @@
     <IsPackable>false</IsPackable>
 
     <RootNamespace>DelegatesTest</RootNamespace>
+
+    <AssemblyName>DelegatesTestNETCore11</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETCOREAPP20;NETCOREAPP2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP11;NETCOREAPP2_0</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;RELEASE;NETCOREAPP20;RELEASE;NETCOREAPP2_0</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NETCOREAPP11;RELEASE;NETCOREAPP2_0</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -62,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETCore20.csproj" />
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETCore11.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,13 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-#if NET35 || NET4 || NET45 || NET46 || NETCOREAPP1_0 || STANDARD
+#if NET35 || NET4 || NET45 || NET46 || STANDARD
 using System.Reflection.Emit;
 #endif
 #if NET35 || NET4 || PORTABLE || STANDARD
 using Delegates.Extensions;
 #endif
-#if NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
+#if NET45 || NET46 || NETCORE || STANDARD
 using WeakReference = System.WeakReference<object>;
 #endif
 

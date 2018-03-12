@@ -6,6 +6,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
 
@@ -153,7 +154,7 @@ namespace Delegates
             Expression returnExpression =
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod,
                     paramsExpression);
-            if (!propertyInfo.PropertyType.IsClassType())
+            if (!propertyInfo.PropertyType.GetTypeInfo().IsClass)
                 returnExpression = Expression.Convert(returnExpression, typeof(object));
             return Expression.Lambda<Func<object, object[], object>>(
                 returnExpression, sourceObjectParam, indexesParam).Compile();
