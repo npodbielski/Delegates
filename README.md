@@ -1,4 +1,14 @@
+
+Stable
+
+[![Build Status](http://185.157.80.85:8080/buildStatus/icon?job=Delegates)](http://185.157.80.85:8080/job/Delegates/)
+
+Unstable
+
+[![Build Status](http://185.157.80.85:8080/buildStatus/icon?job=Delegates_Develop)](http://185.157.80.85:8080/job/Delegates_Develop/)
+
 # Delegates
+
 Easy way to create delegates for obtaining/using all member types (fields, properties, indexers, methods, constructors and events) of all types (static and intance, generic and not generic) and all visibilities (public, internal, protected and private). 
 
 Code was originally written as an example for below articles now is available as nuget package.
