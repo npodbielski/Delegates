@@ -1,3 +1,4 @@
+#updates assemblies and nuget package version according to version from git
 $numberOfCommits = & 'C:\Program Files\git\bin\git.exe' rev-list origin/master..HEAD --count
 $branch = git rev-parse --abbrev-ref HEAD
 if ($branch -eq 'develop'){

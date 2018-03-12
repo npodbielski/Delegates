@@ -31,6 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegatesTestNET46", "Platf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DC8497EF-E6D9-425F-8923-479C3190AB00}"
 	ProjectSection(SolutionItems) = preProject
+		src\Common\Common.props = src\Common\Common.props
 		src\Common\DelegatesAppAssemblyInfo.cs = src\Common\DelegatesAppAssemblyInfo.cs
 		src\Common\DelegatesAssemblyInfo.cs = src\Common\DelegatesAssemblyInfo.cs
 		src\Common\DelegatesTestAssemblyInfo.cs = src\Common\DelegatesTestAssemblyInfo.cs
@@ -58,14 +59,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{C7CD84D2-8D78-45B2-AD21-B082618832F9}"
-	ProjectSection(SolutionItems) = preProject
-		Nuget\delegateFactoryIcon.png = Nuget\delegateFactoryIcon.png
-		Nuget\nuget.exe = Nuget\nuget.exe
-		Nuget\Nuget.nuspec = Nuget\Nuget.nuspec
-		Nuget\pack-publish.bat = Nuget\pack-publish.bat
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesFactoryNETCore", "Platforms\NETCore\DelegatesFactory\DelegatesFactoryNETCore.csproj", "{FA4FE6FB-9420-4E52-B9A3-FC8951474781}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETCore", "Platforms\NETCore\DelegatesTest\DelegatesTestNETCore.csproj", "{E7D7B854-5CA1-472D-86A2-27CF413A4309}"
@@ -79,6 +72,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesFactoryNETStandard11", "Platforms\NETStandard11\DelegatesFactory\DelegatesFactoryNETStandard11.csproj", "{1851C3B2-7A41-46AB-8D16-6A9538B0477A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETStandard11", "Platforms\NETStandard11\DelegatesTest\DelegatesTestNETStandard11.csproj", "{922FA812-3B8A-483F-86FB-45E98E51D4EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{E35BA139-9932-4D05-BBB3-E9CFC2EC6627}"
+	ProjectSection(SolutionItems) = preProject
+		Nuget\delegateFactoryIcon.png = Nuget\delegateFactoryIcon.png
+		Nuget\Nuget.nuspec = Nuget\Nuget.nuspec
+		Nuget\updateVersion.ps1 = Nuget\updateVersion.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -349,7 +349,6 @@ Global
 		{5DB38D8B-7CDA-4F75-8955-E40503F50E68} = {A7BEC3A2-F03A-49F6-B9BB-AE13CCD85CC8}
 		{24B450B4-8C97-47C6-8CF8-9B4D761AB3FC} = {AAA8B143-512A-40BE-958F-4646E6365528}
 		{2636C5AD-535C-400B-8DA3-AD9BE6B84FC0} = {AAA8B143-512A-40BE-958F-4646E6365528}
-		{C7CD84D2-8D78-45B2-AD21-B082618832F9} = {E8CD790A-1F5A-4229-9C1D-03C6904B73A4}
 		{FA4FE6FB-9420-4E52-B9A3-FC8951474781} = {A6C349EB-C9E6-40F2-8E8A-10EDC19C96AE}
 		{E7D7B854-5CA1-472D-86A2-27CF413A4309} = {A6C349EB-C9E6-40F2-8E8A-10EDC19C96AE}
 		{0B6CBF4D-7D26-4435-BCDC-D4EB83FFD63E} = {EA20A180-2B72-4D53-9B79-5C0ECAEE644A}
