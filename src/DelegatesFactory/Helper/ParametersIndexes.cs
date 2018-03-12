@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ParametersIndexes.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -12,6 +18,7 @@ namespace Delegates.Helper
             {
                 return false;
             }
+
             var indexParametersEquals = first.Select((t, i) => t.ParameterType == second[i]).All(p => p);
             return indexParametersEquals;
         }

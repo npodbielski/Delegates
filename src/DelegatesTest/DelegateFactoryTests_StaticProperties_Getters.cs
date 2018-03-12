@@ -1,30 +1,39 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateFactoryTests_StaticProperties_Getters.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE||STANDARD
-using Assert = DelegatesTest.CAssert;
-using TestMethodAttribute = Xunit.FactAttribute;
-#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
 
-namespace DelegatesTest
-{
-#if !(NETCORE||STANDARD)
-    [TestClass]
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+        DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCOREAPP10
+        DelegatesTestNETCORE10
+#elif NETCOREAPP11
+    DelegatesTestNETCORE11
+#elif NETCOREAPP20
+        DelegatesTestNETCORE20
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
 #endif
+{
+    [TestClass]
     public class DelegateFactoryTests_StaticProperties_Getters
     {
-        private static readonly Type TestClassType = typeof(TestClass);
-        private static readonly Type TestStructType = typeof(TestStruct);
-
         //TODO: test what happen if passed incorrect property type (maybe allow this?)
         //TODO: test if interface or abstract class is passed as source
         //TODO: test static properties in generic classes
@@ -38,14 +47,14 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_OnlyWrite()
         {
-            var spg = TestClassType.StaticPropertyGet<string>("StaticOnlySetProperty");
+            var spg = typeof(TestClass).StaticPropertyGet<string>("StaticOnlySetProperty");
             Assert.IsNull(spg);
         }
 
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Internal()
         {
-            var spg = TestClassType.StaticPropertyGet<string>("StaticInternalProperty");
+            var spg = typeof(TestClass).StaticPropertyGet<string>("StaticInternalProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.StaticInternalProperty, spg());
         }
@@ -53,7 +62,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Internal_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet<string>("StaticInternalProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet<string>("StaticInternalProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticInternalProperty, spg());
         }
@@ -61,7 +70,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Private()
         {
-            var spg = TestClassType.StaticPropertyGet<string>("StaticPrivateProperty");
+            var spg = typeof(TestClass).StaticPropertyGet<string>("StaticPrivateProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.GetStaticPrivateProperty(), spg());
         }
@@ -69,7 +78,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Private_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet<string>("StaticPrivateProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet<string>("StaticPrivateProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.GetStaticPrivateProperty(), spg());
         }
@@ -77,7 +86,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Protected()
         {
-            var spg = TestClassType.StaticPropertyGet<string>("StaticProtectedProperty");
+            var spg = typeof(TestClass).StaticPropertyGet<string>("StaticProtectedProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.GetStaticProtectedProperty(), spg());
         }
@@ -85,7 +94,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet<string>("StaticPublicProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet<string>("StaticPublicProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicProperty, spg());
         }
@@ -93,7 +102,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public()
         {
-            var spg = TestClassType.StaticPropertyGet<string>("StaticPublicProperty");
+            var spg = typeof(TestClass).StaticPropertyGet<string>("StaticPublicProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.StaticPublicProperty, spg());
         }
@@ -101,7 +110,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_Struct()
         {
-            var spg = TestClassType.StaticPropertyGet<int>("StaticPublicPropertyValue");
+            var spg = typeof(TestClass).StaticPropertyGet<int>("StaticPublicPropertyValue");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.StaticPublicPropertyValue, spg());
         }
@@ -109,7 +118,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByExtensionAndReturnType_Public_Struct_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet<int>("StaticPublicPropertyValue");
+            var spg = typeof(TestStruct).StaticPropertyGet<int>("StaticPublicPropertyValue");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicPropertyValue, spg());
         }
@@ -117,7 +126,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Internal()
         {
-            var spg = TestClassType.StaticPropertyGet("StaticInternalProperty");
+            var spg = typeof(TestClass).StaticPropertyGet("StaticInternalProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.StaticInternalProperty, spg());
         }
@@ -125,7 +134,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Internal_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet("StaticInternalProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet("StaticInternalProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticInternalProperty, spg());
         }
@@ -140,14 +149,14 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_OnlyWrite()
         {
-            var spg = TestClassType.StaticPropertyGet("StaticOnlySetProperty");
+            var spg = typeof(TestClass).StaticPropertyGet("StaticOnlySetProperty");
             Assert.IsNull(spg);
         }
 
         [TestMethod]
         public void PropertyGet_ByObjects_Private()
         {
-            var spg = TestClassType.StaticPropertyGet("StaticPrivateProperty");
+            var spg = typeof(TestClass).StaticPropertyGet("StaticPrivateProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.GetStaticPrivateProperty(), spg());
         }
@@ -155,7 +164,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Private_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet("StaticPrivateProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet("StaticPrivateProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.GetStaticPrivateProperty(), spg());
         }
@@ -163,7 +172,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Protected()
         {
-            var spg = TestClassType.StaticPropertyGet("StaticProtectedProperty");
+            var spg = typeof(TestClass).StaticPropertyGet("StaticProtectedProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.GetStaticProtectedProperty(), spg());
         }
@@ -171,7 +180,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Public()
         {
-            var spg = TestClassType.StaticPropertyGet("StaticPublicProperty");
+            var spg = typeof(TestClass).StaticPropertyGet("StaticPublicProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestClass.StaticPublicProperty, spg());
         }
@@ -179,7 +188,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Public_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet("StaticPublicProperty");
+            var spg = typeof(TestStruct).StaticPropertyGet("StaticPublicProperty");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicProperty, spg());
         }
@@ -187,7 +196,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertyGet_ByObjects_Public_Struct_FromStruct()
         {
-            var spg = TestStructType.StaticPropertyGet("StaticPublicPropertyValue");
+            var spg = typeof(TestStruct).StaticPropertyGet("StaticPublicPropertyValue");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicPropertyValue, spg());
         }
@@ -277,6 +286,27 @@ namespace DelegatesTest
             var spg = DelegateFactory.StaticPropertyGet<TestStruct, int>("StaticPublicPropertyValue");
             Assert.IsNotNull(spg);
             Assert.AreEqual(TestStruct.StaticPublicPropertyValue, spg());
+        }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByTypes()
+        {
+            var pg = DelegateFactory.StaticPropertyGet<TestClass, string>("PublicProperty");
+            Assert.IsNull(pg);
+        }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByExtensionAndReturnType()
+        {
+            var pg = typeof(TestClass).StaticPropertyGet<string>("PublicProperty");
+            Assert.IsNull(pg);
+        }
+
+        [TestMethod]
+        public void PropertyGet_StaticByNonStaticName_ByObjects()
+        {
+            var pg = typeof(TestClass).StaticPropertyGet("PublicProperty");
+            Assert.IsNull(pg);
         }
     }
 }

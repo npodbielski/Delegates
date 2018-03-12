@@ -1,4 +1,10 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Service.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 
 namespace DelegatesTest.TestObjects
 {
@@ -9,19 +15,16 @@ namespace DelegatesTest.TestObjects
             Property = "Property";
         }
 
-        public event EventHandler<EventArgs> Event;
-
         public int IndexerSetValue { get; set; }
         public string Property { get; set; }
 
         public int this[int index]
         {
-            get
-            {
-                return index;
-            }
-            set { IndexerSetValue = value; }
+            get => index;
+            set => IndexerSetValue = value;
         }
+
+        public event EventHandler<EventArgs> Event;
 
         public string Echo(string text)
         {

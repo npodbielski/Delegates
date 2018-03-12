@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Test": {
-      "commandName": "Project",
-      "commandLineArgs": "dotnet test"
-    }
-  }
-}

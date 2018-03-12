@@ -1,9 +1,11 @@
-﻿using System;
-#if NETCORE||STANDARD
-using Assert = DelegatesTest.CAssert;
-#else
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AssertHelper.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DelegatesTest
 {
@@ -20,6 +22,7 @@ namespace DelegatesTest
             {
                 exp = e;
             }
+
             Assert.IsNotNull(exp);
             Assert.IsInstanceOfType(exp, typeof(TException));
         }

@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactory_PropertyGet.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -8,7 +14,7 @@ using static Delegates.Helper.DelegateHelper;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
@@ -16,7 +22,7 @@ namespace Delegates
         //TODO: Consider NestedValueGet(string path="Property1._nestedfield.SecondNestedProperty._secondNestedField")
         //TODO: Consider adding search in type base types for private and protected members
         /// <summary>
-        /// Creates delegate to instance property getter from instance as object with return type of property type
+        ///     Creates delegate to instance property getter from instance as object with return type of property type
         /// </summary>
         /// <typeparam name="TProperty">Type of property</typeparam>
         /// <param name="source">Type with defined property</param>
@@ -28,7 +34,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to instance property getter from instance as object with return type of object
+        ///     Creates delegate to instance property getter from instance as object with return type of object
         /// </summary>
         /// <param name="source">Type with defined property</param>
         /// <param name="propertyName">Name of property</param>
@@ -39,7 +45,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to instance property getter with return type of property type
+        ///     Creates delegate to instance property getter with return type of property type
         /// </summary>
         /// <typeparam name="TSource">Type with defined property</typeparam>
         /// <typeparam name="TProperty">Type of property</typeparam>
@@ -52,7 +58,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Obsolete
+        ///     Obsolete
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TProperty"></typeparam>
@@ -69,8 +75,8 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to instance property getter from structure passed by reference with return type of 
-        /// property type
+        ///     Creates delegate to instance property getter from structure passed by reference with return type of
+        ///     property type
         /// </summary>
         /// <typeparam name="TSource">Type with defined property</typeparam>
         /// <typeparam name="TProperty">Type of property</typeparam>
@@ -89,27 +95,23 @@ namespace Delegates
             where TDelegate : class
         {
             var propertyInfo = source.GetPropertyInfo(propertyName, false);
-            if (propertyInfo?.GetMethod == null)
-            {
-                return null;
-            }
+            if (propertyInfo?.GetMethod == null) return null;
             var sourceObjectParam = Expression.Parameter(typeof(object), "source");
             Expression returnExpression =
                 Expression.Call(Expression.Convert(sourceObjectParam, source), propertyInfo.GetMethod);
-            if (!propertyInfo.PropertyType.IsClassType())
-            {
+            if (!propertyInfo.PropertyType.GetTypeInfo().IsClass)
                 returnExpression = Expression.Convert(returnExpression, GetDelegateReturnType<TDelegate>());
-            }
             return Expression.Lambda<TDelegate>(returnExpression, sourceObjectParam).Compile();
         }
 
         private static Func<TSource, TProperty> PropertyGet<TSource, TProperty>(string propertyName = null,
-           PropertyInfo propertyInfo = null)
-           where TSource : class
+            PropertyInfo propertyInfo = null)
+            where TSource : class
         {
             var source = typeof(TSource);
 #if NET35 || NET4 || PORTABLE
-            var cpropertyInfo = propertyInfo != null ? new CPropertyInfo(propertyInfo)
+            var cpropertyInfo = propertyInfo != null
+                ? new CPropertyInfo(propertyInfo)
                 : source.GetPropertyInfo(propertyName, false);
             return cpropertyInfo.GetMethod?.CreateDelegate<Func<TSource, TProperty>>();
 #else

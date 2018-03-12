@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\src\Common\Common.props" />
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCORE;NETCOREAPP1_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;NETCORE;RELEASE;NETCOREAPP1_0</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructGetFunc.cs" Link="CustomDelegates\StructGetFunc.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs" Link="CustomDelegates\StructIndex1GetFunc.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs" Link="CustomDelegates\StructIndex1SetAction.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2GetFunc.cs" Link="CustomDelegates\StructIndex2GetFunc.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2SetAction.cs" Link="CustomDelegates\StructIndex2SetAction.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3GetFunc.cs" Link="CustomDelegates\StructIndex3GetFunc.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3SetAction.cs" Link="CustomDelegates\StructIndex3SetAction.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndexesSetAction.cs" Link="CustomDelegates\StructIndexesSetAction.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetAction.cs" Link="CustomDelegates\StructSetAction.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetActionRef.cs" Link="CustomDelegates\StructSetActionRef.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_Constructor.cs" Link="DelegateFactory_Constructor.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventAdd.cs" Link="DelegateFactory_EventAdd.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventInvoke.cs" Link="DelegateFactory_EventInvoke.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventRemove.cs" Link="DelegateFactory_EventRemove.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldGet.cs" Link="DelegateFactory_FieldGet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldSet.cs" Link="DelegateFactory_FieldSet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerGet.cs" Link="DelegateFactory_IndexerGet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet.cs" Link="DelegateFactory_IndexerSet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet_ByObjects.cs" Link="DelegateFactory_IndexerSet_ByObjects.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceGenericMethod.cs" Link="DelegateFactory_InstanceGenericMethod.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceMethod.cs" Link="DelegateFactory_InstanceMethod.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertyGet.cs" Link="DelegateFactory_PropertyGet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet.cs" Link="DelegateFactory_PropertySet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet_Struct.cs" Link="DelegateFactory_PropertySet_Struct.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs" Link="DelegateFactory_StaticFieldGet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldSet.cs" Link="DelegateFactory_StaticFieldSet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticGenericMethod.cs" Link="DelegateFactory_StaticGenericMethod.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticMethod.cs" Link="DelegateFactory_StaticMethod.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertyGet.cs" Link="DelegateFactory_StaticPropertyGet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertySet.cs" Link="DelegateFactory_StaticPropertySet.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CEventInfo.cs" Link="Extensions\CEventInfo.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CPropertyInfo.cs" Link="Extensions\CPropertyInfo.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\ExpressionsExtensions.cs" Link="Extensions\ExpressionsExtensions.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\MethodInfoExtensions.cs" Link="Extensions\MethodInfoExtensions.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions.cs" Link="Extensions\TypeExtensions.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\WeakReferenceExtensions.cs" Link="Extensions\WeakReferenceExtensions.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs" Link="Helper\DelegateHelper.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs" Link="Helper\EventsHelper.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_NonPortable.cs" Link="Helper\EventsHelper_NonPortable.cs" />
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs" Link="Helper\ParametersIndexes.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CustomDelegates\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Helper\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

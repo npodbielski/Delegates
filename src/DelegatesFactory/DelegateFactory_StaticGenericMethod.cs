@@ -5,12 +5,12 @@ using static Delegates.Helper.DelegateHelper;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
         /// <summary>
-        /// Creates delegate to static method with single type parameter
+        ///     Creates delegate to static method with single type parameter
         /// </summary>
         /// <typeparam name="TSource">Type with defined method</typeparam>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
@@ -24,7 +24,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with two type parameters
+        ///     Creates delegate to static method with two type parameters
         /// </summary>
         /// <typeparam name="TSource">Type with defined method</typeparam>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
@@ -39,7 +39,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with three type parameters
+        ///     Creates delegate to static method with three type parameters
         /// </summary>
         /// <typeparam name="TSource">Type with defined method</typeparam>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
@@ -55,7 +55,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with unspecified number of type parameters
+        ///     Creates delegate to static method with unspecified number of type parameters
         /// </summary>
         /// <typeparam name="TSource">Type with defined method</typeparam>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
@@ -69,7 +69,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with single type parameter
+        ///     Creates delegate to static method with single type parameter
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
         /// <typeparam name="TParam1">Method type parameter</typeparam>
@@ -83,7 +83,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with single type parameter
+        ///     Creates delegate to static method with single type parameter
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
         /// <typeparam name="TParam1">First type parameter</typeparam>
@@ -98,7 +98,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with single type parameter
+        ///     Creates delegate to static method with single type parameter
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
         /// <typeparam name="TParam1">First type parameter</typeparam>
@@ -114,7 +114,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate to static method with unspecified number of type parameters
+        ///     Creates delegate to static method with unspecified number of type parameters
         /// </summary>
         /// <typeparam name="TDelegate">Delegate compatible with method</typeparam>
         /// <param name="source">Type with defined method</param>
@@ -132,8 +132,8 @@ namespace Delegates
 
         //TODO: consider allowing to pass incorrect parameters types or not at all if there is only one method with given name
         /// <summary>
-        /// Creates delegate to non-void generic static method with unspecified number of parameters passed as array 
-        /// of objects
+        ///     Creates delegate to non-void generic static method with unspecified number of parameters passed as array
+        ///     of objects
         /// </summary>
         /// <param name="source">Type with defined method</param>
         /// <param name="name">Name of method</param>
@@ -141,14 +141,14 @@ namespace Delegates
         /// <param name="typeParams">Type parameters for generic static method</param>
         /// <returns>Delegate for non-void generic static method</returns>
         public static Func<object[], object> StaticGenericMethod(this Type source,
-         string name, Type[] paramsTypes, Type[] typeParams)
+            string name, Type[] paramsTypes, Type[] typeParams)
         {
             return StaticMethod<Func<object[], object>>(source, name, typeParams, paramsTypes);
         }
 
         /// <summary>
-        /// Creates delegate to void generic static method with unspecified number of parameters passed as array 
-        /// of objects
+        ///     Creates delegate to void generic static method with unspecified number of parameters passed as array
+        ///     of objects
         /// </summary>
         /// <param name="source">Type with defined method</param>
         /// <param name="name">Name of method</param>

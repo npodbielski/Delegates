@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StructIndexesSetAction.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Delegates.CustomDelegates
 {
     /// <summary>
-    /// Delegates for setting value of indexer with unspecified index parameters in structure type by reference.
+    ///     Delegates for setting value of indexer with unspecified index parameters in structure type by reference.
     /// </summary>
     /// <typeparam name="T">Structure type</typeparam>
     /// <typeparam name="TValue">Value type</typeparam>

@@ -5,13 +5,12 @@ using Delegates.Extensions;
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
-#if  !NET35
         /// <summary>
-        /// Creates delegate for setting static field value
+        ///     Creates delegate for setting static field value
         /// </summary>
         /// <typeparam name="TSource">Source type with defined field</typeparam>
         /// <typeparam name="TField">Type of field</typeparam>
@@ -24,7 +23,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for setting static field value
+        ///     Creates delegate for setting static field value
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source">Type with defined field</param>
@@ -40,11 +39,12 @@ namespace Delegates
                     Expression.Assign(Expression.Field(null, fieldInfo), valueParam), valueParam);
                 return (Action<TField>)lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting static field value
+        ///     Creates delegate for setting static field value
         /// </summary>
         /// <param name="source">Type with defined field</param>
         /// <param name="fieldName">Field name</param>
@@ -60,8 +60,8 @@ namespace Delegates
                     Expression.Assign(Expression.Field(null, fieldInfo), convertedValueExpr), valueParam);
                 return (Action<object>)lambda.Compile();
             }
+
             return null;
         }
-#endif
     }
 }

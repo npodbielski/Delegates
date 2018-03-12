@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{24B450B4-8C97-47C6-8CF8-9B4D761AB3FC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Delegates</RootNamespace>
+    <AssemblyName>DelegatesFactory</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;PORTABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\DelegatesFactory.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructGetFunc.cs">
+      <Link>CustomDelegates\StructGetFunc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1GetFunc.cs">
+      <Link>CustomDelegates\StructIndex1GetFunc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex1SetAction.cs">
+      <Link>CustomDelegates\StructIndex1SetAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2GetFunc.cs">
+      <Link>CustomDelegates\StructIndex2GetFunc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex2SetAction.cs">
+      <Link>CustomDelegates\StructIndex2SetAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3GetFunc.cs">
+      <Link>CustomDelegates\StructIndex3GetFunc.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndex3SetAction.cs">
+      <Link>CustomDelegates\StructIndex3SetAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructIndexesSetAction.cs">
+      <Link>CustomDelegates\StructIndexesSetAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetAction.cs">
+      <Link>CustomDelegates\StructSetAction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\CustomDelegates\StructSetActionRef.cs">
+      <Link>CustomDelegates\StructSetActionRef.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_Constructor.cs">
+      <Link>DelegateFactory_Constructor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventAdd.cs">
+      <Link>DelegateFactory_EventAdd.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventInvoke.cs">
+      <Link>DelegateFactory_EventInvoke.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_EventRemove.cs">
+      <Link>DelegateFactory_EventRemove.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldGet.cs">
+      <Link>DelegateFactory_FieldGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_FieldSet.cs">
+      <Link>DelegateFactory_FieldSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerGet.cs">
+      <Link>DelegateFactory_IndexerGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet.cs">
+      <Link>DelegateFactory_IndexerSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_IndexerSet_ByObjects.cs">
+      <Link>DelegateFactory_IndexerSet_ByObjects.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceGenericMethod.cs">
+      <Link>DelegateFactory_InstanceGenericMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_InstanceMethod.cs">
+      <Link>DelegateFactory_InstanceMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertyGet.cs">
+      <Link>DelegateFactory_PropertyGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet.cs">
+      <Link>DelegateFactory_PropertySet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_PropertySet_Struct.cs">
+      <Link>DelegateFactory_PropertySet_Struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldGet.cs">
+      <Link>DelegateFactory_StaticFieldGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticFieldSet.cs">
+      <Link>DelegateFactory_StaticFieldSet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticGenericMethod.cs">
+      <Link>DelegateFactory_StaticGenericMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticMethod.cs">
+      <Link>DelegateFactory_StaticMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertyGet.cs">
+      <Link>DelegateFactory_StaticPropertyGet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\DelegateFactory_StaticPropertySet.cs">
+      <Link>DelegateFactory_StaticPropertySet.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CEventInfo.cs">
+      <Link>Extensions\CEventInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\CPropertyInfo.cs">
+      <Link>Extensions\CPropertyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\ExpressionsExtensions.cs">
+      <Link>Extensions\ExpressionsExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\MethodInfoExtensions.cs">
+      <Link>Extensions\MethodInfoExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\TypeExtensions.cs">
+      <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Extensions\WeakReferenceExtensions.cs">
+      <Link>Extensions\WeakReferenceExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\DelegateHelper.cs">
+      <Link>Helper\DelegateHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper.cs">
+      <Link>Helper\EventsHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\Common\DelegatesAssemblyInfo.cs">
+      <Link>Properties\DelegatesAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\Common\SolutionAssemblyInfo.cs">
+      <Link>Properties\SolutionAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\EventsHelper_Portable.cs">
+      <Link>Helper\EventsHelper_Portable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\ParametersIndexes.cs">
+      <Link>Helper\ParametersIndexes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\src\DelegatesFactory\Helper\PortableAssemblyBuilder.cs">
+      <Link>Helper\PortableAssemblyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

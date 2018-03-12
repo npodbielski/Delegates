@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <RootNamespace>DelegatesTest</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP20;NETCOREAPP2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;RELEASE;NETCOREAPP20;RELEASE;NETCOREAPP2_0</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\src\DelegatesTest\AssertHelper.cs" Link="AssertHelper.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Constructors.cs" Link="DelegateFactoryTests_Constructors.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Add.cs" Link="DelegateFactoryTests_Events_Add.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Invoke.cs" Link="DelegateFactoryTests_Events_Invoke.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Events_Remove.cs" Link="DelegateFactoryTests_Events_Remove.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_GetValue.cs" Link="DelegateFactoryTests_Fields_GetValue.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Fields_SetValue.cs" Link="DelegateFactoryTests_Fields_SetValue.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Indexers_Getters.cs" Link="DelegateFactoryTests_Indexers_Getters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Indexers_Setters.cs" Link="DelegateFactoryTests_Indexers_Setters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_InstanceMethods.cs" Link="DelegateFactoryTests_InstanceMethods.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_InstanceMethods_Generic.cs" Link="DelegateFactoryTests_InstanceMethods_Generic.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Properties_Getters.cs" Link="DelegateFactoryTests_Properties_Getters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_Properties_Setters.cs" Link="DelegateFactoryTests_Properties_Setters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_GetValue.cs" Link="DelegateFactoryTests_StaticField_GetValue.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticField_SetValue.cs" Link="DelegateFactoryTests_StaticField_SetValue.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticMethods.cs" Link="DelegateFactoryTests_StaticMethods.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticMethods_Generic.cs" Link="DelegateFactoryTests_StaticMethods_Generic.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticProperties_Getters.cs" Link="DelegateFactoryTests_StaticProperties_Getters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\DelegateFactoryTests_StaticProperties_Setters.cs" Link="DelegateFactoryTests_StaticProperties_Setters.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Action17.cs" Link="TestObjects\Action17.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Base.cs" Link="TestObjects\Base.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\CustomDelegates.cs" Link="TestObjects\CustomDelegates.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Derived.cs" Link="TestObjects\Derived.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\EventCustomDelegate.cs" Link="TestObjects\EventCustomDelegate.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Func17.cs" Link="TestObjects\Func17.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\GenericClass.cs" Link="TestObjects\GenericClass.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\IService.cs" Link="TestObjects\IService.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\ITestInterface.cs" Link="TestObjects\ITestInterface.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\Service.cs" Link="TestObjects\Service.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestClass.cs" Link="TestObjects\TestClass.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestClassNoDefaultCtor.cs" Link="TestObjects\TestClassNoDefaultCtor.cs" />
+    <Compile Include="..\..\..\src\DelegatesTest\TestObjects\TestStruct.cs" Link="TestObjects\TestStruct.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestObjects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETCore20.csproj" />
+  </ItemGroup>
+
+</Project>

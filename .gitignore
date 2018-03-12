@@ -29,8 +29,6 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 packages/**
 Nuget/lib
-Platforms/NETCore/DelegatesFactory/**/*.cs
-Platforms/NETCore/DelegatesTest/**/*.cs
-Platforms/NETStandard/DelegatesTest/**/*.cs
 **/project.fragment.lock.json
 **.nupkg
+.vs/**

@@ -1,13 +1,13 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StructGetFunc.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Delegates.CustomDelegates
 {
     /// <summary>
-    /// Delegates for returning value of property from structure type by reference.
+    ///     Delegates for returning value of property from structure type by reference.
     /// </summary>
     /// <typeparam name="T">Type of structure</typeparam>
     /// <typeparam name="TProp">Property type</typeparam>

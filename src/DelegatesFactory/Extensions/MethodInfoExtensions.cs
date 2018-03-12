@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MethodInfoExtensions.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2017 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,17 +15,17 @@ namespace Delegates.Extensions
         public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
             where TDelegate : class
         {
-#if NET45 || NETCORE || NET4 || PORTABLE||STANDARD
+#if NET4 || NET45 || NET46 || NETCORE || PORTABLE || STANDARD
             DelegateHelper.CheckDelegateReturnType<TDelegate>(method);
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
-#elif NET35      
+#elif NET35
             return Delegate.CreateDelegate(typeof(TDelegate), method, true) as TDelegate;
 #endif
         }
 
         public static Delegate CreateDelegate(this MethodInfo method, Type delegateType)
         {
-#if NET45 || NETCORE||STANDARD
+#if NET45 || NET46 || NETCORE|| STANDARD
             return method.CreateDelegate(delegateType);
 #elif NET35 || NET4
             return Delegate.CreateDelegate(delegateType, method, true);

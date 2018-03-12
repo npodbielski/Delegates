@@ -1,18 +1,24 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DelegateFactory_FieldSet.cs" company="Natan Podbielski">
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using Delegates.CustomDelegates;
 using Delegates.Extensions;
 
 namespace Delegates
 {
     /// <summary>
-    /// Creates delegates for types members
+    ///     Creates delegates for types members
     /// </summary>
     public static partial class DelegateFactory
     {
-#if !NET35
         /// <summary>
-        /// Creates delegate for setting instance field value in structure type passed by reference as object
+        ///     Creates delegate for setting instance field value in structure type passed by reference as object
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source"></param>
@@ -37,8 +43,9 @@ namespace Delegates
                     valueParam = Expression.Parameter(typeof(TField), "value");
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
                 }
+
                 var structVariable = Expression.Variable(source, "struct");
-                var body = Expression.Block(typeof(void), new[] { structVariable },
+                var body = Expression.Block(typeof(void), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -46,12 +53,13 @@ namespace Delegates
                 var lambda = Expression.Lambda<StructSetActionRef<object, TField>>(body, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in structure passed by value as object.
-        /// Returns new value with changed field value.
+        ///     Creates delegate for setting instance field value in structure passed by value as object.
+        ///     Returns new value with changed field value.
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source">Type with defined field</param>
@@ -75,8 +83,9 @@ namespace Delegates
                     valueParam = Expression.Parameter(typeof(TField), "value");
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
                 }
+
                 var structVariable = Expression.Variable(source, "struct");
-                var body = Expression.Block(typeof(object), new[] { structVariable },
+                var body = Expression.Block(typeof(object), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -84,11 +93,12 @@ namespace Delegates
                 var lambda = Expression.Lambda<StructSetAction<object, TField>>(body, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in instance by passed by object
+        ///     Creates delegate for setting instance field value in instance by passed by object
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source">Type with defined field</param>
@@ -103,23 +113,20 @@ namespace Delegates
                 Expression valueExpr;
                 var valueParam = Expression.Parameter(typeof(TField), "value");
                 if (fieldInfo.FieldType == typeof(TField))
-                {
                     valueExpr = valueParam;
-                }
                 else
-                {
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
-                }
                 var lambda = Expression.Lambda<Action<object, TField>>(
                     Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo), valueExpr),
                     sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in structure by passed by type as reference
+        ///     Creates delegate for setting instance field value in structure by passed by type as reference
         /// </summary>
         /// <typeparam name="TSource">Source type with defined field</typeparam>
         /// <typeparam name="TField">Type of field</typeparam>
@@ -135,25 +142,17 @@ namespace Delegates
                 Expression sourcExpr;
                 var sourceParam = Expression.Parameter(typeof(TSource).MakeByRefType(), "source");
                 if (source == typeof(TSource))
-                {
                     sourcExpr = sourceParam;
-                }
                 else
-                {
                     sourcExpr = Expression.Convert(sourceParam, source);
-                }
                 var valueParam = Expression.Parameter(typeof(TField), "value");
                 Expression valueExpr;
                 var structVariable = Expression.Variable(source, "struct");
                 if (fieldInfo.FieldType == typeof(TField))
-                {
                     valueExpr = valueParam;
-                }
                 else
-                {
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
-                }
-                var body = Expression.Block(typeof(void), new[] { structVariable },
+                var body = Expression.Block(typeof(void), new[] {structVariable},
                     Expression.Assign(structVariable, sourcExpr),
                     Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr),
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(TSource)))
@@ -161,11 +160,12 @@ namespace Delegates
                 var lambda = Expression.Lambda<StructSetActionRef<TSource, TField>>(body, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in instance
+        ///     Creates delegate for setting instance field value in instance
         /// </summary>
         /// <typeparam name="TSource">Source type with defined field</typeparam>
         /// <typeparam name="TField">Type of field</typeparam>
@@ -185,11 +185,12 @@ namespace Delegates
                     sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value as object in instance as object
+        ///     Creates delegate for setting instance field value as object in instance as object
         /// </summary>
         /// <param name="source">Type with defined field</param>
         /// <param name="fieldName">Field name</param>
@@ -205,18 +206,17 @@ namespace Delegates
                 Expression returnExpression =
                     Expression.Assign(Expression.Field(Expression.Convert(sourceParam, source), fieldInfo),
                         convertedValueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
-                {
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
-                }
                 var lambda = Expression.Lambda<Action<object, object>>(returnExpression, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value as object in structure passed by reference as object
+        ///     Creates delegate for setting instance field value as object in structure passed by reference as object
         /// </summary>
         /// <param name="source">Type with defined field</param>
         /// <param name="fieldName">Field name</param>
@@ -230,20 +230,14 @@ namespace Delegates
                 var valueParam = Expression.Parameter(typeof(object), "value");
                 Expression valueExpr;
                 if (fieldInfo.FieldType != typeof(object))
-                {
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
-                }
                 else
-                {
                     valueExpr = valueParam;
-                }
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
-                {
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
-                }
-                var body = Expression.Block(typeof(void), new[] { structVariable },
+                var body = Expression.Block(typeof(void), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     returnExpression,
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -251,12 +245,13 @@ namespace Delegates
                 var lambda = Expression.Lambda<StructSetActionRef<object, object>>(body, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value as object in structure passed as object.
-        /// Returns new value with changed field value.
+        ///     Creates delegate for setting instance field value as object in structure passed as object.
+        ///     Returns new value with changed field value.
         /// </summary>
         /// <param name="source">Type with defined field</param>
         /// <param name="fieldName">Field name</param>
@@ -270,20 +265,14 @@ namespace Delegates
                 var valueParam = Expression.Parameter(typeof(object), "value");
                 Expression valueExpr;
                 if (fieldInfo.FieldType != typeof(object))
-                {
                     valueExpr = Expression.Convert(valueParam, fieldInfo.FieldType);
-                }
                 else
-                {
                     valueExpr = valueParam;
-                }
                 var structVariable = Expression.Variable(source, "struct");
                 Expression returnExpression = Expression.Assign(Expression.Field(structVariable, fieldInfo), valueExpr);
-                if (!fieldInfo.FieldType.IsClassType())
-                {
+                if (!fieldInfo.FieldType.GetTypeInfo().IsClass)
                     returnExpression = Expression.Convert(returnExpression, typeof(object));
-                }
-                var body = Expression.Block(typeof(object), new[] { structVariable },
+                var body = Expression.Block(typeof(object), new[] {structVariable},
                     Expression.Assign(structVariable, Expression.Convert(sourceParam, source)),
                     returnExpression,
                     Expression.Assign(sourceParam, Expression.Convert(structVariable, typeof(object)))
@@ -291,11 +280,12 @@ namespace Delegates
                 var lambda = Expression.Lambda<StructSetAction<object, object>>(body, sourceParam, valueParam);
                 return lambda.Compile();
             }
+
             return null;
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in instance as object
+        ///     Creates delegate for setting instance field value in instance as object
         /// </summary>
         /// <typeparam name="TField">Type of field</typeparam>
         /// <param name="source">Type with defined field</param>
@@ -308,7 +298,7 @@ namespace Delegates
         }
 
         /// <summary>
-        /// Creates delegate for setting instance field value in instance
+        ///     Creates delegate for setting instance field value in instance
         /// </summary>
         /// <typeparam name="TSource">Source type with defined field</typeparam>
         /// <typeparam name="TField">Type of field</typeparam>
@@ -319,6 +309,5 @@ namespace Delegates
         {
             return typeof(TSource).FieldSet(fieldName) as Action<TSource, TField>;
         }
-#endif
     }
 }

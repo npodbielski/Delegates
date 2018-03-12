@@ -1,30 +1,39 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateFactoryTests_StaticField_GetValue.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE||STANDARD
-using Assert = DelegatesTest.CAssert;
-using TestMethodAttribute = Xunit.FactAttribute;
-#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
 
-namespace DelegatesTest
-{
-#if !(NETCORE||STANDARD)
-    [TestClass]
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+        DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCOREAPP10
+        DelegatesTestNETCORE10
+#elif NETCOREAPP11
+    DelegatesTestNETCORE11
+#elif NETCOREAPP20
+        DelegatesTestNETCORE20
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
 #endif
+{
+    [TestClass]
     public class DelegateFactoryTests_StaticField_GetValue
     {
-        private static readonly Type TestClassType = typeof(TestClass);
-        private static readonly Type TestStructType = typeof(TestStruct);
-
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_NonExisting()
         {
@@ -35,7 +44,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Internal()
         {
-            var sfg = TestClassType.StaticFieldGet<string>("StaticInternalField");
+            var sfg = typeof(TestClass).StaticFieldGet<string>("StaticInternalField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.StaticInternalField, sfg());
         }
@@ -43,7 +52,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Internal_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet<string>("StaticInternalField");
+            var sfg = typeof(TestStruct).StaticFieldGet<string>("StaticInternalField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticInternalField, sfg());
         }
@@ -51,7 +60,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Private()
         {
-            var sfg = TestClassType.StaticFieldGet<string>("StaticPrivateField");
+            var sfg = typeof(TestClass).StaticFieldGet<string>("StaticPrivateField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.GetStaticPrivateField(), sfg());
         }
@@ -59,7 +68,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Private_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet<string>("_staticPrivateField");
+            var sfg = typeof(TestStruct).StaticFieldGet<string>("_staticPrivateField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.GetStaticPrivateField(), sfg());
         }
@@ -67,7 +76,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Protected()
         {
-            var sfg = TestClassType.StaticFieldGet<string>("StaticProtectedField");
+            var sfg = typeof(TestClass).StaticFieldGet<string>("StaticProtectedField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.GetStaticProtectedField(), sfg());
         }
@@ -75,7 +84,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Public_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet<string>("StaticPublicField");
+            var sfg = typeof(TestStruct).StaticFieldGet<string>("StaticPublicField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticPublicField, sfg());
         }
@@ -83,7 +92,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Public()
         {
-            var sfg = TestClassType.StaticFieldGet<string>("StaticPublicField");
+            var sfg = typeof(TestClass).StaticFieldGet<string>("StaticPublicField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.StaticPublicField, sfg());
         }
@@ -91,7 +100,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Public_Struct()
         {
-            var sfg = TestClassType.StaticFieldGet<int>("StaticPublicValueField");
+            var sfg = typeof(TestClass).StaticFieldGet<int>("StaticPublicValueField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.StaticPublicValueField, sfg());
         }
@@ -99,7 +108,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByExtensionAndReturnType_Public_Struct_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet<int>("StaticPublicFieldInt");
+            var sfg = typeof(TestStruct).StaticFieldGet<int>("StaticPublicFieldInt");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticPublicFieldInt, sfg());
         }
@@ -107,7 +116,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Internal()
         {
-            var sfg = TestClassType.StaticFieldGet("StaticInternalField");
+            var sfg = typeof(TestClass).StaticFieldGet("StaticInternalField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.StaticInternalField, sfg());
         }
@@ -115,7 +124,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Internal_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet("StaticInternalField");
+            var sfg = typeof(TestStruct).StaticFieldGet("StaticInternalField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticInternalField, sfg());
         }
@@ -130,14 +139,14 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_OnlyWrite()
         {
-            var sfg = TestClassType.StaticFieldGet("StaticOnlySetField");
+            var sfg = typeof(TestClass).StaticFieldGet("StaticOnlySetField");
             Assert.IsNull(sfg);
         }
 
         [TestMethod]
         public void FieldGet_ByObjects_Private()
         {
-            var sfg = TestClassType.StaticFieldGet("StaticPrivateField");
+            var sfg = typeof(TestClass).StaticFieldGet("StaticPrivateField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.GetStaticPrivateField(), sfg());
         }
@@ -145,7 +154,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Private_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet("_staticPrivateField");
+            var sfg = typeof(TestStruct).StaticFieldGet("_staticPrivateField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.GetStaticPrivateField(), sfg());
         }
@@ -153,7 +162,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Protected()
         {
-            var sfg = TestClassType.StaticFieldGet("StaticProtectedField");
+            var sfg = typeof(TestClass).StaticFieldGet("StaticProtectedField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.GetStaticProtectedField(), sfg());
         }
@@ -161,7 +170,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Public()
         {
-            var sfg = TestClassType.StaticFieldGet("StaticPublicField");
+            var sfg = typeof(TestClass).StaticFieldGet("StaticPublicField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestClass.StaticPublicField, sfg());
         }
@@ -169,7 +178,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Public_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet("StaticPublicField");
+            var sfg = typeof(TestStruct).StaticFieldGet("StaticPublicField");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticPublicField, sfg());
         }
@@ -177,7 +186,7 @@ namespace DelegatesTest
         [TestMethod]
         public void FieldGet_ByObjects_Public_Struct_FromStruct()
         {
-            var sfg = TestStructType.StaticFieldGet("StaticPublicFieldInt");
+            var sfg = typeof(TestStruct).StaticFieldGet("StaticPublicFieldInt");
             Assert.IsNotNull(sfg);
             Assert.AreEqual(TestStruct.StaticPublicFieldInt, sfg());
         }

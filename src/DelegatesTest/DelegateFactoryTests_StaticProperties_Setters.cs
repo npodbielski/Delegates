@@ -1,37 +1,47 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DelegateFactoryTests_StaticProperties_Setters.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using Delegates;
 using DelegatesTest.TestObjects;
-#if NETCORE||STANDARD
-using Assert = DelegatesTest.CAssert;
-using TestMethodAttribute = Xunit.FactAttribute;
-#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
-#endif
 
-namespace DelegatesTest
-{
-#if !(NETCORE||STANDARD)
-    [TestClass]
+namespace
+#if NET35
+        DelegatesTestNET35
+#elif NET4
+        DelegatesTestNET4
+#elif NET45
+        DelegatesTestNET45
+#elif NET46
+        DelegatesTestNET46
+#elif PORTABLE
+        DelegatesTestNETPortable
+#elif NETCOREAPP10
+        DelegatesTestNETCORE10
+#elif NETCOREAPP11
+    DelegatesTestNETCORE11
+#elif NETCOREAPP20
+        DelegatesTestNETCORE20
+#elif NETSTANDARD1_1
+        DelegatesTestNETStandard11
+#elif NETSTANDARD1_5
+        DelegatesTestNETStandard15
 #endif
+{
+    [TestClass]
     public class DelegateFactoryTests_StaticProperties_Setters
     {
         private const int NewIntValue = 0;
         private const string NewStringValue = "Test";
-        private static readonly Type TestClassType = typeof(TestClass);
-        private static readonly Type TestStructType = typeof(TestStruct);
 
         //TODO: test with passed incorrect property type
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Internal()
         {
-            var sps = TestClassType.StaticPropertySet<string>("StaticInternalProperty");
+            var sps = typeof(TestClass).StaticPropertySet<string>("StaticInternalProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticInternalProperty);
@@ -40,7 +50,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Internal_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet<string>("StaticInternalProperty");
+            var sps = typeof(TestStruct).StaticPropertySet<string>("StaticInternalProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticInternalProperty);
@@ -56,14 +66,14 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_OnlyRead()
         {
-            var sps = TestClassType.StaticPropertySet<string>("StaticOnlyGetProperty");
+            var sps = typeof(TestClass).StaticPropertySet<string>("StaticOnlyGetProperty");
             Assert.IsNull(sps);
         }
 
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Private()
         {
-            var sps = TestClassType.StaticPropertySet<string>("StaticPrivateProperty");
+            var sps = typeof(TestClass).StaticPropertySet<string>("StaticPrivateProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticPrivateProperty());
@@ -72,7 +82,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Private_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet<string>("StaticPrivateProperty");
+            var sps = typeof(TestStruct).StaticPropertySet<string>("StaticPrivateProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.GetStaticPrivateProperty());
@@ -81,7 +91,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Protected()
         {
-            var sps = TestClassType.StaticPropertySet<string>("StaticProtectedProperty");
+            var sps = typeof(TestClass).StaticPropertySet<string>("StaticProtectedProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticProtectedProperty());
@@ -90,7 +100,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Public()
         {
-            var sps = TestClassType.StaticPropertySet<string>("StaticPublicProperty");
+            var sps = typeof(TestClass).StaticPropertySet<string>("StaticPublicProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticPublicProperty);
@@ -99,7 +109,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Public_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet<string>("StaticPublicProperty");
+            var sps = typeof(TestStruct).StaticPropertySet<string>("StaticPublicProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticPublicProperty);
@@ -108,7 +118,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Public_Struct()
         {
-            var sps = TestClassType.StaticPropertySet<int>("StaticPublicPropertyValue");
+            var sps = typeof(TestClass).StaticPropertySet<int>("StaticPublicPropertyValue");
             Assert.IsNotNull(sps);
             sps(NewIntValue);
             Assert.AreEqual(NewIntValue, TestClass.StaticPublicPropertyValue);
@@ -117,7 +127,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByExtensionAndReturnType_Public_Struct_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet<int>("StaticPublicPropertyValue");
+            var sps = typeof(TestStruct).StaticPropertySet<int>("StaticPublicPropertyValue");
             Assert.IsNotNull(sps);
             sps(NewIntValue);
             Assert.AreEqual(NewIntValue, TestStruct.StaticPublicPropertyValue);
@@ -126,7 +136,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Internal()
         {
-            var sps = TestClassType.StaticPropertySet("StaticInternalProperty");
+            var sps = typeof(TestClass).StaticPropertySet("StaticInternalProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticInternalProperty);
@@ -135,7 +145,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Internal_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet("StaticInternalProperty");
+            var sps = typeof(TestStruct).StaticPropertySet("StaticInternalProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticInternalProperty);
@@ -151,14 +161,14 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_OnlyRead()
         {
-            var sps = TestClassType.StaticPropertySet("StaticOnlyGetProperty");
+            var sps = typeof(TestClass).StaticPropertySet("StaticOnlyGetProperty");
             Assert.IsNull(sps);
         }
 
         [TestMethod]
         public void PropertySet_ByObjects_Private()
         {
-            var sps = TestClassType.StaticPropertySet("StaticPrivateProperty");
+            var sps = typeof(TestClass).StaticPropertySet("StaticPrivateProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticPrivateProperty());
@@ -167,7 +177,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Private_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet("StaticPrivateProperty");
+            var sps = typeof(TestStruct).StaticPropertySet("StaticPrivateProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.GetStaticPrivateProperty());
@@ -176,7 +186,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Protected()
         {
-            var sps = TestClassType.StaticPropertySet("StaticProtectedProperty");
+            var sps = typeof(TestClass).StaticPropertySet("StaticProtectedProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.GetStaticProtectedProperty());
@@ -185,7 +195,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Public()
         {
-            var sps = TestClassType.StaticPropertySet("StaticPublicProperty");
+            var sps = typeof(TestClass).StaticPropertySet("StaticPublicProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestClass.StaticPublicProperty);
@@ -194,7 +204,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Public_FromStruct()
         {
-            var sps = TestStructType.StaticPropertySet("StaticPublicProperty");
+            var sps = typeof(TestStruct).StaticPropertySet("StaticPublicProperty");
             Assert.IsNotNull(sps);
             sps(NewStringValue);
             Assert.AreEqual(NewStringValue, TestStruct.StaticPublicProperty);
@@ -203,7 +213,7 @@ namespace DelegatesTest
         [TestMethod]
         public void PropertySet_ByObjects_Public_Struct()
         {
-            var sps = TestClassType.StaticPropertySet("StaticPublicPropertyValue");
+            var sps = typeof(TestClass).StaticPropertySet("StaticPublicPropertyValue");
             Assert.IsNotNull(sps);
             sps(NewIntValue);
             Assert.AreEqual(NewIntValue, TestClass.StaticPublicPropertyValue);

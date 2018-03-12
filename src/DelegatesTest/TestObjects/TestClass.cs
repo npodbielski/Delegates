@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TestClass.cs" company="Natan Podbielski">
-//   Copyright (c) 2016 - 2016 Natan Podbielski. All rights reserved.
+//   Copyright (c) 2016 - 2018 Natan Podbielski. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -35,9 +35,15 @@ namespace DelegatesTest.TestObjects
         public static bool StaticVoidPublicExecuted;
         public static string StaticVoidPublicParam;
         public static object[] StaticVoidPublicParams;
+        private static string _staticOnlySetPropertyBackend;
         public readonly List<int> IndexerBackend = new List<int>(new int[10]);
         public readonly string PublicReadOnlyField = "PublicReadOnlyField";
+        private string _onlySetPropertyBackend;
+
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        private string _privateField;
         public object InstanceGenericMethodVoidParameter;
+        internal string InternalField;
         public double InternalIndexer;
         public bool InternalMethodVoidExecuted;
         public string InternalMethodVoidParameter;
@@ -46,6 +52,7 @@ namespace DelegatesTest.TestObjects
         public bool PrivateMethodVoidExecuted;
         public string PrivateMethodVoidParameter;
         public string PrivateParameterlessReturnValue = "PrivateMethodVoid";
+        protected string ProtectedField;
         public double ProtectedIndexer;
         public bool ProtectedMethodVoidExecuted;
         public string ProtectedMethodVoidParameter;
@@ -58,12 +65,7 @@ namespace DelegatesTest.TestObjects
         public string PublicMethodVoidParameter;
         public string PublicParameterlessReturnValue = "PublicMethodVoid";
         public object[] PublicParams;
-        internal string InternalField;
-        protected string ProtectedField;
-        private static string _staticOnlySetPropertyBackend;
-        private string _onlySetPropertyBackend;
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        private string _privateField;
+
         public TestClass()
         {
             PublicProperty = "PublicProperty";
@@ -92,27 +94,11 @@ namespace DelegatesTest.TestObjects
         {
         }
 
-        public event EventHandler<PublicEventArgs> PublicEvent;
-
-        internal event EventHandler<InternalEventArgs> InternalEvent
-        {
-            add { InternalEventBackend += value; }
-            remove { InternalEventBackend -= value; }
-        }
-
-        protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
-
-        public event EventCustomDelegate CusDelegEvent;
-
-        private event EventHandler<InternalEventArgs> InternalEventBackend;
-
-        private event EventHandler<PrivateEventArgs> PrivateEvent;
-
         public static string StaticOnlyGetProperty { get; } = "StaticOnlyGetProperty";
 
         public static string StaticOnlySetProperty
         {
-            set { _staticOnlySetPropertyBackend = value; }
+            set => _staticOnlySetPropertyBackend = value;
         }
 
         public static string StaticPublicProperty { get; set; } = "StaticPublicProperty";
@@ -123,7 +109,7 @@ namespace DelegatesTest.TestObjects
 
         public string OnlySetProperty
         {
-            set { _onlySetPropertyBackend = value; }
+            set => _onlySetPropertyBackend = value;
         }
 
         public string PublicProperty { get; set; }
@@ -149,22 +135,22 @@ namespace DelegatesTest.TestObjects
         [IndexerName("TheItem")]
         public int this[int i]
         {
-            get { return IndexerBackend[i]; }
-            set { IndexerBackend[i] = value; }
+            get => IndexerBackend[i];
+            set => IndexerBackend[i] = value;
         }
 
         [IndexerName("TheItem")]
         public int this[int i1, int i2, int i3]
         {
-            get { return i1; }
-            set { Public3IndexIndexer = value; }
+            get => i1;
+            set => Public3IndexIndexer = value;
         }
 
         [IndexerName("TheItem")]
         public int this[int i1, int i2, int i3, int i4]
         {
-            get { return i1; }
-            set { Public4IndexIndexer = value; }
+            get => i1;
+            set => Public4IndexIndexer = value;
         }
 
         [IndexerName("TheItem")]
@@ -173,8 +159,8 @@ namespace DelegatesTest.TestObjects
         [IndexerName("TheItem")]
         internal double this[double s]
         {
-            get { return s; }
-            set { InternalIndexer = value; }
+            get => s;
+            set => InternalIndexer = value;
         }
 
         [IndexerName("TheItem")]
@@ -186,8 +172,8 @@ namespace DelegatesTest.TestObjects
         [IndexerName("TheItem")]
         protected byte this[byte i]
         {
-            get { return i; }
-            set { ProtectedIndexer = value; }
+            get => i;
+            set => ProtectedIndexer = value;
         }
 
         [IndexerName("TheItem")]
@@ -195,13 +181,29 @@ namespace DelegatesTest.TestObjects
         // ReSharper disable once UnusedParameter.Local
         private int this[int i1, int i2]
         {
-            get { return i1; }
-            set { PrivateIndexer = value; }
+            get => i1;
+            set => PrivateIndexer = value;
         }
 
         [IndexerName("TheItem")]
         // ReSharper disable once UnusedMember.Local
         private long this[long s] => s;
+
+        public event EventHandler<PublicEventArgs> PublicEvent;
+
+        internal event EventHandler<InternalEventArgs> InternalEvent
+        {
+            add => InternalEventBackend += value;
+            remove => InternalEventBackend -= value;
+        }
+
+        protected event EventHandler<ProtectedEventArgs> ProtectedEvent;
+
+        public event EventCustomDelegate CusDelegEvent;
+
+        private event EventHandler<InternalEventArgs> InternalEventBackend;
+
+        private event EventHandler<PrivateEventArgs> PrivateEvent;
 
         public static string GetStaticPrivateField()
         {
@@ -226,187 +228,187 @@ namespace DelegatesTest.TestObjects
         public static T PublicStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
         public static void PublicStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
         }
 
         public static T StaticGenericMethod<T>(T param)
         {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static T StaticGenericMethod<T>(T param, int i) where T : ITestInterface
         {
-            StaticPublicParams = new object[] { param, i };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param, i};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static T StaticGenericMethod<T>(T param, int i, bool p) where T : struct
         {
-            StaticPublicParams = new object[] { param, i, p };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param, i, p};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static T1 StaticGenericMethod<T1, T2>() where T1 : new()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T1), typeof(T2) };
+            StaticPublicTypeParams = new[] {typeof(T1), typeof(T2)};
             return new T1();
         }
 
         public static T1 StaticGenericMethod<T1, T2, T3>(int i) where T1 : new()
         {
-            StaticPublicParams = new object[] { i };
-            StaticPublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
+            StaticPublicParams = new object[] {i};
+            StaticPublicTypeParams = new[] {typeof(T1), typeof(T2), typeof(T3)};
             return new T1();
         }
 
         public static T StaticGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
         {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T), typeof(T2) };
+            StaticPublicParams = new object[] {param};
+            StaticPublicTypeParams = new[] {typeof(T), typeof(T2)};
             return param;
         }
 
         public static void StaticGenericMethodVoid<T>(T s) where T : class
         {
-            StaticPublicParams = new object[] { s };
+            StaticPublicParams = new object[] {s};
             StaticGenericMethodVoidParameter = s;
         }
 
         public static T StaticGenericMethodWithClass<T>(T param) where T : class
         {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static T StaticGenericMethodWithStruc<T>(T param) where T : struct
         {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static T StaticGenericMethodWithType<T>(T param) where T : Base
         {
-            StaticPublicParams = new object[] { param };
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicParams = new object[] {param};
+            StaticPublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public static string StaticPublic(string s)
         {
-            StaticPublicParams = new[] { s };
+            StaticPublicParams = new[] {s};
             return s;
         }
 
         public static string StaticPublic(string s, string s1)
         {
-            StaticPublicParams = new[] { s, s1 };
+            StaticPublicParams = new[] {s, s1};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2)
         {
-            StaticPublicParams = new[] { s, s1, s2 };
+            StaticPublicParams = new[] {s, s1, s2};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3 };
+            StaticPublicParams = new[] {s, s1, s2, s3};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14};
             return s;
         }
 
         public static string StaticPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15};
             return s;
         }
 
@@ -414,7 +416,7 @@ namespace DelegatesTest.TestObjects
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15,
             string s16)
         {
-            StaticPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16 };
+            StaticPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16};
             return s;
         }
 
@@ -425,7 +427,7 @@ namespace DelegatesTest.TestObjects
 
         public static string StaticPublic<T>()
         {
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
             return StaticPublicParameterlessReturnValue;
         }
 
@@ -452,127 +454,110 @@ namespace DelegatesTest.TestObjects
         public static void StaticVoidPublic()
         {
             StaticVoidPublicExecuted = true;
-            return;
         }
 
         public static void StaticVoidPublic(string s)
         {
             StaticVoidPublicParam = s;
-            return;
         }
 
         public static void StaticVoidPublic(string s, string s1)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15};
         }
 
         public static void StaticVoidPublic(string s, string s1, string s2, string s3, string s4, string s5, string s6,
@@ -580,8 +565,7 @@ namespace DelegatesTest.TestObjects
             string s16)
         {
             StaticVoidPublicParam = s;
-            StaticVoidPublicParams = new[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s16 };
-            return;
+            StaticVoidPublicParams = new[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s16};
         }
 
         public void AddPublicEventHandler(EventHandler<PublicEventArgs> eventHandler)
@@ -621,84 +605,84 @@ namespace DelegatesTest.TestObjects
 
         public T InstanceGenericMethod<T>(T param)
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public T InstanceGenericMethod<T>(T param, int i) where T : ITestInterface
         {
-            PublicParams = new object[] { param, i };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param, i};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public T InstanceGenericMethod<T>(T param, int i, bool p) where T : struct
         {
-            PublicParams = new object[] { param, i, p };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param, i, p};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public T1 InstanceGenericMethod<T1, T2>() where T1 : new()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T1), typeof(T2) };
+            PublicTypeParams = new[] {typeof(T1), typeof(T2)};
             return new T1();
         }
 
         public T1 InstanceGenericMethod<T1, T2, T3>(int i) where T1 : new()
         {
-            PublicParams = new object[] { i };
-            PublicTypeParams = new[] { typeof(T1), typeof(T2), typeof(T3) };
+            PublicParams = new object[] {i};
+            PublicTypeParams = new[] {typeof(T1), typeof(T2), typeof(T3)};
             return new T1();
         }
 
         public T InstanceGenericMethodFromOtherParameter<T, T2>(T param) where T2 : T
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T), typeof(T2) };
+            PublicParams = new object[] {param};
+            PublicTypeParams = new[] {typeof(T), typeof(T2)};
             return param;
         }
 
         public void InstanceGenericMethodVoid<T>(T s) where T : class
         {
-            PublicParams = new object[] { s };
+            PublicParams = new object[] {s};
             InstanceGenericMethodVoidParameter = s;
         }
 
         public T InstanceGenericMethodWithClass<T>(T param) where T : class
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public T InstanceGenericMethodWithStruc<T>(T param) where T : struct
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
         public T InstanceGenericMethodWithType<T>(T param) where T : Base
         {
-            PublicParams = new object[] { param };
-            PublicTypeParams = new[] { typeof(T) };
+            PublicParams = new object[] {param};
+            PublicTypeParams = new[] {typeof(T)};
             return param;
         }
 
-        public string InternalMethod()
+        internal string InternalMethod()
         {
             return InternalParameterlessReturnValue;
         }
 
-        public void InternalMethodVoid()
+        internal void InternalMethodVoid()
         {
             InternalMethodVoidExecuted = true;
         }
 
-        public void InternalMethodVoid(string s)
+        internal void InternalMethodVoid(string s)
         {
             InternalMethodVoidParameter = s;
         }
@@ -761,14 +745,14 @@ namespace DelegatesTest.TestObjects
         public T PublicInstanceGenericMethod<T>() where T : new()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
         public void PublicInstanceGenericMethodVoid<T>()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
         }
 
         public string PublicMethod()
@@ -783,100 +767,100 @@ namespace DelegatesTest.TestObjects
 
         public string PublicMethod(string s, string s1)
         {
-            PublicParams = new object[] { s, s1 };
+            PublicParams = new object[] {s, s1};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2)
         {
-            PublicParams = new object[] { s, s1, s2 };
+            PublicParams = new object[] {s, s1, s2};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3)
         {
-            PublicParams = new object[] { s, s1, s2, s3 };
+            PublicParams = new object[] {s, s1, s2, s3};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4 };
+            PublicParams = new object[] {s, s1, s2, s3, s4};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14};
             return s;
         }
 
         public string PublicMethod(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15};
             return s;
         }
 
@@ -893,125 +877,125 @@ namespace DelegatesTest.TestObjects
         public void PublicMethodVoid(string s, string s1)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1 };
+            PublicParams = new object[] {s, s1};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2 };
+            PublicParams = new object[] {s, s1, s2};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3 };
+            PublicParams = new object[] {s, s1, s2, s3};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4 };
+            PublicParams = new object[] {s, s1, s2, s3, s4};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14};
         }
 
         public void PublicMethodVoid(string s, string s1, string s2, string s3, string s4, string s5, string s6,
             string s7, string s8, string s9, string s10, string s11, string s12, string s13, string s14, string s15)
         {
             PublicMethodVoidParameter = s;
-            PublicParams = new object[] { s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15 };
+            PublicParams = new object[] {s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15};
         }
 
         internal static T InternalStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
         internal static void InternalStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
         }
 
         internal static void PrivateStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
         }
 
         internal static void ProtectedStaticGenericMethodVoid<T>()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
         }
 
         internal static string StaticInternal(string s)
@@ -1032,19 +1016,18 @@ namespace DelegatesTest.TestObjects
         internal static void StaticVoidInternal()
         {
             StaticVoidInternalExecuted = true;
-            return;
         }
 
         internal static void StaticVoidInternal(string s)
         {
             StaticVoidInternalParam = s;
-            return;
         }
 
         internal void AddInternalEventHandler(EventHandler<InternalEventArgs> eventHandler)
         {
             InternalEvent += eventHandler;
         }
+
         internal void AddPrivateEventHandler(EventHandler<PrivateEventArgs> eventHandler)
         {
             PrivateEvent += eventHandler;
@@ -1054,18 +1037,20 @@ namespace DelegatesTest.TestObjects
         {
             ProtectedEvent += eventHandler;
         }
+
         internal T InternalInstanceGenericMethod<T>() where T : new()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
         internal void InternalInstanceGenericMethodVoid<T>()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
         }
+
         internal string InternalMethod(string s)
         {
             return s;
@@ -1074,18 +1059,19 @@ namespace DelegatesTest.TestObjects
         internal void PrivateInstanceGenericMethodVoid<T>()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
         }
 
         internal void ProtectedInstanceGenericMethodVoid<T>()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
         }
+
         protected static T ProtectedStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
@@ -1107,19 +1093,17 @@ namespace DelegatesTest.TestObjects
         protected static void StaticVoidProtected()
         {
             StaticVoidProtectedExecuted = true;
-            return;
         }
 
         protected static void StaticVoidProtected(string s)
         {
             StaticVoidProtectedParam = s;
-            return;
         }
 
         protected T ProtectedInstanceGenericMethod<T>() where T : new()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
@@ -1131,7 +1115,7 @@ namespace DelegatesTest.TestObjects
         private static T PrivateStaticGenericMethod<T>() where T : new()
         {
             StaticPublicParams = null;
-            StaticPublicTypeParams = new[] { typeof(T) };
+            StaticPublicTypeParams = new[] {typeof(T)};
             return new T();
         }
 
@@ -1153,25 +1137,25 @@ namespace DelegatesTest.TestObjects
         private static void StaticVoidPrivate()
         {
             StaticVoidPrivateExecuted = true;
-            return;
         }
 
         private static void StaticVoidPrivate(string s)
         {
             StaticVoidPrivateParam = s;
-            return;
         }
 
         private T PrivateInstanceGenericMethod<T>() where T : new()
         {
             PublicParams = null;
-            PublicTypeParams = new[] { typeof(T) };
+            PublicTypeParams = new[] {typeof(T)};
             return new T();
         }
+
         private string PrivateMethod(string s)
         {
             return s;
         }
+
         public class PrivateEventArgs : EventArgs
         {
         }

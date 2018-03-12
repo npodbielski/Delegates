@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <AssemblyName>DelegatesFactory</AssemblyName>
+    <RootNamespace>DelegatesFactory</RootNamespace>
+    <Version>1.2.0.0</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <Authors>npodbielski</Authors>
+    <Copyright>Copyright © npodbielski 2018</Copyright>
+  </PropertyGroup>
+</Project>
