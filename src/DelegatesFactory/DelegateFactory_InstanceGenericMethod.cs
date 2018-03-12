@@ -60,7 +60,7 @@ namespace Delegates
         /// <remarks>
         ///     Intended for internal use.
         /// </remarks>
-#if NETCORE||STANDARD
+#if NETCOREAPP1_0|| NETCOREAPP2_0 || STANDARD
         public
 #else
         internal

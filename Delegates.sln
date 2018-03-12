@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelegatesFactoryNET45", "Pl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET45", "NET45", "{DD3B46F3-7A5E-49B4-9584-D11BF55BD8CD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NETCore", "NETCore", "{A6C349EB-C9E6-40F2-8E8A-10EDC19C96AE}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NETCore20", "NETCore20", "{A6C349EB-C9E6-40F2-8E8A-10EDC19C96AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET35", "NET35", "{CE29B2F6-26FF-491A-B8D6-79DCD84E6ECE}"
 EndProject
@@ -59,9 +59,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesFactoryNETCore", "Platforms\NETCore\DelegatesFactory\DelegatesFactoryNETCore.csproj", "{FA4FE6FB-9420-4E52-B9A3-FC8951474781}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesFactoryNETCore20", "Platforms\NETCore20\DelegatesFactory\DelegatesFactoryNETCore20.csproj", "{FA4FE6FB-9420-4E52-B9A3-FC8951474781}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETCore", "Platforms\NETCore\DelegatesTest\DelegatesTestNETCore.csproj", "{E7D7B854-5CA1-472D-86A2-27CF413A4309}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETCore20", "Platforms\NETCore20\DelegatesTest\DelegatesTestNETCore20.csproj", "{E7D7B854-5CA1-472D-86A2-27CF413A4309}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETStandard15", "Platforms\NETStandard15\DelegatesTest\DelegatesTestNETStandard15.csproj", "{0B6CBF4D-7D26-4435-BCDC-D4EB83FFD63E}"
 EndProject
@@ -79,6 +79,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{E35BA139
 		Nuget\Nuget.nuspec = Nuget\Nuget.nuspec
 		Nuget\updateVersion.ps1 = Nuget\updateVersion.ps1
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NETCore10", "NETCore10", "{C4DBBA1D-05F4-42E9-83E7-2715FE21D459}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesFactoryNETCore10", "Platforms\NETCore10\DelegatesFactory\DelegatesFactoryNETCore10.csproj", "{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DelegatesTestNETCore10", "Platforms\NETCore10\DelegatesTest\DelegatesTestNETCore10.csproj", "{A7F7FD15-1506-40F1-B1A1-592EBBDCDEB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -330,6 +336,18 @@ Global
 		{922FA812-3B8A-483F-86FB-45E98E51D4EB}.Release|iPhone.Build.0 = Release|Any CPU
 		{922FA812-3B8A-483F-86FB-45E98E51D4EB}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{922FA812-3B8A-483F-86FB-45E98E51D4EB}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|iPhone.Build.0 = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{CF1BFFF7-BDED-46BF-8ABB-F7B2664D6EC4}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

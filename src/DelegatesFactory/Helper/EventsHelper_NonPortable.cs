@@ -4,7 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !(NETSTANDARD1_1 || NETSTANDARD1_5)
+#if NET35 || NET4 || NET45 || NET46
+#define Supports_Type_Creation
 using System;
 #endif
 using System.Reflection;
@@ -14,9 +15,16 @@ namespace Delegates.Helper
 {
     internal static partial class EventsHelper
     {
+        private const AssemblyBuilderAccess ConververAssemblyAccess =
+#if !NET35
+            AssemblyBuilderAccess.RunAndCollect;
+#else
+            AssemblyBuilderAccess.Run;
+#endif
+
         private static
-#if !(NETSTANDARD1_1 || NETSTANDARD1_5)
-            Type  
+#if Supports_Type_Creation
+            Type
 #else
             TypeInfo
 #endif
@@ -36,35 +44,21 @@ namespace Delegates.Helper
             generator.Emit(OpCodes.Ldftn, typeof(TSource).GetMethod("Invoke"));
             generator.Emit(OpCodes.Newobj, con);
             generator.Emit(OpCodes.Ret);
-#if NET35 || NET4 || NET45 || NET46
+#if Supports_Type_Creation
             var type = typeBuilder.CreateType();
-#elif NETCORE || STANDARD
+#else
             var type = typeBuilder.CreateTypeInfo();
 #endif
             return type;
         }
 
-#if NET35 || NET4
-      private static AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
-        {
-            const AssemblyBuilderAccess assemblyAccess =
-#if NET4
-                AssemblyBuilderAccess.RunAndCollect;
-#elif NET35
-            AssemblyBuilderAccess.Run;
-#endif
-            var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, assemblyAccess);
-            return assemblyBuilder;
-        }  
-#endif
-
-#if NET45 || NET46 || NETCORE || STANDARD
         private static AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
         {
-            const AssemblyBuilderAccess assemblyAccess = AssemblyBuilderAccess.RunAndCollect;
-            var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, assemblyAccess);
-            return assemblyBuilder;
-        }
+#if NET35 || NET4
+            return AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, assemblyAccess);
+#else
+            return AssemblyBuilder.DefineDynamicAssembly(assemblyName, ConververAssemblyAccess);
 #endif
+        }
     }
 }

@@ -4,6 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
+#define TaskUtilMethodsWith_TO_Suffix
+#endif
+#if !NETSTANDARD1_1
+#define Supports_BindingFlags
+#endif
+#if NET45 || NET46 || NETCORE || STANDARD
+#define Supports_GenericTypeArguments_Property
+#endif
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +34,7 @@ namespace Delegates.Extensions
 
         public const string RemoveAccessor = "remove";
 
-#if !NETSTANDARD1_1
+#if Supports_BindingFlags
         private const BindingFlags PrivateOrProtectedBindingFlags = BindingFlags.NonPublic;
 
         private const BindingFlags InternalBindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
@@ -162,7 +172,7 @@ namespace Delegates.Extensions
 
         public static Type[] GenericTypeArguments(this Type source)
         {
-#if NET35 || NET4 || PORTABLE
+#if NET35 || NET4 || PORTABLE || NETCOREAPP1_0
             return source.GetGenericArguments();
 #elif NET45 || NET46 || NETCORE || STANDARD
             return source.GetTypeInfo().GenericTypeArguments;
@@ -173,7 +183,7 @@ namespace Delegates.Extensions
         {
 #if NET35 || NET4 || PORTABLE
             return source.IsClass;
-#elif NET45 || NET46 || NETCORE || STANDARD
+#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
             return source.GetTypeInfo().IsClass;
 #endif
         }
@@ -181,8 +191,8 @@ namespace Delegates.Extensions
         public static bool IsValueType(this Type source)
         {
 #if NET35 || NET4 || PORTABLE
-            return source.IsValueType;
-#elif NET45 || NET46 || NETCORE || STANDARD
+            return source.IsValueType();
+#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
             return source.GetTypeInfo().IsValueType;
 #endif
         }
@@ -210,20 +220,20 @@ namespace Delegates.Extensions
             _hasReferenceConversionDeleg ??
             (_hasReferenceConversionDeleg = TypeUtils.StaticMethod<Func<Type, Type, bool>>
             (
-#if !(NETCORE || STANDARD)
-                "HasReferenceConversion"
-#else
+#if TaskUtilMethodsWith_TO_Suffix
                 "HasReferenceConversionTo"
+#else
+                "HasReferenceConversion"
 #endif
             ));
 
         internal static Func<Type, Type, bool> HasIdentityPrimitiveOrNullableConversionDeleg =>
             _hasIdentityPrimitiveOrNullableConversionDeleg ??
             (_hasIdentityPrimitiveOrNullableConversionDeleg = TypeUtils.StaticMethod<Func<Type, Type, bool>>(
-#if !(NETCORE || STANDARD)
-                "HasIdentityPrimitiveOrNullableConversion"
-#else
+#if TaskUtilMethodsWith_TO_Suffix
                 "HasIdentityPrimitiveOrNullableConversionTo"
+#else
+                "HasIdentityPrimitiveOrNullableConversion"
 #endif
             ));
 
@@ -249,7 +259,7 @@ namespace Delegates.Extensions
             }
         }
 
-#if NET45 || NETCORE || NETSTANDARD1_5
+#if NET45 || NETSTANDARD1_5
         public static MethodInfo GetMethod(this Type source, string methodName)
         {
             var typeInfo = source.GetTypeInfo();
@@ -283,7 +293,7 @@ namespace Delegates.Extensions
             var parameters = types
 #if NET35
                 .Select(a => Expression.Parameter(a, "p" + index++))
-#elif NET45 || NET46 || NETCORE || NET4 || PORTABLE || STANDARD
+#elif NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || NET4 || PORTABLE || STANDARD
                 .Select(Expression.Parameter)
 #endif
                 .ToList();
@@ -293,6 +303,7 @@ namespace Delegates.Extensions
         private static IEnumerable<MethodInfo> GetAllMethods(this Type source, bool isStatic)
         {
 #if NETSTANDARD1_1
+            //TODO: filter by static or instance
             return source.GetTypeInfo().DeclaredMethods;
 #else
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
@@ -362,36 +373,46 @@ namespace Delegates.Extensions
         public static MethodInfo GetMethodInfoByEnumerate(this Type source, string name, Type[] parametersTypes,
             bool isStatic)
         {
-            MethodInfo methodInfo = null;
             var methods = source.GetAllMethods(isStatic).Where(m => m.Name == name && !m.IsGenericMethod);
             foreach (var method in methods)
             {
-                var parameters = method.GetParameters();
-                var parametersTypesValid = parameters.Length == parametersTypes.Length;
-                if (!parametersTypesValid)
+                var methodInfo = CheckMethodInfoParameters(parametersTypes, method);
+                if (methodInfo != null)
                 {
-                    continue;
+                    return methodInfo;
                 }
+            }
 
-                for (var index = 0; index < parameters.Length; index++)
-                {
-                    var parameterInfo = parameters[index];
-                    var parameterType = parametersTypes[index];
-                    if (parameterInfo.ParameterType != parameterType)
-                    {
-                        parametersTypesValid = false;
-                        break;
-                    }
-                }
+            return null;
+        }
 
-                if (parametersTypesValid)
+        private static MethodInfo CheckMethodInfoParameters(Type[] parametersTypes, MethodInfo method)
+        {
+            var parameters = method.GetParameters();
+            //TODO: test if instance method with the same number parameters but different types will not break this code
+            var parametersTypesValid = parameters.Length == parametersTypes.Length;
+            if (!parametersTypesValid)
+            {
+                return null;
+            }
+
+            for (var index = 0; index < parameters.Length; index++)
+            {
+                var parameterInfo = parameters[index];
+                var parameterType = parametersTypes[index];
+                if (parameterInfo.ParameterType != parameterType)
                 {
-                    methodInfo = method;
+                    parametersTypesValid = false;
                     break;
                 }
             }
 
-            return methodInfo;
+            if (parametersTypesValid)
+            {
+                return method;
+            }
+
+            return null;
         }
 
         public static MethodInfo GetMethodInfo(this Type source, string name, Type[] parametersTypes,
@@ -400,17 +421,24 @@ namespace Delegates.Extensions
             MethodInfo methodInfo = null;
             if (typeParameters == null || typeParameters.Length == 0)
             {
-#if !(NETCORE || PORTABLE || STANDARD)
+#if !(PORTABLE || STANDARD)
                 var enumerateMethods = false;
                 try
                 {
-                    methodInfo = source.GetSingleMethod(name, parametersTypes, isStatic);
+                    methodInfo = source.GetNonGenericMethod(name, parametersTypes, isStatic);
                 }
                 catch (AmbiguousMatchException)
                 {
-                    //if more than one method it means there are also generic -> enumerate
+                    //if more than one method it means there are more than one method with name and parameters types i.e. generics
                     enumerateMethods = true;
                 }
+
+#if NETCOREAPP1_0
+                if (methodInfo==null)
+                {
+                    enumerateMethods = true;
+                }
+#endif
 
                 if (enumerateMethods)
                 {
@@ -430,19 +458,41 @@ namespace Delegates.Extensions
         }
 
 
-#if !(NETCORE || PORTABLE || STANDARD)
-        public static MethodInfo GetSingleMethod(this Type source, string name, Type[] parametersTypes, bool isStatic)
+#if !(PORTABLE || STANDARD)
+        public static MethodInfo GetNonGenericMethod(this Type source, string name, Type[] parametersTypes, bool isStatic)
         {
             var staticOrInstance = isStatic ? BindingFlags.Static : BindingFlags.Instance;
             var typeInfo = source.GetTypeInfo();
+#if !(NETCOREAPP1_0 || NETCOREAPP2_0)
             var methodInfo =
-                (typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
-                    typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes,
-                        null)) ??
-                typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, parametersTypes, null);
+                    (typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public, null, parametersTypes, null) ??
+                     typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, parametersTypes, null)) ??
+                     typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, parametersTypes, null); 
+#endif
+#if NETCOREAPP2_0
+            var methodInfo = typeInfo.GetMethod(name, staticOrInstance, null, CallingConventions.Any, parametersTypes, null)??
+                typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags, null, CallingConventions.Any, parametersTypes, null)??
+                typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags, null, CallingConventions.Any, parametersTypes, null);
+#elif NETCOREAPP1_0
+            var methodInfo = typeInfo.GetMethod(name, staticOrInstance | BindingFlags.Public) ??
+                typeInfo.GetMethod(name, staticOrInstance | PrivateOrProtectedBindingFlags) ??
+                typeInfo.GetMethod(name, staticOrInstance | InternalBindingFlags);
+#endif
+            //TODO: test if necessary
+            if (methodInfo != null && methodInfo.IsGenericMethod)
+            {
+                methodInfo = null;
+            }
+#if NETCOREAPP1_0
+            if (methodInfo != null)
+            {
+                methodInfo = CheckMethodInfoParameters(parametersTypes, methodInfo);
+            }
+#endif
             return methodInfo;
         }
 #endif
+
 #if NETSTANDARD1_1
         private static bool IsPropertyStatic(this PropertyInfo propertyInfo)
         {
@@ -556,7 +606,7 @@ namespace Delegates.Extensions
 
         public static ConstructorInfo GetConstructorInfo(this Type source, Type[] types)
         {
-#if NETCORE || PORTABLE || STANDARD
+#if NETCOREAPP1_0 || NETCOREAPP2_0 || PORTABLE || STANDARD
             ConstructorInfo constructor = null;
             var constructors = source.GetAllConstructors();
             foreach (var c in constructors)
@@ -589,10 +639,9 @@ namespace Delegates.Extensions
             return constructor;
 #else
             return (source.GetConstructor(BindingFlags.Public, null, types, null) ??
-                    source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
-                source.GetConstructor(
-                    InternalBindingFlags | BindingFlags.Instance, null,
-                    types, null);
+                        source.GetConstructor(BindingFlags.NonPublic, null, types, null)) ??
+                        source.GetConstructor(InternalBindingFlags | BindingFlags.Instance, null, types, null);
+            
 #endif
         }
 

@@ -15,7 +15,7 @@ namespace Delegates.Extensions
         public static TDelegate CreateDelegate<TDelegate>(this MethodInfo method)
             where TDelegate : class
         {
-#if NET4 || NET45 || NET46 || NETCORE || PORTABLE || STANDARD
+#if NET4 || NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || PORTABLE || STANDARD
             DelegateHelper.CheckDelegateReturnType<TDelegate>(method);
             return method.CreateDelegate(typeof(TDelegate)) as TDelegate;
 #elif NET35
@@ -25,7 +25,7 @@ namespace Delegates.Extensions
 
         public static Delegate CreateDelegate(this MethodInfo method, Type delegateType)
         {
-#if NET45 || NET46 || NETCORE|| STANDARD
+#if NET45 || NET46 || NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
             return method.CreateDelegate(delegateType);
 #elif NET35 || NET4
             return Delegate.CreateDelegate(delegateType, method, true);

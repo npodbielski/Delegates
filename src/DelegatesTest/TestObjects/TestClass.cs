@@ -672,17 +672,17 @@ namespace DelegatesTest.TestObjects
             return param;
         }
 
-        public string InternalMethod()
+        internal string InternalMethod()
         {
             return InternalParameterlessReturnValue;
         }
 
-        public void InternalMethodVoid()
+        internal void InternalMethodVoid()
         {
             InternalMethodVoidExecuted = true;
         }
 
-        public void InternalMethodVoid(string s)
+        internal void InternalMethodVoid(string s)
         {
             InternalMethodVoidParameter = s;
         }

@@ -62,7 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETCore.csproj" />
+    <ProjectReference Include="..\DelegatesFactory\DelegatesFactoryNETCore20.csproj" />
   </ItemGroup>
 
 </Project>

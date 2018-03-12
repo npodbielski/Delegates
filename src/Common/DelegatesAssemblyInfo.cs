@@ -13,5 +13,6 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("DelegatesTestNET4")]
 [assembly: InternalsVisibleTo("DelegatesTestNET45")]
 [assembly: InternalsVisibleTo("DelegatesTestNET46")]
-[assembly: InternalsVisibleTo("DelegatesTestNETCORE")]
+[assembly: InternalsVisibleTo("DelegatesTestNETCore10")]
+[assembly: InternalsVisibleTo("DelegatesTestNETCore20")]
 [assembly: InternalsVisibleTo("DelegatesTestNETPortable")]
