@@ -17,11 +17,13 @@ namespace
 #elif NET45
         DelegatesTestNET45
 #elif NET46
-    DelegatesTestNET46
+        DelegatesTestNET46
 #elif PORTABLE
         DelegatesTestNETPortable
-#elif NETCORE
-        DelegatesTestNETCORE
+#elif NETCOREAPP1_0
+    DelegatesTestNETCORE10
+#elif NETCOREAPP2_0
+        DelegatesTestNETCORE20
 #elif NETSTANDARD1_1
         DelegatesTestNETStandard11
 #elif NETSTANDARD1_5

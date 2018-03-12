@@ -82,10 +82,10 @@ namespace Delegates
         /// <remarks>
         ///     Intended for internal use.
         /// </remarks>
-#if NETCOREAPP1_0 || NETCOREAPP2_0 || STANDARD
-        public
-#else
+#if No_InternalsVisibleTo
         internal
+#else
+        public
 #endif
             static TDelegate StaticMethod<TDelegate>(this Type source,
                 string name, Type[] typeParams, Type[] paramsTypes)
