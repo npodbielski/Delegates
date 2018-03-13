@@ -1,3 +1,7 @@
+Develop branch | Master branch 
+
+[![Develop Status](http://185.157.80.85:8080/buildStatus/icon?job=Delegates_Develop)](http://185.157.80.85:8080/buildStatus/icon?job=Delegates_Develop)    [![Master Status](http://185.157.80.85:8080/buildStatus/icon?job=Delegates)](http://185.157.80.85:8080/buildStatus/icon?job=Delegates) 
+
 # Delegates
 Easy way to create delegates for obtaining/using all member types (fields, properties, indexers, methods, constructors and events) of all types (static and intance, generic and not generic) and all visibilities (public, internal, protected and private). 
 
